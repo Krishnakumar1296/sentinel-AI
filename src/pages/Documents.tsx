@@ -72,7 +72,7 @@ export default function Documents() {
 
       <div className="card flex flex-col gap-3 p-4 lg:flex-row lg:items-center">
         <div className="relative flex-1">
-          <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-faint" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -118,11 +118,11 @@ export default function Documents() {
       )}
 
       {isManager && (
-        <div className="flex items-center gap-3 rounded-2xl border border-dashed border-slate-300 bg-white/60 p-5">
-          <Plus className="h-5 w-5 text-slate-400" />
-          <p className="text-sm text-[#64748B]">
+        <div className="flex items-center gap-3 rounded-2xl border border-dashed border-line bg-surface/60 p-5">
+          <Plus className="h-5 w-5 text-faint" />
+          <p className="text-sm text-muted">
             New knowledge missing?{' '}
-            <button onClick={() => navigate('/upload')} className="font-medium text-[#2563EB] hover:text-[#1D4ED8]">
+            <button onClick={() => navigate('/upload')} className="font-medium text-brand-blue hover:text-brand-blue">
               Upload a document
             </button>{' '}
             to strengthen your knowledge base.

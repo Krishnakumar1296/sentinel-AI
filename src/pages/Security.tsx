@@ -48,12 +48,12 @@ export default function Security() {
         <ErrorState variant="unauthorized" title="Access Restricted" message="The Security Center is restricted to administrators.">
           <div className="mx-auto max-w-xs space-y-3 text-sm">
             <div className="flex justify-between">
-              <span className="text-[#64748B]">Your role</span>
-              <span className="font-semibold capitalize text-[#172033]">{user?.role ?? 'employee'}</span>
+              <span className="text-muted">Your role</span>
+              <span className="font-semibold capitalize text-ink">{user?.role ?? 'employee'}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#64748B]">Required role</span>
-              <span className="font-semibold text-[#172033]">Admin</span>
+              <span className="text-muted">Required role</span>
+              <span className="font-semibold text-ink">Admin</span>
             </div>
           </div>
         </ErrorState>
@@ -68,32 +68,32 @@ export default function Security() {
         <p className="page-subtitle">Monitor access, permissions and document protection.</p>
       </div>
 
-      <div className="rounded-2xl border border-green-200 bg-gradient-to-br from-green-50 to-white p-6 shadow-card">
+      <div className="rounded-2xl border border-green-200 bg-gradient-to-br from-green-50 to-white p-6 shadow-card dark:border-green-500/20 dark:from-green-500/10 dark:to-surface">
         <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-green-100">
-            <ShieldCheck className="h-7 w-7 text-green-600" />
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-green-100 dark:bg-green-500/10">
+            <ShieldCheck className="h-7 w-7 text-green-600 dark:text-green-400" />
           </div>
           <div>
-            <p className="text-lg font-bold uppercase tracking-wide text-green-700">System Secure</p>
-            <p className="text-sm text-green-700">All retrieval requests are filtered through role-based authorization.</p>
+            <p className="text-lg font-bold uppercase tracking-wide text-green-700 dark:text-green-400">System Secure</p>
+            <p className="text-sm text-green-700 dark:text-green-400">All retrieval requests are filtered through role-based authorization.</p>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="card p-6">
-          <h2 className="text-base font-semibold text-[#172033]">Security Controls</h2>
-          <p className="text-sm text-[#64748B]">Active protection layers</p>
+          <h2 className="text-base font-semibold text-ink">Security Controls</h2>
+          <p className="text-sm text-muted">Active protection layers</p>
           <div className="mt-5 space-y-3">
             {items.map((it) => (
-              <div key={it.label} className="flex items-center justify-between rounded-xl border border-slate-100 px-4 py-3">
+              <div key={it.label} className="flex items-center justify-between rounded-xl border border-line px-4 py-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-soft text-muted">
                     <it.icon className="h-4 w-4" />
                   </div>
-                  <span className="text-sm font-medium text-[#172033]">{it.label}</span>
+                  <span className="text-sm font-medium text-ink">{it.label}</span>
                 </div>
-                <span className="flex items-center gap-1.5 text-xs font-semibold text-green-600">
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-green-600 dark:text-green-400">
                   <CheckCircle2 className="h-4 w-4" /> {it.value}
                 </span>
               </div>
@@ -102,22 +102,22 @@ export default function Security() {
         </div>
 
         <div className="card p-6 lg:col-span-2">
-          <h2 className="text-base font-semibold text-[#172033]">Access Activity Timeline</h2>
-          <p className="text-sm text-[#64748B]">Recent security-relevant events</p>
+          <h2 className="text-base font-semibold text-ink">Access Activity Timeline</h2>
+          <p className="text-sm text-muted">Recent security-relevant events</p>
           {loading ? (
             <div className="mt-5"><SkeletonLoader variant="library" /></div>
           ) : (
             <div className="mt-5 space-y-1">
               {logs.map((l) => (
-                <div key={l.id} className="flex items-start gap-4 rounded-xl px-3 py-3 transition hover:bg-slate-50">
+                <div key={l.id} className="flex items-start gap-4 rounded-xl px-3 py-3 transition hover:bg-surface-muted">
                   <div className="flex flex-col items-center">
                     <span className={`mt-1.5 h-2.5 w-2.5 rounded-full ${toneStyles[l.status]}`} />
-                    <span className="mt-1 h-full w-px bg-slate-100" />
+                    <span className="mt-1 h-full w-px bg-surface-soft" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-[#172033]">{l.action}</p>
-                    <p className="text-xs text-[#64748B]">{l.userName} · {l.timestamp}</p>
-                    <p className="text-xs text-slate-400">{l.details}</p>
+                    <p className="text-sm font-medium text-ink">{l.action}</p>
+                    <p className="text-xs text-muted">{l.userName} · {l.timestamp}</p>
+                    <p className="text-xs text-faint">{l.details}</p>
                   </div>
                   <span className={statusChip[l.status]}>{l.status}</span>
                 </div>

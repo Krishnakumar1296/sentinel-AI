@@ -2,20 +2,95 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────────────────────
+   Design tokens — "Corporate calm contrast"
+   Light theme: soft, airy, reduced harshness.
+   Dark theme:  muted charcoal (never pure black), low-contrast.
+   Switch using the `.dark` class on <html>.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --canvas: #F5F7FA;
+  --canvas-soft: #F9FAFC;
+  --surface: #FFFFFF;
+  --surface-muted: #F1F4F8;
+  --surface-soft: #E9EDF3;
+
+  --line: #E3E8F0;
+  --line-soft: #EDF1F6;
+
+  --ink: #222B38;
+  --ink-soft: #667085;
+
+  --text-muted: #6B7280;
+  --text-faint: #9AA3AF;
+
+  --brand-navy: 18 59 93;
+  --brand-blue: 43 108 176;
+  --brand-bg: #EEF3F9;
+
+  --primary-50: 236 243 250;
+  --primary-100: 214 229 242;
+  --primary-200: 173 203 229;
+  --primary-300: 131 176 215;
+  --primary-400: 79 141 196;
+  --primary-500: 43 108 176;
+  --primary-600: 31 87 143;
+  --primary-700: 26 72 120;
+  --primary-800: 18 59 93;
+  --primary-900: 10 37 64;
+
+  color-scheme: light;
+}
+
+/* Calm, muted dark palette — lower contrast than the light theme */
+.dark {
+  --canvas: #0E1116;
+  --canvas-soft: #10141A;
+  --surface: #161B22;
+  --surface-muted: #1C222B;
+  --surface-soft: #232A35;
+
+  --line: #2A313C;
+  --line-soft: #232933;
+
+  --ink: #E4E9F0;
+  --ink-soft: #9AA4B2;
+
+  --text-muted: #93A0AF;
+  --text-faint: #6B7682;
+
+  --brand-navy: 124 163 200;
+  --brand-blue: 91 155 215;
+  --brand-bg: #1A2633;
+
+  --primary-50: 26 39 53;
+  --primary-100: 36 55 74;
+  --primary-200: 51 80 113;
+  --primary-300: 74 108 149;
+  --primary-400: 91 155 215;
+  --primary-500: 111 169 224;
+  --primary-600: 143 185 230;
+  --primary-700: 169 201 236;
+  --primary-800: 194 217 242;
+  --primary-900: 220 237 250;
+
+  color-scheme: dark;
+}
+
 @layer base {
   html { scroll-behavior: smooth; }
-  
+
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    @apply text-[#172033] bg-[#F7F9FC] antialiased;
+    @apply text-ink bg-canvas antialiased;
     -webkit-font-smoothing: antialiased;
   }
 
   * { box-sizing: border-box; }
-  
+
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Inter', system-ui, sans-serif;
-    @apply font-semibold text-[#172033];
+    @apply font-semibold text-ink;
   }
 }
 
@@ -23,74 +98,74 @@
   /* Buttons */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-[8px] font-medium text-sm text-white
-    bg-[#2563EB] hover:bg-[#1D4ED8] active:bg-[#1E3A8A]
+    bg-brand-blue hover:brightness-110 active:brightness-95
     transition-colors duration-150 cursor-pointer select-none;
   }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-[8px] font-medium text-sm
-    text-[#172033] bg-white border border-[#E2E8F0]
-    hover:bg-[#F7F9FC] hover:border-[#CBD5E1]
+    text-ink bg-surface border border-line
+    hover:bg-surface-muted hover:border-line
     transition-colors duration-150 cursor-pointer select-none;
   }
 
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 px-3 py-2 rounded-[8px] font-medium text-sm
-    text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#172033]
+    text-muted hover:bg-surface-soft hover:text-ink
     transition-colors duration-150 cursor-pointer select-none;
   }
 
   .btn-danger {
     @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-[8px] font-medium text-sm text-white
-    bg-[#DC2626] hover:bg-[#B91C1C]
+    bg-red-600 hover:bg-red-500
     transition-colors duration-150 cursor-pointer select-none;
   }
 
   /* Cards */
   .card {
-    @apply bg-white rounded-[14px] border border-[#E2E8F0] shadow-card;
+    @apply bg-surface rounded-[14px] border border-line shadow-card;
   }
 
   .card-hover {
-    @apply card hover:shadow-card-md hover:border-[#CBD5E1] transition-all duration-200;
+    @apply card hover:shadow-card-md hover:border-line transition-all duration-200;
   }
 
   /* Form inputs */
   .input {
-    @apply w-full px-3.5 py-2.5 rounded-[8px] border border-[#E2E8F0] bg-white
-    text-sm text-[#172033] placeholder-[#94A3B8]
-    focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB]
+    @apply w-full px-3.5 py-2.5 rounded-[8px] border border-line bg-surface
+    text-sm text-ink placeholder-faint
+    focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue
     transition-colors duration-150;
   }
 
   .label {
-    @apply block text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-1.5;
+    @apply block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5;
   }
 
   /* Badges */
   .badge-blue {
     @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold
-    bg-blue-50 text-blue-700 border border-blue-100;
+    bg-primary-50 text-primary-500 border border-primary-100;
   }
 
   .badge-green {
     @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold
-    bg-green-50 text-green-700 border border-green-100;
+    bg-green-50 text-green-700 border border-green-100 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20;
   }
 
   .badge-red {
     @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold
-    bg-red-50 text-red-700 border border-red-100;
+    bg-red-50 text-red-700 border border-red-100 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20;
   }
 
   .badge-amber {
     @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold
-    bg-amber-50 text-amber-700 border border-amber-100;
+    bg-amber-50 text-amber-700 border border-amber-100 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20;
   }
 
   .badge-slate {
     @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold
-    bg-slate-100 text-slate-600 border border-slate-200;
+    bg-surface-soft text-muted border border-line;
   }
 
   /* Section */
@@ -99,40 +174,40 @@
   }
 
   .page-title {
-    @apply text-2xl font-bold text-[#172033] mb-1;
+    @apply text-2xl font-bold text-ink mb-1;
   }
 
   .page-subtitle {
-    @apply text-sm text-[#64748B];
+    @apply text-sm text-muted;
   }
 
   /* Sidebar */
   .sidebar-link {
     @apply flex items-center gap-2.5 px-3 py-2 rounded-[8px] text-sm font-medium
-    text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#172033]
+    text-muted hover:bg-surface-soft hover:text-ink
     transition-colors duration-150 cursor-pointer;
   }
 
   .sidebar-link-active {
     @apply flex items-center gap-2.5 px-3 py-2 rounded-[8px] text-sm font-medium
-    bg-blue-50 text-[#2563EB] cursor-pointer;
+    bg-brand-blue/10 text-brand-blue cursor-pointer;
   }
 
   /* Skeleton */
   .skeleton {
-    @apply bg-slate-200 rounded animate-pulse;
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    @apply bg-slate-200 rounded animate-pulse dark:bg-slate-700;
+    background: linear-gradient(90deg, var(--surface-soft) 25%, var(--line) 50%, var(--surface-soft) 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
   }
 
   /* Tables */
   .table-header {
-    @apply bg-[#F7F9FC] px-4 py-3 text-left text-xs font-semibold text-[#64748B] uppercase tracking-wider;
+    @apply bg-surface-muted px-4 py-3 text-left text-xs font-semibold text-muted uppercase tracking-wider;
   }
 
   .table-cell {
-    @apply px-4 py-3.5 text-sm text-[#172033];
+    @apply px-4 py-3.5 text-sm text-ink;
   }
 
   /* Stat card */
@@ -142,8 +217,8 @@
 
   /* Nav overlay (corporate background) */
   .corp-bg {
-    background-image: 
-      linear-gradient(rgba(255,255,255,0.88), rgba(255,255,255,0.88)),
+    background-image:
+      linear-gradient(rgba(255,255,255,0.90), rgba(255,255,255,0.90)),
       url("https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80&auto=format&fit=crop");
     background-size: cover;
     background-position: center;
@@ -152,7 +227,7 @@
 
   .corp-bg-dark {
     background-image:
-      linear-gradient(rgba(18,59,93,0.92), rgba(18,59,93,0.92)),
+      linear-gradient(rgba(14,22,36,0.92), rgba(14,22,36,0.92)),
       url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80&auto=format&fit=crop");
     background-size: cover;
     background-position: center;
@@ -160,16 +235,16 @@
 }
 
 @layer utilities {
-  .text-primary { color: #123B5D; }
-  .text-brand-blue { color: #2563EB; }
-  .text-muted { color: #64748B; }
-  .text-body { color: #172033; }
+  .text-primary { color: rgb(var(--brand-navy)); }
+  .text-brand-blue { color: rgb(var(--brand-blue)); }
+  .text-muted { color: var(--text-muted); }
+  .text-body { color: var(--ink); }
 
-  .bg-primary { background-color: #123B5D; }
-  .bg-brand-blue { background-color: #2563EB; }
-  .bg-surface { background-color: #F7F9FC; }
+  .bg-primary { background-color: rgb(var(--brand-navy)); }
+  .bg-brand-blue { background-color: rgb(var(--brand-blue)); }
+  .bg-surface { background-color: var(--surface); }
 
-  .border-default { border-color: #E2E8F0; }
+  .border-default { border-color: var(--line); }
 
   /* Confidence ring */
   .ring-score {
@@ -181,7 +256,7 @@
 
   /* Typing dots */
   .typing-dot {
-    @apply w-1.5 h-1.5 rounded-full bg-blue-400;
+    @apply w-1.5 h-1.5 rounded-full bg-brand-blue;
     animation: typingBounce 1.4s ease-in-out infinite;
   }
   .typing-dot:nth-child(2) { animation-delay: 0.2s; }
@@ -200,14 +275,14 @@
 
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: #F1F5F9; }
-::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+::-webkit-scrollbar-track { background: var(--surface-muted); }
+::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
 
 /* PDF viewer highlight */
 .evidence-highlight {
-  background: rgba(37, 99, 235, 0.15);
-  border-left: 3px solid #2563EB;
+  background: rgba(43, 108, 176, 0.15);
+  border-left: 3px solid #2B6CB0;
   border-radius: 2px;
   padding: 2px 4px;
 }
@@ -216,6 +291,6 @@
 .sidebar-width { width: 240px; min-width: 240px; }
 
 /* Processing steps */
-.step-done { @apply text-green-600; }
-.step-active { @apply text-blue-600; }
-.step-pending { @apply text-slate-400; }
+.step-done { @apply text-green-600 dark:text-green-400; }
+.step-active { @apply text-brand-blue; }
+.step-pending { @apply text-faint; }

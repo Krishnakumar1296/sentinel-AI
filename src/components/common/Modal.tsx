@@ -30,15 +30,15 @@ export function Modal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      <div className={`relative w-full ${widths[size]} overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-2xl animate-fade-in`}>
-        <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
-          <h3 className="text-base font-semibold text-[#172033]">{title}</h3>
-          <button onClick={onClose} className="rounded-md p-1 text-[#64748B] transition hover:bg-slate-100 hover:text-[#172033]">
+      <div className={`relative w-full ${widths[size]} overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl animate-fade-in`}>
+        <div className="flex items-center justify-between border-b border-line-soft px-6 py-4">
+          <h3 className="text-base font-semibold text-ink">{title}</h3>
+          <button onClick={onClose} className="rounded-md p-1 text-muted transition hover:bg-surface-soft hover:text-ink">
             <X className="h-5 w-5" />
           </button>
         </div>
         <div className="max-h-[70vh] overflow-y-auto px-6 py-5">{children}</div>
-        {footer && <div className="flex justify-end gap-3 border-t border-slate-100 px-6 py-4">{footer}</div>}
+        {footer && <div className="flex justify-end gap-3 border-t border-line-soft px-6 py-4">{footer}</div>}
       </div>
     </div>
   )

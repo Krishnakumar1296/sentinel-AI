@@ -16,7 +16,7 @@ export function UploadZone({ onFile, disabled }: { onFile: (file: File) => void;
   return (
     <div
       className={`relative flex min-h-[280px] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed px-6 py-14 text-center transition ${
-        dragging ? 'border-[#2563EB] bg-blue-50/50' : 'border-slate-300 bg-white hover:border-slate-400'
+        dragging ? 'border-brand-blue bg-brand-blue/10' : 'border-line bg-surface hover:border-line'
       } ${disabled ? 'pointer-events-none opacity-60' : ''}`}
       onDragOver={(e) => {
         e.preventDefault()
@@ -38,11 +38,11 @@ export function UploadZone({ onFile, disabled }: { onFile: (file: File) => void;
         onChange={(e) => handleFiles(e.target.files)}
       />
       {fileName ? (
-        <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-5 py-3">
-          <FileText className="h-6 w-6 text-red-500" />
+        <div className="flex items-center gap-3 rounded-xl border border-line bg-surface-muted px-5 py-3">
+          <FileText className="h-6 w-6 text-red-500 dark:text-red-400" />
           <div className="text-left">
-            <p className="text-sm font-semibold text-[#172033]">{fileName}</p>
-            <p className="text-xs text-[#64748B]">PDF</p>
+            <p className="text-sm font-semibold text-ink">{fileName}</p>
+            <p className="text-xs text-muted">PDF</p>
           </div>
           {!disabled && (
             <button
@@ -50,7 +50,7 @@ export function UploadZone({ onFile, disabled }: { onFile: (file: File) => void;
                 e.stopPropagation()
                 setFileName(null)
               }}
-              className="rounded-md p-1 text-[#64748B] hover:bg-slate-200 hover:text-[#172033]"
+              className="rounded-md p-1 text-muted hover:bg-surface-soft hover:text-ink"
             >
               <X className="h-4 w-4" />
             </button>
@@ -58,13 +58,13 @@ export function UploadZone({ onFile, disabled }: { onFile: (file: File) => void;
         </div>
       ) : (
         <>
-          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-[#2563EB]">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-blue/10 text-brand-blue">
             <UploadCloud className="h-7 w-7" />
           </div>
-          <p className="text-base font-semibold text-[#172033]">Drag &amp; Drop PDF Here</p>
-          <p className="mt-1 text-sm text-[#64748B]">or</p>
+          <p className="text-base font-semibold text-ink">Drag &amp; Drop PDF Here</p>
+          <p className="mt-1 text-sm text-muted">or</p>
           <button className="btn-secondary mt-3">Browse Files</button>
-          <p className="mt-4 text-xs text-[#64748B]">Supported format: PDF</p>
+          <p className="mt-4 text-xs text-muted">Supported format: PDF</p>
         </>
       )}
     </div>

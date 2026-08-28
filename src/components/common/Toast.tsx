@@ -23,15 +23,15 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const icons: Record<ToastType, ReactNode> = {
-    success: <CheckCircle2 className="h-5 w-5 text-green-600" />,
-    error: <XCircle className="h-5 w-5 text-red-500" />,
-    info: <Info className="h-5 w-5 text-[#2563EB]" />,
+    success: <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />,
+    error: <XCircle className="h-5 w-5 text-red-500 dark:text-red-400" />,
+    info: <Info className="h-5 w-5 text-brand-blue" />,
   }
 
   const borders: Record<ToastType, string> = {
-    success: 'border-green-200',
-    error: 'border-red-200',
-    info: 'border-blue-200',
+    success: 'border-green-200 dark:border-green-500/30',
+    error: 'border-red-200 dark:border-red-500/30',
+    info: 'border-blue-200 dark:border-blue-500/30',
   }
 
   return (
@@ -41,10 +41,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((t) => (
           <div
             key={t.id}
-            className={`pointer-events-auto flex items-start gap-3 rounded-xl border bg-white px-4 py-3 shadow-lg animate-fade-in ${borders[t.type]}`}
+            className={`pointer-events-auto flex items-start gap-3 rounded-xl border bg-surface px-4 py-3 shadow-lg animate-fade-in ${borders[t.type]}`}
           >
             <span className="mt-0.5">{icons[t.type]}</span>
-            <p className="text-sm text-[#172033]">{t.message}</p>
+            <p className="text-sm text-ink">{t.message}</p>
           </div>
         ))}
       </div>

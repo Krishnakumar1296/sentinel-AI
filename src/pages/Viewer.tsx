@@ -73,19 +73,19 @@ export default function Viewer() {
           </button>
           <div>
             <h1 className="page-title text-2xl font-bold">Document Viewer</h1>
-            <p className="flex items-center gap-1.5 text-sm text-[#64748B]">
-              <FileText className="h-4 w-4 text-red-500" /> {doc.name}
+            <p className="flex items-center gap-1.5 text-sm text-muted">
+              <FileText className="h-4 w-4 text-red-500 dark:text-red-400" /> {doc.name}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-3 py-2">
-          <ShieldCheck className="h-4 w-4 text-green-600" />
-          <span className="text-xs font-medium text-green-700">Authorized for your role</span>
+        <div className="flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-3 py-2 dark:border-green-500/20 dark:bg-green-500/10">
+          <ShieldCheck className="h-4 w-4 text-green-600 dark:text-green-400" />
+          <span className="text-xs font-medium text-green-700 dark:text-green-400">Authorized for your role</span>
         </div>
       </div>
 
       {searchParams.get('page') && docId !== 'd5' && (
-        <div className="flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+        <div className="flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-400">
           <BookOpen className="h-4 w-4" />
           Navigated to cited page {citedPage} — highlighted evidence from the AI answer.
         </div>

@@ -44,7 +44,7 @@ export default function Settings() {
                 key={t.id}
                 onClick={() => setTab(t.id)}
                 className={`flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition ${
-                  tab === t.id ? 'bg-blue-50 text-[#2563EB]' : 'text-[#64748B] hover:bg-slate-50'
+                  tab === t.id ? 'bg-brand-blue/10 text-brand-blue' : 'text-muted hover:bg-surface-muted'
                 }`}
               >
                 <t.icon className="h-[18px] w-[18px]" />
@@ -53,11 +53,11 @@ export default function Settings() {
             ))}
           </div>
           <div className="mt-4 card flex items-center gap-3 p-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-50 text-green-600">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400">
               <Shield className="h-5 w-5" />
             </div>
-            <div className="text-xs text-[#64748B]">
-              <p className="font-semibold text-green-700">Account secure</p>
+            <div className="text-xs text-muted">
+              <p className="font-semibold text-green-700 dark:text-green-400">Account secure</p>
               <p>Protected by RBAC</p>
             </div>
           </div>
@@ -72,8 +72,8 @@ export default function Settings() {
                     {name.charAt(0)}
                   </div>
                   <div>
-                    <p className="text-lg font-bold text-[#172033]">{name}</p>
-                    <span className="inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium capitalize text-[#2563EB] border-blue-200 bg-blue-50">
+                    <p className="text-lg font-bold text-ink">{name}</p>
+                    <span className="inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium capitalize text-brand-blue border-brand-blue/30 bg-brand-blue/10">
                       {user?.role ?? 'employee'}
                     </span>
                   </div>
@@ -85,11 +85,11 @@ export default function Settings() {
                   </div>
                   <div>
                     <label className="label">Email</label>
-                    <input value={email} disabled className="input bg-slate-50 text-slate-400" />
+                    <input value={email} disabled className="input bg-surface-muted text-faint" />
                   </div>
                   <div>
                     <label className="label">Department</label>
-                    <input value={department} disabled className="input bg-slate-50 text-slate-400" />
+                    <input value={department} disabled className="input bg-surface-muted text-faint" />
                   </div>
                 </div>
                 <div className="flex justify-end">
@@ -106,18 +106,18 @@ export default function Settings() {
                   { key: 'securityAlerts' as const, label: 'Security Alerts', desc: 'Unauthorized access attempts and security events' },
                   { key: 'weeklyDigest' as const, label: 'Weekly Digest', desc: 'Weekly summary of your knowledge activity' },
                 ].map((n) => (
-                  <div key={n.key} className="flex items-center justify-between gap-4 rounded-xl border border-slate-100 px-4 py-3">
+                  <div key={n.key} className="flex items-center justify-between gap-4 rounded-xl border border-line px-4 py-3">
                     <div>
-                      <p className="text-sm font-medium text-[#172033]">{n.label}</p>
-                      <p className="text-xs text-[#64748B]">{n.desc}</p>
+                      <p className="text-sm font-medium text-ink">{n.label}</p>
+                      <p className="text-xs text-muted">{n.desc}</p>
                     </div>
                     <button
                       role="switch"
                       aria-checked={notifPrefs[n.key]}
                       onClick={() => setNotifPrefs({ ...notifPrefs, [n.key]: !notifPrefs[n.key] })}
-                      className={`relative h-6 w-11 shrink-0 rounded-full transition ${notifPrefs[n.key] ? 'bg-[#2563EB]' : 'bg-slate-200'}`}
+                      className={`relative h-6 w-11 shrink-0 rounded-full transition ${notifPrefs[n.key] ? 'bg-brand-blue' : 'bg-surface-soft'}`}
                     >
-                      <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${notifPrefs[n.key] ? 'left-[22px]' : 'left-0.5'}`} />
+                      <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-surface shadow transition-all ${notifPrefs[n.key] ? 'left-[22px]' : 'left-0.5'}`} />
                     </button>
                   </div>
                 ))}
@@ -129,11 +129,11 @@ export default function Settings() {
 
             {tab === 'security' && (
               <div className="space-y-5">
-                <div className="flex items-start gap-3 rounded-xl border border-green-200 bg-green-50/60 px-4 py-3">
-                  <Shield className="mt-0.5 h-5 w-5 text-green-600" />
-                  <div className="text-sm text-green-800">
+                <div className="flex items-start gap-3 rounded-xl border border-green-200 bg-green-50/60 px-4 py-3 dark:border-green-500/20 dark:bg-green-500/10">
+                  <Shield className="mt-0.5 h-5 w-5 text-green-600 dark:text-green-400" />
+                  <div className="text-sm text-green-800 dark:text-green-400">
                     <p className="font-semibold">Password &amp; Security</p>
-                    <p className="mt-0.5 text-green-700">Your account uses enterprise single sign-on with multi-factor authentication.</p>
+                    <p className="mt-0.5 text-green-700 dark:text-green-400">Your account uses enterprise single sign-on with multi-factor authentication.</p>
                   </div>
                 </div>
                 <div className="space-y-3">
@@ -157,8 +157,8 @@ export default function Settings() {
             {tab === 'appearance' && (
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm font-medium text-[#172033]">Theme</p>
-                  <p className="text-xs text-[#64748B]">Sentinel AI uses a light enterprise theme for clarity.</p>
+                  <p className="text-sm font-medium text-ink">Theme</p>
+                  <p className="text-xs text-muted">Sentinel AI uses a light enterprise theme for clarity.</p>
                 </div>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                   {['Enterprise Light', 'Corporate Dark', 'Calm Contrast'].map((t, i) => (
@@ -166,7 +166,7 @@ export default function Settings() {
                       key={t}
                       onClick={() => toast('info', `${t} theme is not available in this build`)}
                       className={`flex items-center justify-center gap-2 rounded-xl border px-4 py-6 text-sm font-medium transition ${
-                        i === 0 ? 'border-[#2563EB]/40 bg-blue-50/60 text-[#2563EB]' : 'border-slate-200 text-slate-500 hover:border-slate-300'
+                        i === 0 ? 'border-brand-blue/40 bg-brand-blue/10 text-brand-blue' : 'border-line text-muted hover:border-line'
                       }`}
                     >
                       <Palette className="h-4 w-4" />

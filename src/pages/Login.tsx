@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Eye, EyeOff, Lock, LogIn, ShieldCheck, Search, FileCheck, Users, UserRound, Shield, ArrowLeft } from 'lucide-react'
+import { Eye, EyeOff, Lock, LogIn, ShieldCheck, Search, FileCheck, Users, UserRound, Shield, ArrowLeft, Sun, Moon } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import { useTheme } from '../context/ThemeContext'
 import { loginUser } from '../services/api'
 
 const features = [
@@ -45,6 +46,7 @@ const portalConfig: Record<Portal, {
 export default function Login() {
   const { login } = useAuth()
   const navigate = useNavigate()
+  const { theme, toggleTheme } = useTheme()
   const [portal, setPortal] = useState<Portal>('employee')
   const cfg = portalConfig[portal]
   const [email, setEmail] = useState(cfg.email)
@@ -130,11 +132,20 @@ export default function Login() {
       </div>
 
       {/* Right — login card */}
-      <div className="flex w-full items-center justify-center bg-[#F7F9FC] px-6 py-10 lg:w-1/2">
+      <div className="relative flex w-full items-center justify-center bg-canvas px-6 py-10 lg:w-1/2">
+        <button
+          onClick={toggleTheme}
+          className="absolute right-5 top-5 rounded-lg p-2 text-muted transition hover:bg-surface-soft hover:text-ink"
+          title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          aria-label="Toggle theme"
+        >
+          {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+        </button>
+
         <div className="w-full max-w-md">
           <div className="mb-8 flex flex-col items-center text-center lg:hidden">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-xl font-bold text-white">S</div>
-            <p className="mt-3 text-lg font-bold tracking-tight text-[#123B5D]">SENTINEL AI</p>
+            <p className="mt-3 text-lg font-bold tracking-tight text-ink">SENTINEL AI</p>
           </div>
 
           <div className="card p-8 shadow-card-md">
@@ -144,11 +155,11 @@ export default function Login() {
               </div>
             </div>
 
-            <h2 className="text-center text-2xl font-bold text-[#172033]">{cfg.title}</h2>
-            <p className="mt-1 text-center text-sm text-[#64748B]">{cfg.subtitle}</p>
+            <h2 className="text-center text-2xl font-bold text-ink">{cfg.title}</h2>
+            <p className="mt-1 text-center text-sm text-muted">{cfg.subtitle}</p>
 
             {/* Portal selector */}
-            <div className="mt-5 grid grid-cols-2 gap-2 rounded-xl bg-slate-100 p-1.5">
+            <div className="mt-5 grid grid-cols-2 gap-2 rounded-xl bg-surface-soft p-1.5">
               {(Object.keys(portalConfig) as Portal[]).map((p) => {
                 const pc = portalConfig[p]
                 const active = portal === p
@@ -158,7 +169,7 @@ export default function Login() {
                     type="button"
                     onClick={() => selectPortal(p)}
                     className={`flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition ${
-                      active ? 'bg-white text-[#172033] shadow-sm' : 'text-[#64748B] hover:text-[#172033]'
+                      active ? 'bg-surface text-ink shadow-sm' : 'text-muted hover:text-ink'
                     }`}
                   >
                     <pc.icon className={`h-4 w-4 ${active ? '' : 'opacity-60'}`} />
@@ -168,7 +179,7 @@ export default function Login() {
               })}
             </div>
 
-            <p className="mt-3 flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-2 text-xs text-[#64748B]">
+            <p className="mt-3 flex items-center gap-2 rounded-lg bg-surface-muted px-3 py-2 text-xs text-muted">
               <Lock className="h-3.5 w-3.5 shrink-0" />
               {cfg.desc}
             </p>
@@ -199,7 +210,7 @@ export default function Login() {
                   <button
                     type="button"
                     onClick={() => setShowPw((s) => !s)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-slate-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-faint transition hover:text-muted"
                   >
                     {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -207,7 +218,7 @@ export default function Login() {
               </div>
 
               {error && (
-                <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400">
                   <span>{error}</span>
                 </div>
               )}
@@ -226,18 +237,18 @@ export default function Login() {
               </button>
 
               <div className="text-center">
-                <button type="button" className="flex items-center justify-center gap-1 text-sm font-medium text-[#64748B] hover:text-[#2563EB]">
+                <button type="button" className="flex items-center justify-center gap-1 text-sm font-medium text-muted hover:text-brand-blue">
                   <ArrowLeft className="h-3.5 w-3.5" /> Forgot password?
                 </button>
               </div>
             </form>
 
-            <div className="mt-6 border-t border-slate-100 pt-5">
-              <div className="flex items-center justify-center gap-2 text-xs text-[#64748B]">
+            <div className="mt-6 border-t border-line-soft pt-5">
+              <div className="flex items-center justify-center gap-2 text-xs text-muted">
                 <Lock className="h-3.5 w-3.5" />
                 Secure enterprise authentication
               </div>
-              <p className="mt-1.5 text-center text-xs text-[#64748B]">Your access is protected by role-based security</p>
+              <p className="mt-1.5 text-center text-xs text-muted">Your access is protected by role-based security</p>
             </div>
           </div>
         </div>

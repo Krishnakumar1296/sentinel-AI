@@ -21,7 +21,7 @@ export function ConfidenceScore({
     <div className="flex flex-col items-center">
       <div className="relative" style={{ width: dims, height: dims }}>
         <svg width={dims} height={dims} className="-rotate-90">
-          <circle cx={dims / 2} cy={dims / 2} r={radius} fill="none" stroke="#E2E8F0" strokeWidth={stroke} />
+          <circle cx={dims / 2} cy={dims / 2} r={radius} fill="none" stroke="var(--line)" strokeWidth={stroke} />
           <circle
             cx={dims / 2}
             cy={dims / 2}
@@ -36,12 +36,12 @@ export function ConfidenceScore({
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className={cn('font-bold text-[#172033]', size === 'lg' ? 'text-2xl' : size === 'md' ? 'text-lg' : 'text-sm')}>
+          <span className={cn('font-bold text-ink', size === 'lg' ? 'text-2xl' : size === 'md' ? 'text-lg' : 'text-sm')}>
             {value}%
           </span>
         </div>
       </div>
-      {label && <p className="mt-2 text-center text-sm font-medium text-[#64748B]">{label}</p>}
+      {label && <p className="mt-2 text-center text-sm font-medium text-muted">{label}</p>}
     </div>
   )
 }

@@ -16,12 +16,12 @@ export default function Roles() {
         <ErrorState variant="unauthorized" title="Access Restricted" message="Role management is restricted to administrators.">
           <div className="mx-auto max-w-xs space-y-3 text-sm">
             <div className="flex justify-between">
-              <span className="text-[#64748B]">Your role</span>
-              <span className="font-semibold capitalize text-[#172033]">{user?.role ?? 'employee'}</span>
+              <span className="text-muted">Your role</span>
+              <span className="font-semibold capitalize text-ink">{user?.role ?? 'employee'}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#64748B]">Required role</span>
-              <span className="font-semibold text-[#172033]">Admin</span>
+              <span className="text-muted">Required role</span>
+              <span className="font-semibold text-ink">Admin</span>
             </div>
           </div>
         </ErrorState>
@@ -46,12 +46,12 @@ export default function Roles() {
         ].map((r) => (
           <div key={r.name} className="card p-5">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-[#2563EB]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue">
                 <r.icon className="h-5 w-5" />
               </div>
               <div>
-                <p className="font-semibold text-[#172033]">{r.name}</p>
-                <p className="text-xs text-[#64748B]">{r.desc}</p>
+                <p className="font-semibold text-ink">{r.name}</p>
+                <p className="text-xs text-muted">{r.desc}</p>
               </div>
             </div>
           </div>
@@ -59,18 +59,18 @@ export default function Roles() {
       </div>
 
       <div>
-        <h2 className="mb-3 text-base font-semibold text-[#172033]">Permissions Matrix</h2>
+        <h2 className="mb-3 text-base font-semibold text-ink">Permissions Matrix</h2>
         <PermissionMatrix />
-        <p className="mt-3 text-xs text-[#64748B]">
+        <p className="mt-3 text-xs text-muted">
           Note: Frontend role hiding is a UI feature only. The backend must enforce authorization before any document retrieval.
         </p>
       </div>
 
       <div className="card flex items-center gap-3 p-5">
-        <ShieldCheck className="h-5 w-5 text-green-600" />
-        <p className="text-sm text-[#64748B]">
+        <ShieldCheck className="h-5 w-5 text-green-600 dark:text-green-400" />
+        <p className="text-sm text-muted">
           Managing users?{' '}
-          <button onClick={() => navigate('/users')} className="font-medium text-[#2563EB] hover:text-[#1D4ED8]">Go to User Management</button>
+          <button onClick={() => navigate('/users')} className="font-medium text-brand-blue hover:text-brand-blue">Go to User Management</button>
         </p>
       </div>
     </div>

@@ -35,9 +35,9 @@ export default function Sidebar({ user, logout }: SidebarProps) {
   const isAdmin = role === 'admin'
 
   const linkBase =
-    'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#172033] transition-colors duration-150'
+    'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-muted hover:bg-surface-soft hover:text-ink transition-colors duration-150'
 
-  const activeClass = 'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium bg-blue-50 text-[#2563EB]'
+  const activeClass = 'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium bg-brand-blue/10 text-brand-blue'
 
   const handleLogout = () => {
     logout()
@@ -45,21 +45,21 @@ export default function Sidebar({ user, logout }: SidebarProps) {
   }
 
   return (
-    <aside className="sidebar-width hidden h-screen shrink-0 flex-col border-r border-[#E2E8F0] bg-white lg:flex">
-      <div className="flex h-16 items-center gap-2.5 border-b border-[#E2E8F0] px-5">
+    <aside className="sidebar-width hidden h-screen shrink-0 flex-col border-r border-line bg-surface lg:flex">
+      <div className="flex h-16 items-center gap-2.5 border-b border-line px-5">
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-sm font-bold text-white">
           S
         </div>
         <div className="leading-tight">
-          <p className="text-sm font-bold tracking-tight text-[#123B5D]">SENTINEL</p>
-          <p className="text-[10px] font-medium uppercase tracking-widest text-[#64748B]">
+          <p className="text-sm font-bold tracking-tight text-ink">SENTINEL</p>
+          <p className="text-[10px] font-medium uppercase tracking-widest text-muted">
             Secure Intelligence
           </p>
         </div>
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-4">
-        <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-wider text-faint">
           Workspace
         </p>
 
@@ -79,14 +79,14 @@ export default function Sidebar({ user, logout }: SidebarProps) {
           <>
             <button
               onClick={() => setDocsOpen((o) => !o)}
-              className="flex w-full items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#172033] transition-colors duration-150"
+              className="flex w-full items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-muted hover:bg-surface-soft hover:text-ink transition-colors duration-150"
             >
               <Files className="h-[18px] w-[18px]" />
               Documents
               <ChevronDown className={`ml-auto h-4 w-4 transition-transform ${docsOpen ? 'rotate-90' : ''}`} />
             </button>
             {docsOpen && (
-              <div className="mb-1 ml-3 border-l border-[#E2E8F0] pl-3">
+              <div className="mb-1 ml-3 border-l border-line pl-3">
                 <NavLink to="/documents" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
                   <FileText className="h-[18px] w-[18px]" />
                   All Documents
@@ -137,7 +137,7 @@ export default function Sidebar({ user, logout }: SidebarProps) {
 
         {isAdmin && (
           <>
-            <p className="mb-1 mt-5 px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+            <p className="mb-1 mt-5 px-3 text-[11px] font-semibold uppercase tracking-wider text-faint">
               Administration
             </p>
             <NavLink to="/users" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
@@ -156,27 +156,29 @@ export default function Sidebar({ user, logout }: SidebarProps) {
         )}
       </nav>
 
-      <div className="border-t border-[#E2E8F0] p-3">
-        <div className="flex items-center gap-3 rounded-lg bg-[#F7F9FC] px-3 py-2.5">
+      <div className="border-t border-line p-3">
+        <div className="flex items-center gap-3 rounded-lg bg-surface-muted px-3 py-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-semibold text-white">
             {user?.name?.charAt(0) ?? 'K'}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-[#172033] capitalize">{user?.name ?? 'Krishna Kumar'}</p>
-            <p className="text-xs font-medium uppercase tracking-wide text-[#2563EB]">{role}</p>
+            <p className="truncate text-sm font-semibold text-ink capitalize">{user?.name ?? 'Krishna Kumar'}</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-brand-blue">{role}</p>
           </div>
           <button
             onClick={handleLogout}
-            className="rounded-md p-1.5 text-[#64748B] transition hover:bg-slate-200 hover:text-red-500"
+            className="rounded-md p-1.5 text-muted transition hover:bg-surface-soft hover:text-red-500"
             title="Sign out"
           >
             <LogOut className="h-4 w-4" />
           </button>
         </div>
-        <p className="mt-3 flex items-center justify-center gap-1.5 text-[10px] text-slate-400">
-          <Shield className="h-3 w-3 text-green-500" />
-          Secure · RBAC Enforced
-        </p>
+        <div className="mt-2 flex items-center justify-between px-1">
+          <p className="flex items-center gap-1.5 text-[10px] text-faint">
+            <Shield className="h-3 w-3 text-green-500" />
+            Secure · RBAC
+          </p>
+        </div>
       </div>
     </aside>
   )

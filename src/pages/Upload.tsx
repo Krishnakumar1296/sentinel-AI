@@ -38,14 +38,14 @@ export default function Upload() {
         >
           <div className="mx-auto max-w-xs space-y-3 text-sm">
             <div className="flex justify-between">
-              <span className="text-[#64748B]">Your role</span>
-              <span className="font-semibold capitalize text-[#172033]">{user?.role ?? 'employee'}</span>
+              <span className="text-muted">Your role</span>
+              <span className="font-semibold capitalize text-ink">{user?.role ?? 'employee'}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#64748B]">Required role</span>
-              <span className="font-semibold text-[#172033]">Manager</span>
+              <span className="text-muted">Required role</span>
+              <span className="font-semibold text-ink">Manager</span>
             </div>
-            <p className="text-xs text-[#64748B]">Contact your administrator if you believe this access is required.</p>
+            <p className="text-xs text-muted">Contact your administrator if you believe this access is required.</p>
           </div>
         </ErrorState>
       </div>
@@ -77,12 +77,12 @@ export default function Upload() {
 
       {done ? (
         <div className="card flex flex-col items-center p-10 text-center">
-          <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-green-100">
-            <CheckCircle2 className="h-7 w-7 text-green-600" />
+          <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 dark:bg-green-500/10">
+            <CheckCircle2 className="h-7 w-7 text-green-600 dark:text-green-400" />
           </div>
-          <h2 className="text-lg font-semibold text-[#172033]">Document Uploaded Successfully</h2>
-          <p className="mt-1 text-sm text-[#64748B]">
-            <span className="font-medium text-[#172033]">{name || file?.name}</span> is now available in the secure knowledge vault.
+          <h2 className="text-lg font-semibold text-ink">Document Uploaded Successfully</h2>
+          <p className="mt-1 text-sm text-muted">
+            <span className="font-medium text-ink">{name || file?.name}</span> is now available in the secure knowledge vault.
           </p>
           <div className="mt-6 flex gap-3">
             <button
@@ -117,7 +117,7 @@ export default function Upload() {
           </div>
 
           <form onSubmit={handleUpload} className="card h-fit p-6">
-            <h2 className="text-base font-semibold text-[#172033]">Document Information</h2>
+            <h2 className="text-base font-semibold text-ink">Document Information</h2>
             <div className="mt-5 space-y-4">
               <div>
                 <label className="label">Document Name</label>

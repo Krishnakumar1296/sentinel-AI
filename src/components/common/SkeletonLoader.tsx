@@ -15,7 +15,7 @@ export function SkeletonLoader({ variant = 'default' }: { variant?: string }) {
       )
     case 'answer':
       return (
-        <div className="space-y-4 rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-card">
+        <div className="space-y-4 rounded-2xl border border-line bg-surface p-6 shadow-card">
           <div className="skeleton h-10 w-72" />
           <div className="space-y-2">
             <div className="skeleton h-4 w-full" />
@@ -52,7 +52,7 @@ export function SkeletonLoader({ variant = 'default' }: { variant?: string }) {
       )
     case 'evidence':
       return (
-        <div className="space-y-3 rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-card">
+        <div className="space-y-3 rounded-2xl border border-line bg-surface p-6 shadow-card">
           <div className="skeleton h-6 w-32" />
           <div className="skeleton h-4 w-48" />
           <div className="skeleton h-96 w-full rounded-xl" />

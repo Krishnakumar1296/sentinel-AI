@@ -34,12 +34,12 @@ export default function Users() {
         <ErrorState variant="unauthorized" title="Access Restricted" message="User management is restricted to administrators.">
           <div className="mx-auto max-w-xs space-y-3 text-sm">
             <div className="flex justify-between">
-              <span className="text-[#64748B]">Your role</span>
-              <span className="font-semibold capitalize text-[#172033]">{user?.role ?? 'employee'}</span>
+              <span className="text-muted">Your role</span>
+              <span className="font-semibold capitalize text-ink">{user?.role ?? 'employee'}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#64748B]">Required role</span>
-              <span className="font-semibold text-[#172033]">Admin</span>
+              <span className="text-muted">Required role</span>
+              <span className="font-semibold text-ink">Admin</span>
             </div>
           </div>
         </ErrorState>
@@ -104,7 +104,7 @@ export default function Users() {
       </div>
 
       <div className="relative max-w-md">
-        <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-faint" />
         <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search users..." className="input pl-10" />
       </div>
 
@@ -175,8 +175,8 @@ export default function Users() {
               {editUser?.name.charAt(0)}
             </div>
             <div>
-              <p className="font-semibold text-[#172033]">{editUser?.name}</p>
-              <p className="text-sm text-[#64748B]">{editUser?.email}</p>
+              <p className="font-semibold text-ink">{editUser?.name}</p>
+              <p className="text-sm text-muted">{editUser?.email}</p>
             </div>
           </div>
           <div>

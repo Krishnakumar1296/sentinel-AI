@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -10,38 +11,53 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        primary: {
-          DEFAULT: '#123B5D',
-          50: '#EBF4FB',
-          100: '#CCDFF0',
-          200: '#99BFE2',
-          300: '#669FD3',
-          400: '#337FC4',
-          500: '#2563EB',
-          600: '#1D4ED8',
-          700: '#1E3A5F',
-          800: '#123B5D',
-          900: '#0A2540',
-        },
-        brand: {
-          navy: '#123B5D',
-          blue: '#2563EB',
-          bg: '#F7F9FC',
-        },
+        canvas: 'var(--canvas)',
+        'canvas-soft': 'var(--canvas-soft)',
         surface: {
-          DEFAULT: '#FFFFFF',
-          secondary: '#F7F9FC',
-          tertiary: '#F1F5F9',
+          DEFAULT: 'var(--surface)',
+          muted: 'var(--surface-muted)',
+          soft: 'var(--surface-soft)',
+        },
+        line: {
+          DEFAULT: 'var(--line)',
+          soft: 'var(--line-soft)',
+        },
+        ink: {
+          DEFAULT: 'var(--ink)',
+          soft: 'var(--ink-soft)',
+        },
+        muted: {
+          DEFAULT: 'var(--text-muted)',
+          line: 'var(--text-faint)',
+        },
+        faint: 'var(--text-faint)',
+        brand: {
+          navy: 'rgb(var(--brand-navy) / <alpha-value>)',
+          blue: 'rgb(var(--brand-blue) / <alpha-value>)',
+          bg: 'var(--brand-bg)',
+        },
+        primary: {
+          DEFAULT: 'rgb(var(--brand-navy) / <alpha-value>)',
+          50: 'rgb(var(--primary-50) / <alpha-value>)',
+          100: 'rgb(var(--primary-100) / <alpha-value>)',
+          200: 'rgb(var(--primary-200) / <alpha-value>)',
+          300: 'rgb(var(--primary-300) / <alpha-value>)',
+          400: 'rgb(var(--primary-400) / <alpha-value>)',
+          500: 'rgb(var(--primary-500) / <alpha-value>)',
+          600: 'rgb(var(--primary-600) / <alpha-value>)',
+          700: 'rgb(var(--primary-700) / <alpha-value>)',
+          800: 'rgb(var(--primary-800) / <alpha-value>)',
+          900: 'rgb(var(--primary-900) / <alpha-value>)',
         },
       },
       backgroundImage: {
-        'corp-gradient': 'linear-gradient(135deg, #123B5D 0%, #1D4ED8 100%)',
+        'corp-gradient': 'linear-gradient(135deg, rgb(var(--brand-navy)) 0%, rgb(var(--brand-blue)) 100%)',
       },
       boxShadow: {
-        'card': '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
-        'card-md': '0 4px 16px rgba(0,0,0,0.08)',
-        'card-lg': '0 8px 32px rgba(0,0,0,0.10)',
-        'sidebar': '1px 0 0 #E2E8F0',
+        'card': '0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06)',
+        'card-md': '0 4px 16px rgba(16,24,40,0.06)',
+        'card-lg': '0 8px 32px rgba(16,24,40,0.08)',
+        'sidebar': '1px 0 0 var(--line)',
       },
       borderRadius: {
         'card': '14px',

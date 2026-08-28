@@ -12,9 +12,9 @@ import { EmptyState } from '../components/common/EmptyState'
 import { useToast } from '../components/common/Toast'
 
 const priorityColors: Record<KnowledgeGap['priority'], string> = {
-  high: 'border-red-200 bg-red-50 text-red-600',
-  medium: 'border-amber-200 bg-amber-50 text-amber-600',
-  low: 'border-slate-200 bg-slate-100 text-slate-600',
+  high: 'border-red-200 bg-red-50 text-red-600 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400',
+  medium: 'border-amber-200 bg-amber-50 text-amber-600 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-400',
+  low: 'border-line bg-surface-soft text-muted',
 }
 
 const statusBadge: Record<KnowledgeGap['status'], string> = {
@@ -80,10 +80,10 @@ export default function KnowledgeGaps() {
                     <stop offset="95%" stopColor="#DC2626" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
-                <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#64748B' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 12, fill: '#64748B' }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid #E2E8F0' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--line)" vertical={false} />
+                <XAxis dataKey="month" tick={{ fontSize: 12, fill: 'var(--text-muted)' }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 12, fill: 'var(--text-muted)' }} axisLine={false} tickLine={false} />
+                <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid var(--line)' }} />
                 <Area type="monotone" dataKey="count" stroke="#DC2626" strokeWidth={2} fill="url(#gapGrad)" />
               </AreaChart>
             </ResponsiveContainer>
@@ -95,11 +95,11 @@ export default function KnowledgeGaps() {
             {gapsByDept.map((d) => (
               <div key={d.department}>
                 <div className="mb-1 flex justify-between text-sm">
-                  <span className="font-medium text-[#172033]">{d.department}</span>
-                  <span className="text-[#64748B]">{d.count}</span>
+                  <span className="font-medium text-ink">{d.department}</span>
+                  <span className="text-muted">{d.count}</span>
                 </div>
-                <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
-                  <div className="h-full rounded-full bg-[#2563EB] transition-all duration-700" style={{ width: `${(d.count / maxDept) * 100}%` }} />
+                <div className="h-2.5 w-full overflow-hidden rounded-full bg-surface-soft">
+                  <div className="h-full rounded-full bg-brand-blue transition-all duration-700" style={{ width: `${(d.count / maxDept) * 100}%` }} />
                 </div>
               </div>
             ))}
@@ -113,7 +113,7 @@ export default function KnowledgeGaps() {
         action={
           <button
             onClick={() => toast('success', 'Document request created and routed to administrators')}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#2563EB] px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#1D4ED8]"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-brand-blue px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-brand-blue"
           >
             <PlusCircle className="h-4 w-4" />
             Create Document Request
@@ -123,7 +123,7 @@ export default function KnowledgeGaps() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[480px] text-left text-sm">
             <thead>
-              <tr className="border-b border-slate-100 text-xs font-semibold uppercase tracking-wide text-[#64748B]">
+              <tr className="border-b border-line-soft text-xs font-semibold uppercase tracking-wide text-muted">
                 <th className="py-3">Question</th>
                 <th className="py-3">Frequency</th>
                 <th className="py-3">Priority</th>
@@ -133,10 +133,10 @@ export default function KnowledgeGaps() {
             </thead>
             <tbody>
               {gaps.map((g) => (
-                <tr key={g.id} className="border-b border-slate-50 transition hover:bg-slate-50/50">
-                  <td className="py-3.5 font-medium text-[#172033]">{g.question}</td>
+                <tr key={g.id} className="border-b border-line-soft transition hover:bg-surface-muted/50">
+                  <td className="py-3.5 font-medium text-ink">{g.question}</td>
                   <td className="py-3.5">
-                    <span className="inline-flex min-w-9 items-center justify-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600">{g.frequency}</span>
+                    <span className="inline-flex min-w-9 items-center justify-center rounded-md bg-surface-soft px-2 py-0.5 text-xs font-semibold text-muted">{g.frequency}</span>
                   </td>
                   <td className="py-3.5">
                     <span className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-semibold uppercase ${priorityColors[g.priority]}`}>
@@ -146,7 +146,7 @@ export default function KnowledgeGaps() {
                   </td>
                   <td className="py-3.5">{statusBadge[g.status]}</td>
                   <td className="py-3.5 text-right">
-                    <button onClick={() => toast('info', 'Request logged for: ' + g.question)} className="text-sm font-medium text-[#2563EB] hover:text-[#1D4ED8]">
+                    <button onClick={() => toast('info', 'Request logged for: ' + g.question)} className="text-sm font-medium text-brand-blue hover:text-brand-blue">
                       Request
                     </button>
                   </td>

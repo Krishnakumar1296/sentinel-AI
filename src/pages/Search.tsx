@@ -73,7 +73,7 @@ export default function Search() {
       <div className={`card transition-all ${!hasSubmitted ? 'p-6 lg:p-8' : 'p-4'}`}>
         <form onSubmit={submit} className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="relative flex-1">
-            <SearchIcon className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+            <SearchIcon className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-faint" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -97,7 +97,7 @@ export default function Search() {
 
         {!hasSubmitted && (
           <div className="mt-6">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Suggested queries</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-faint">Suggested queries</p>
             <div className="mt-3 flex flex-wrap gap-2">
               {suggestions.map((s) => (
                 <button
@@ -106,7 +106,7 @@ export default function Search() {
                     setQuery(s)
                     runSearch(s)
                   }}
-                  className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-600 transition hover:border-slate-300 hover:bg-white hover:text-[#123B5D]"
+                  className="rounded-full border border-line bg-surface-muted px-4 py-2 text-sm text-muted transition hover:border-line hover:bg-surface hover:text-brand-blue"
                 >
                   {s}
                 </button>
@@ -129,14 +129,14 @@ export default function Search() {
 
       {noAnswer && !loading && result && (
         <div className="card flex flex-col items-center px-6 py-14 text-center">
-          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-amber-500">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-amber-500 dark:bg-amber-500/10 dark:text-amber-400">
             <BookOpen className="h-7 w-7" />
           </div>
-          <h3 className="text-lg font-semibold text-[#172033]">No Verified Answer Found</h3>
-          <p className="mt-1 max-w-md text-sm text-[#64748B]">
+          <h3 className="text-lg font-semibold text-ink">No Verified Answer Found</h3>
+          <p className="mt-1 max-w-md text-sm text-muted">
             Sentinel AI could not find sufficient evidence in your authorized company documents.
           </p>
-          <p className="mt-4 rounded-lg bg-amber-50 px-4 py-2 text-xs font-medium text-amber-700">
+          <p className="mt-4 rounded-lg bg-amber-50 px-4 py-2 text-xs font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">
             This query has been logged as a potential knowledge gap.
           </p>
           <button
@@ -152,38 +152,38 @@ export default function Search() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
           <div className={`space-y-6 ${isManager ? 'lg:col-span-3' : 'lg:col-span-5'}`}>
             <div className="card p-6">
-              <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
+              <div className="flex items-center gap-2 border-b border-line-soft pb-4">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-white">S</div>
                 <div>
-                  <p className="text-sm font-bold text-[#123B5D]">SENTINEL AI</p>
-                  <p className="text-[11px] uppercase tracking-wide text-slate-400">Answer</p>
+                  <p className="text-sm font-bold text-brand-blue">SENTINEL AI</p>
+                  <p className="text-[11px] uppercase tracking-wide text-faint">Answer</p>
                 </div>
               </div>
 
               <div className="mt-4 flex items-start gap-2">
-                <p className="text-sm font-semibold text-[#64748B]">Q.</p>
-                <p className="text-sm font-semibold text-[#172033]">{result.query}</p>
+                <p className="text-sm font-semibold text-muted">Q.</p>
+                <p className="text-sm font-semibold text-ink">{result.query}</p>
               </div>
 
-              <p className="mt-4 text-[15px] leading-relaxed text-slate-700 whitespace-pre-line">{result.answer}</p>
-              <p className="mt-3 text-xs text-slate-400">[AI-generated answer]</p>
+              <p className="mt-4 text-[15px] leading-relaxed text-ink whitespace-pre-line">{result.answer}</p>
+              <p className="mt-3 text-xs text-faint">[AI-generated answer]</p>
 
-              <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 pt-5">
+              <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-line-soft pt-5">
                 <div className="flex items-center gap-2 text-sm">
                   <span className="flex h-4 w-4 items-center justify-center">
-                    <svg className="h-4 w-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="h-4 w-4 text-green-500 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </span>
-                  <span className="font-medium text-[#64748B]">Confidence</span>
-                  <span className="font-bold text-[#172033]">{result.confidence}%</span>
+                  <span className="font-medium text-muted">Confidence</span>
+                  <span className="font-bold text-ink">{result.confidence}%</span>
                 </div>
-                <p className="text-xs text-[#64748B]">Answer verified against authorized documents</p>
+                <p className="text-xs text-muted">Answer verified against authorized documents</p>
               </div>
             </div>
 
             <div>
-              <h3 className="mb-3 text-sm font-semibold text-[#172033]">
+              <h3 className="mb-3 text-sm font-semibold text-ink">
                 Sources: {result.sources.length} documents
               </h3>
 
@@ -202,23 +202,23 @@ export default function Search() {
                   ))}
                 </div>
               ) : (
-                <div className="divide-y divide-slate-100 rounded-2xl border border-[#E2E8F0] bg-white shadow-card">
+                <div className="divide-y divide-line-soft rounded-2xl border border-line bg-surface shadow-card">
                   {result.sources.map((s, idx) => (
                     <div key={s.id} className="flex items-center gap-3 px-5 py-4">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-xs font-bold text-slate-600">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-surface-soft text-xs font-bold text-muted">
                         {idx + 1}
                       </span>
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-medium text-[#172033]">{s.documentName}</p>
-                        <p className="text-xs text-[#64748B]">Page {s.page} · Relevance {s.relevance}%</p>
+                        <p className="truncate text-sm font-medium text-ink">{s.documentName}</p>
+                        <p className="text-xs text-muted">Page {s.page} · Relevance {s.relevance}%</p>
                       </div>
-                      <span className="shrink-0 text-xs font-medium text-[#64748B]">
+                      <span className="shrink-0 text-xs font-medium text-muted">
                         Viewing not authorized
                       </span>
                     </div>
                   ))}
-                  <div className="flex items-center gap-2 border-t border-slate-100 bg-[#F7F9FC] px-5 py-3 text-xs text-[#64748B]">
-                    <ShieldCheck className="h-4 w-4 text-green-600" />
+                  <div className="flex items-center gap-2 border-t border-line-soft bg-surface-muted px-5 py-3 text-xs text-muted">
+                    <ShieldCheck className="h-4 w-4 text-green-600 dark:text-green-400" />
                     Source contents are restricted. Ask another question to explore.
                   </div>
                 </div>
