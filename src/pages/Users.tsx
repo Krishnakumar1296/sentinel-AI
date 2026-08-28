@@ -136,7 +136,7 @@ export default function Users() {
             <label className="label">Email</label>
             <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="input" required />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="label">Department</label>
               <select value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} className="input">

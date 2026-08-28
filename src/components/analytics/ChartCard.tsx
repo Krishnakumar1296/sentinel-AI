@@ -13,7 +13,7 @@ export function ChartCard({
 }) {
   return (
     <div className="card p-6">
-      <div className="mb-4 flex items-start justify-between">
+      <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-base font-semibold text-[#172033]">{title}</h2>
           {subtitle && <p className="text-sm text-[#64748B]">{subtitle}</p>}

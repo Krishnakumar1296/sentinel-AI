@@ -147,7 +147,7 @@ export default function Upload() {
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="Briefly describe the document contents..." className="input resize-none" />
               </div>
             </div>
-            <div className="mt-6 flex gap-3">
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <button type="button" onClick={() => navigate('/documents')} className="btn-secondary flex-1">Cancel</button>
               <button type="submit" disabled={!file || processing} className="btn-primary flex-1 disabled:opacity-60">
                 {processing ? (

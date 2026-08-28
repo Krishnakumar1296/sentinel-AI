@@ -120,13 +120,13 @@ export default function Dashboard() {
                 onClick={() => navigate('/history')}
                 className="flex w-full items-center justify-between rounded-xl border border-slate-100 px-4 py-3 text-left transition hover:border-slate-200 hover:bg-slate-50"
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-[#2563EB]">
+                <div className="flex min-w-0 flex-1 items-center gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-[#2563EB]">
                     <History className="h-4 w-4" />
                   </div>
-                  <span className="text-sm font-medium text-[#172033]">{r.q}</span>
+                  <span className="truncate text-sm font-medium text-[#172033]">{r.q}</span>
                 </div>
-                <span className="flex items-center gap-1.5 text-xs text-[#64748B]">
+                <span className="flex shrink-0 items-center gap-1.5 pl-2 text-xs text-[#64748B]">
                   <Clock className="h-3.5 w-3.5" /> {r.t}
                 </span>
               </button>

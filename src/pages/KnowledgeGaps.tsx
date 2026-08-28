@@ -62,7 +62,7 @@ export default function KnowledgeGaps() {
         <p className="page-subtitle">Identify questions your organization cannot currently answer.</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <KnowledgeGapCard value={String(openGaps)} label="Unanswered Queries" accent="danger" />
         <KnowledgeGapCard icon={TrendingUp} value={String(highPriority)} label="High Priority Gaps" accent="warning" />
         <KnowledgeGapCard icon={FileQuestion} value={String(openGaps)} label="Missing Policies" />

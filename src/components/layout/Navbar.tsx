@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Bell, Menu, LogOut, Search, ShieldCheck } from 'lucide-react'
 import type { UserRole } from '../../types'
 
@@ -16,6 +17,7 @@ const notifications = [
 
 export default function Navbar({ user, onMenuClick, onLogout }: NavbarProps) {
   const [notifOpen, setNotifOpen] = useState(false)
+  const navigate = useNavigate()
 
   return (
     <header className="relative z-30 flex h-16 shrink-0 items-center gap-3 border-b border-[#E2E8F0] bg-white/85 px-4 backdrop-blur-md lg:gap-6 lg:px-6">
@@ -46,6 +48,15 @@ export default function Navbar({ user, onMenuClick, onLogout }: NavbarProps) {
       </div>
 
       <div className="ml-auto flex items-center gap-2 lg:gap-4">
+        <button
+          onClick={() => navigate('/search')}
+          className="rounded-lg p-2 text-[#64748B] transition hover:bg-slate-100 hover:text-[#172033] md:hidden"
+          title="Search"
+          aria-label="Search"
+        >
+          <Search className="h-5 w-5" />
+        </button>
+
         <div className="relative">
           <button
             onClick={() => setNotifOpen((o) => !o)}
@@ -57,7 +68,7 @@ export default function Navbar({ user, onMenuClick, onLogout }: NavbarProps) {
           {notifOpen && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setNotifOpen(false)} />
-              <div className="absolute right-0 z-20 mt-2 w-80 overflow-hidden rounded-xl border border-[#E2E8F0] bg-white shadow-lg animate-fade-in">
+              <div className="absolute right-0 z-20 mt-2 w-80 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-[#E2E8F0] bg-white shadow-lg animate-fade-in">
                 <div className="border-b border-[#E2E8F0] px-4 py-3">
                   <p className="text-sm font-semibold text-[#172033]">Notifications</p>
                 </div>

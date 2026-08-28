@@ -88,7 +88,7 @@ export default function Analytics() {
         <p className="page-subtitle">Query performance and AI answer quality metrics.</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard icon={MessagesSquare} label="Total Queries" value={data.totalQueries.toLocaleString()} delta="This period" />
         <StatCard icon={CheckCircle2} label="Successful Answers" value={data.successfulAnswers.toLocaleString()} delta="95% success rate" iconClass="bg-green-50 text-green-600" />
         <StatCard icon={XCircle} label="Failed Queries" value={data.failedQueries.toLocaleString()} delta="Tracked as gaps" positive={false} iconClass="bg-red-50 text-red-500" />
@@ -113,7 +113,7 @@ export default function Analytics() {
         </ChartCard>
 
         <ChartCard title="Answer Quality" subtitle="AI performance metrics">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <QualityGauge value={data.faithfulnessScore} label="Faithfulness" />
             <QualityGauge value={data.contextRelevance} label="Context Relevance" />
             <QualityGauge value={data.answerConfidence} label="Answer Confidence" />
