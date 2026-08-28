@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { AuthProvider } from './context/AuthContext'
+import { AuthProvider, useAuth } from './context/AuthContext'
 import { ToastProvider } from './components/common/Toast'
+import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Search from './pages/Search'
@@ -16,27 +17,41 @@ import Roles from './pages/Roles'
 import Settings from './pages/Settings'
 import DashboardLayout from './layouts/DashboardLayout'
 
+function mainPath(role?: string) {
+  return role === 'admin' || role === 'manager' ? '/dashboard' : '/search'
+}
+
+function LoginRoute() {
+  const { user, isAuthenticated } = useAuth()
+  if (isAuthenticated) {
+    return <Navigate to={mainPath(user?.role)} replace />
+  }
+  return <Login />
+}
+
 function App() {
   return (
     <ToastProvider>
       <AuthProvider>
         <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<DashboardLayout />}>
-            <Route index element={<Navigate to="/dashboard" replace />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="search" element={<Search />} />
-            <Route path="documents" element={<Documents />} />
-            <Route path="upload" element={<Upload />} />
-            <Route path="viewer" element={<Viewer />} />
-            <Route path="history" element={<History />} />
-            <Route path="gaps" element={<KnowledgeGaps />} />
-            <Route path="analytics" element={<Analytics />} />
-            <Route path="security" element={<Security />} />
-            <Route path="users" element={<Users />} />
-            <Route path="roles" element={<Roles />} />
-            <Route path="settings" element={<Settings />} />
+          <Route path="/login" element={<LoginRoute />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<DashboardLayout />}>
+              <Route index element={<Navigate to="/dashboard" replace />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="search" element={<Search />} />
+              <Route path="documents" element={<Documents />} />
+              <Route path="upload" element={<Upload />} />
+              <Route path="viewer" element={<Viewer />} />
+              <Route path="history" element={<History />} />
+              <Route path="gaps" element={<KnowledgeGaps />} />
+              <Route path="analytics" element={<Analytics />} />
+              <Route path="security" element={<Security />} />
+              <Route path="users" element={<Users />} />
+              <Route path="roles" element={<Roles />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
           </Route>
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
