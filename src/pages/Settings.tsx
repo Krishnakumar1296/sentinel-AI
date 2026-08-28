@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { User as UserIcon, Bell, Shield, Palette, KeyRound } from 'lucide-react'
+import { User as UserIcon, Bell, Shield, Palette, KeyRound, Check, Sun, Moon, Contrast } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import { useTheme } from '../context/ThemeContext'
 import { useToast } from '../components/common/Toast'
 
 type Tab = 'profile' | 'notifications' | 'security' | 'appearance'
@@ -8,6 +9,7 @@ type Tab = 'profile' | 'notifications' | 'security' | 'appearance'
 export default function Settings() {
   const { user } = useAuth()
   const { toast } = useToast()
+  const { theme, setTheme } = useTheme()
   const [tab, setTab] = useState<Tab>('profile')
 
   const tabs: { id: Tab; label: string; icon: typeof UserIcon }[] = [
@@ -155,24 +157,79 @@ export default function Settings() {
             )}
 
             {tab === 'appearance' && (
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <div>
                   <p className="text-sm font-medium text-ink">Theme</p>
-                  <p className="text-xs text-muted">Sentinel AI uses a light enterprise theme for clarity.</p>
+                  <p className="text-xs text-muted">Choose how Sentinel AI looks for you. Your selection is saved to this browser.</p>
                 </div>
+
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  {['Enterprise Light', 'Corporate Dark', 'Calm Contrast'].map((t, i) => (
+                  {[
+                    {
+                      id: 'light' as const,
+                      name: 'Enterprise Light',
+                      desc: 'Bright, calm and clean',
+                      icon: Sun,
+                      preview: 'bg-[#F5F7FA]',
+                      active: theme === 'light',
+                      bar: 'bg-[#FFFFFF]',
+                    },
+                    {
+                      id: 'dark' as const,
+                      name: 'Corporate Dark',
+                      desc: 'Muted charcoal, easy on the eyes',
+                      icon: Moon,
+                      preview: 'bg-[#0E1116]',
+                      active: theme === 'dark',
+                      bar: 'bg-[#161B22]',
+                    },
+                    {
+                      id: 'dark' as const,
+                      name: 'Calm Contrast',
+                      desc: 'Corporate dark with calm contrast',
+                      icon: Contrast,
+                      preview: 'bg-[#0E1116]',
+                      active: theme === 'dark',
+                      bar: 'bg-[#161B22]',
+                    },
+                  ].map((t) => (
                     <button
-                      key={t}
-                      onClick={() => toast('info', `${t} theme is not available in this build`)}
-                      className={`flex items-center justify-center gap-2 rounded-xl border px-4 py-6 text-sm font-medium transition ${
-                        i === 0 ? 'border-brand-blue/40 bg-brand-blue/10 text-brand-blue' : 'border-line text-muted hover:border-line'
+                      key={t.name}
+                      onClick={() => {
+                        setTheme(t.id)
+                        toast('success', `${t.name} theme applied`)
+                      }}
+                      className={`relative flex flex-col items-center gap-2 rounded-xl border p-5 text-sm font-medium transition ${
+                        t.active
+                          ? 'border-brand-blue/60 bg-brand-blue/10 text-brand-blue ring-2 ring-brand-blue/10'
+                          : 'border-line text-muted hover:border-line hover:bg-surface-muted'
                       }`}
                     >
-                      <Palette className="h-4 w-4" />
-                      {t}
+                      {t.active && (
+                        <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-brand-blue text-white">
+                          <Check className="h-3.5 w-3.5" />
+                        </span>
+                      )}
+                      <span className={`flex h-12 w-full items-end justify-center rounded-lg border p-1.5 ${t.preview}`}>
+                        <span className="flex w-full gap-1">
+                          <span className={`h-6 w-2/5 rounded shadow-sm ${t.bar}`} />
+                          <span className="h-6 flex-1 rounded bg-brand-blue/30" />
+                        </span>
+                      </span>
+                      <span className="flex items-center gap-1.5 text-sm">
+                        <t.icon className="h-4 w-4" /> {t.name}
+                      </span>
+                      <span className="text-center text-[11px] font-normal text-muted">{t.desc}</span>
                     </button>
                   ))}
+                </div>
+
+                <div className="flex items-start gap-3 rounded-xl border border-line bg-surface-muted/50 px-4 py-3 text-xs text-muted">
+                  <Palette className="mt-0.5 h-4 w-4 shrink-0 text-faint" />
+                  <p>
+                    Changes apply instantly across the entire workspace, including documents, analytics and search. You can
+                    also toggle themes from the sun/moon button in the top bar.
+                  </p>
                 </div>
               </div>
             )}
