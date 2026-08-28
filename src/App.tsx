@@ -43,24 +43,47 @@ function App() {
         <ThemeProvider>
         <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LandingRoute />} />
           <Route path="/login" element={<LoginRoute />} />
+          <Route path="/" element={<LandingRoute />} />
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<DashboardLayout />}>
-              <Route index element={<Navigate to="/dashboard" replace />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="search" element={<Search />} />
-              <Route path="documents" element={<Documents />} />
-              <Route path="upload" element={<Upload />} />
-              <Route path="viewer" element={<Viewer />} />
-              <Route path="history" element={<History />} />
-              <Route path="gaps" element={<KnowledgeGaps />} />
-              <Route path="analytics" element={<Analytics />} />
-              <Route path="security" element={<Security />} />
-              <Route path="users" element={<Users />} />
-              <Route path="roles" element={<Roles />} />
-              <Route path="settings" element={<Settings />} />
-              <Route path="about" element={<About />} />
+            <Route path="/dashboard" element={<DashboardLayout />}>
+              <Route index element={<Dashboard />} />
+            </Route>
+            <Route path="/search" element={<DashboardLayout />}>
+              <Route index element={<Search />} />
+            </Route>
+            <Route path="/documents" element={<DashboardLayout />}>
+              <Route index element={<Documents />} />
+            </Route>
+            <Route path="/upload" element={<DashboardLayout />}>
+              <Route index element={<Upload />} />
+            </Route>
+            <Route path="/viewer" element={<DashboardLayout />}>
+              <Route index element={<Viewer />} />
+            </Route>
+            <Route path="/history" element={<DashboardLayout />}>
+              <Route index element={<History />} />
+            </Route>
+            <Route path="/gaps" element={<DashboardLayout />}>
+              <Route index element={<KnowledgeGaps />} />
+            </Route>
+            <Route path="/analytics" element={<DashboardLayout />}>
+              <Route index element={<Analytics />} />
+            </Route>
+            <Route path="/security" element={<DashboardLayout />}>
+              <Route index element={<Security />} />
+            </Route>
+            <Route path="/users" element={<DashboardLayout />}>
+              <Route index element={<Users />} />
+            </Route>
+            <Route path="/roles" element={<DashboardLayout />}>
+              <Route index element={<Roles />} />
+            </Route>
+            <Route path="/settings" element={<DashboardLayout />}>
+              <Route index element={<Settings />} />
+            </Route>
+            <Route path="/about" element={<DashboardLayout />}>
+              <Route index element={<About />} />
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/login" replace />} />
