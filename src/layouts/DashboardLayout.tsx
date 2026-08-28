@@ -16,7 +16,7 @@ export default function DashboardLayout() {
   }
 
   return (
-    <div className="flex h-dvh min-h-dvh overflow-hidden bg-canvas text-ink">
+    <div className="corp-bg dark:corp-bg-dark flex h-dvh min-h-dvh overflow-hidden text-ink">
       <Sidebar user={user ? { name: user.name, role: user.role } : null} logout={logout} />
       <MobileSidebar open={mobileOpen} onClose={() => setMobileOpen(false)} user={user} logout={logout} />
 
