@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Bell, Menu, LogOut, Search, ShieldCheck, Sun, Moon, ChevronDown, Settings, UserRound, Mail, Building2 } from 'lucide-react'
+import { Bell, Menu, LogOut, Search, ShieldCheck, Sun, Moon, ChevronDown, Settings, UserRound, Mail, Building2, CheckCircle2, AlertTriangle, XCircle, Info, CheckCheck, BellOff } from 'lucide-react'
 import { useTheme } from '../../context/ThemeContext'
-import type { UserRole } from '../../types'
+import { getNotifications } from '../../services/api'
+import type { Notification, UserRole } from '../../types'
 
 interface NavbarProps {
   user: { name: string; role: UserRole; department: string; email?: string } | null
@@ -10,17 +11,42 @@ interface NavbarProps {
   onLogout: () => void
 }
 
-const notifications = [
-  { id: 1, title: 'Document Processing Complete', body: 'Security Policy.pdf is now available.', time: '2 minutes ago', dot: 'bg-green-500' },
-  { id: 2, title: 'Knowledge Gap Detected', body: 'A frequently asked question has no matching document.', time: '15 minutes ago', dot: 'bg-amber-500' },
-  { id: 3, title: 'Security Alert', body: 'Unauthorized document access attempt blocked.', time: '1 hour ago', dot: 'bg-red-500' },
-]
-
 export default function Navbar({ user, onMenuClick, onLogout }: NavbarProps) {
   const [notifOpen, setNotifOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
+  const [notifications, setNotifications] = useState<Notification[]>([])
+  const [loadingNotifs, setLoadingNotifs] = useState(false)
   const navigate = useNavigate()
   const { theme, toggleTheme } = useTheme()
+
+  const unreadCount = notifications.filter((n) => !n.read).length
+
+  useEffect(() => {
+    let active = true
+    setLoadingNotifs(true)
+    getNotifications().then((n) => {
+      if (active) {
+        setNotifications(n)
+        setLoadingNotifs(false)
+      }
+    })
+    return () => { active = false }
+  }, [])
+
+  const markRead = (id: string) => {
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)))
+  }
+
+  const markAllRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
+  }
+
+  const notifIcons: Record<Notification['type'], { icon: typeof Info; styles: string }> = {
+    success: { icon: CheckCircle2, styles: 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10' },
+    warning: { icon: AlertTriangle, styles: 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10' },
+    error: { icon: XCircle, styles: 'text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-500/10' },
+    info: { icon: Info, styles: 'text-brand-blue bg-brand-blue/10' },
+  }
 
   return (
     <header className="relative z-30 flex h-16 shrink-0 items-center gap-3 border-b border-line bg-canvas-soft/85 px-4 backdrop-blur-md lg:gap-6 lg:px-6">
@@ -73,28 +99,74 @@ export default function Navbar({ user, onMenuClick, onLogout }: NavbarProps) {
           <button
             onClick={() => setNotifOpen((o) => !o)}
             className="relative rounded-lg p-2 text-muted transition hover:bg-surface-soft hover:text-ink"
+            title="Notifications"
+            aria-label="Notifications"
           >
             <Bell className="h-5 w-5" />
-            <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-brand-blue" />
+            {unreadCount > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-blue px-1 text-[10px] font-bold text-white">
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </span>
+            )}
           </button>
           {notifOpen && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setNotifOpen(false)} />
               <div className="absolute right-0 z-20 mt-2 w-80 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-line bg-surface shadow-card-md animate-fade-in">
-                <div className="border-b border-line px-4 py-3">
+                <div className="flex items-center justify-between border-b border-line px-4 py-3">
                   <p className="text-sm font-semibold text-ink">Notifications</p>
+                  {unreadCount > 0 && (
+                    <button
+                      onClick={markAllRead}
+                      className="flex items-center gap-1 text-xs font-medium text-brand-blue hover:text-brand-blue"
+                    >
+                      <CheckCheck className="h-3.5 w-3.5" /> Mark all read
+                    </button>
+                  )}
                 </div>
                 <div className="max-h-80 overflow-y-auto">
-                  {notifications.map((n) => (
-                    <div key={n.id} className="flex gap-3 border-b border-line-soft px-4 py-3 transition hover:bg-surface-soft">
-                      <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${n.dot}`} />
-                      <div>
-                        <p className="text-sm font-medium text-ink">{n.title}</p>
-                        <p className="text-xs text-muted">{n.body}</p>
-                        <p className="mt-1 text-[11px] text-faint">{n.time}</p>
-                      </div>
+                  {loadingNotifs ? (
+                    <div className="space-y-3 p-4">
+                      {[0, 1, 2].map((i) => (
+                        <div key={i} className="flex gap-3">
+                          <div className="h-8 w-8 shrink-0 animate-pulse rounded-full bg-surface-soft" />
+                          <div className="flex-1 space-y-2">
+                            <div className="h-3 w-3/4 animate-pulse rounded bg-surface-soft" />
+                            <div className="h-3 w-full animate-pulse rounded bg-surface-soft" />
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  ) : notifications.length === 0 ? (
+                    <div className="flex flex-col items-center px-6 py-10 text-center">
+                      <BellOff className="h-8 w-8 text-faint" />
+                      <p className="mt-3 text-sm font-medium text-ink">You're all caught up</p>
+                      <p className="mt-1 text-xs text-muted">No notifications right now.</p>
+                    </div>
+                  ) : (
+                    notifications.map((n) => {
+                      const meta = notifIcons[n.type]
+                      return (
+                        <button
+                          key={n.id}
+                          onClick={() => markRead(n.id)}
+                          className={`flex w-full gap-3 border-b border-line-soft px-4 py-3 text-left transition hover:bg-surface-soft ${n.read ? 'bg-surface-muted/30 opacity-75' : ''}`}
+                        >
+                          <span className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${meta.styles}`}>
+                            <meta.icon className="h-4 w-4" />
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="flex items-center justify-between gap-2">
+                              <span className="truncate text-sm font-medium text-ink">{n.title}</span>
+                              {!n.read && <span className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-brand-blue" />}
+                            </span>
+                            <span className="mt-0.5 block text-xs leading-relaxed text-muted">{n.message}</span>
+                            <span className="mt-1 block text-[11px] text-faint">{n.timestamp}</span>
+                          </span>
+                        </button>
+                      )
+                    })
+                  )}
                 </div>
               </div>
             </>
