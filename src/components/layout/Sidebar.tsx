@@ -17,6 +17,7 @@ import {
   ChevronDown,
   LogOut,
   Shield,
+  Sparkles,
 } from 'lucide-react'
 import { useState } from 'react'
 import type { UserRole } from '../../types'
@@ -73,6 +74,11 @@ export default function Sidebar({ user, logout }: SidebarProps) {
         <NavLink to="/search" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
           <MessagesSquare className="h-[18px] w-[18px]" />
           AI Knowledge Search
+        </NavLink>
+
+        <NavLink to="/about" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
+          <Sparkles className="h-[18px] w-[18px]" />
+          Why Sentinel AI
         </NavLink>
 
         {isManager && (

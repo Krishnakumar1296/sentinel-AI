@@ -16,6 +16,7 @@ import Security from './pages/Security'
 import Users from './pages/Users'
 import Roles from './pages/Roles'
 import Settings from './pages/Settings'
+import About from './pages/About'
 import DashboardLayout from './layouts/DashboardLayout'
 
 function mainPath(role?: string) {
@@ -53,6 +54,7 @@ function App() {
               <Route path="users" element={<Users />} />
               <Route path="roles" element={<Roles />} />
               <Route path="settings" element={<Settings />} />
+              <Route path="about" element={<About />} />
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/login" replace />} />
