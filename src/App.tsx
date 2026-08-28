@@ -4,6 +4,7 @@ import { ThemeProvider } from './context/ThemeContext'
 import { ToastProvider } from './components/common/Toast'
 import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
+import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
 import Search from './pages/Search'
 import Documents from './pages/Documents'
@@ -31,6 +32,14 @@ function LoginRoute() {
   return <Login />
 }
 
+function LandingRoute() {
+  const { user, isAuthenticated } = useAuth()
+  if (isAuthenticated) {
+    return <Navigate to={mainPath(user?.role)} replace />
+  }
+  return <Landing />
+}
+
 function App() {
   return (
     <ToastProvider>
@@ -38,6 +47,7 @@ function App() {
         <ThemeProvider>
         <BrowserRouter>
         <Routes>
+          <Route path="/" element={<LandingRoute />} />
           <Route path="/login" element={<LoginRoute />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<DashboardLayout />}>
