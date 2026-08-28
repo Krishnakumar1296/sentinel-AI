@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Bell, Menu, LogOut, Search, ShieldCheck, Sun, Moon } from 'lucide-react'
+import { Bell, Menu, LogOut, Search, ShieldCheck, Sun, Moon, ChevronDown, Settings, UserRound, Mail, Building2 } from 'lucide-react'
 import { useTheme } from '../../context/ThemeContext'
 import type { UserRole } from '../../types'
 
 interface NavbarProps {
-  user: { name: string; role: UserRole; department: string } | null
+  user: { name: string; role: UserRole; department: string; email?: string } | null
   onMenuClick: () => void
   onLogout: () => void
 }
@@ -18,6 +18,7 @@ const notifications = [
 
 export default function Navbar({ user, onMenuClick, onLogout }: NavbarProps) {
   const [notifOpen, setNotifOpen] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false)
   const navigate = useNavigate()
   const { theme, toggleTheme } = useTheme()
 
@@ -105,14 +106,72 @@ export default function Navbar({ user, onMenuClick, onLogout }: NavbarProps) {
           <span className="text-xs font-medium text-green-700 dark:text-green-400">Secure</span>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white">
-            {user?.name?.charAt(0) ?? 'K'}
-          </div>
-          <div className="hidden text-right sm:block">
-            <p className="text-sm font-semibold leading-tight text-ink">{user?.name ?? 'Krishna Kumar'}</p>
-            <p className="text-xs font-medium uppercase tracking-wide text-muted capitalize">{user?.role ?? 'employee'}</p>
-          </div>
+        <div className="relative">
+          <button
+            onClick={() => setProfileOpen((o) => !o)}
+            className="flex items-center gap-2.5 rounded-lg p-1.5 pr-2 text-left transition hover:bg-surface-soft"
+            title="View your profile"
+            aria-label="Open profile"
+          >
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white">
+              {user?.name?.charAt(0) ?? 'K'}
+            </div>
+            <div className="hidden text-right sm:block">
+              <p className="text-sm font-semibold leading-tight text-ink">{user?.name ?? 'Krishna Kumar'}</p>
+              <p className="text-xs font-medium uppercase tracking-wide text-muted capitalize">{user?.role ?? 'employee'}</p>
+            </div>
+            <ChevronDown className={`hidden h-4 w-4 text-faint transition-transform sm:block ${profileOpen ? 'rotate-180' : ''}`} />
+          </button>
+          {profileOpen && (
+            <>
+              <div className="fixed inset-0 z-10" onClick={() => setProfileOpen(false)} />
+              <div className="absolute right-0 z-20 mt-2 w-72 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-line bg-surface shadow-card-md animate-fade-in">
+                <div className="flex items-center gap-3 border-b border-line px-4 py-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-lg font-semibold text-white">
+                    {user?.name?.charAt(0) ?? 'K'}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-bold capitalize text-ink">{user?.name ?? 'Krishna Kumar'}</p>
+                    <span className="inline-flex items-center gap-1 rounded-full border border-brand-blue/30 bg-brand-blue/10 px-2 py-0.5 text-[11px] font-medium capitalize text-brand-blue">
+                      <UserRound className="h-3 w-3" /> {user?.role ?? 'employee'}
+                    </span>
+                  </div>
+                </div>
+                <div className="space-y-3 border-b border-line px-4 py-4">
+                  {user?.email && (
+                    <div className="flex items-center gap-2.5 text-sm text-muted">
+                      <Mail className="h-4 w-4 shrink-0 text-faint" />
+                      <span className="min-w-0 truncate">{user.email}</span>
+                    </div>
+                  )}
+                  {user?.department && (
+                    <div className="flex items-center gap-2.5 text-sm text-muted">
+                      <Building2 className="h-4 w-4 shrink-0 text-faint" />
+                      <span className="capitalize">{user.department}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2.5 text-sm text-muted">
+                    <ShieldCheck className="h-4 w-4 shrink-0 text-green-600 dark:text-green-400" />
+                    <span>Access protected by RBAC</span>
+                  </div>
+                </div>
+                <div className="p-2">
+                  <button
+                    onClick={() => { setProfileOpen(false); navigate('/settings') }}
+                    className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-muted transition hover:bg-surface-muted hover:text-ink"
+                  >
+                    <Settings className="h-4 w-4" /> Account Settings
+                  </button>
+                  <button
+                    onClick={onLogout}
+                    className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-muted transition hover:bg-surface-muted hover:text-red-500"
+                  >
+                    <LogOut className="h-4 w-4" /> Sign out
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         <button

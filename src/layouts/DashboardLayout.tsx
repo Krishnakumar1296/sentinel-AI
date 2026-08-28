@@ -25,7 +25,7 @@ export default function DashboardLayout() {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <Navbar
-          user={user ? { name: user.name, role: user.role, department: user.department } : null}
+          user={user ? { name: user.name, role: user.role, department: user.department, email: user.email } : null}
           onMenuClick={() => setMobileOpen(true)}
           onLogout={handleLogout}
         />
