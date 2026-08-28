@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/layout/Navbar'
 import Sidebar from '../components/layout/Sidebar'
 import MobileSidebar from '../components/layout/MobileSidebar'
+import AnimatedBackground from '../components/layout/AnimatedBackground'
 
 export default function DashboardLayout() {
   const { user, logout } = useAuth()
@@ -16,7 +17,9 @@ export default function DashboardLayout() {
   }
 
   return (
-    <div className="corp-bg dark:corp-bg-dark flex h-dvh min-h-dvh overflow-hidden text-ink">
+    <div className="corp-bg dark:corp-bg-dark relative flex h-dvh min-h-dvh overflow-hidden text-ink">
+      <AnimatedBackground />
+      <div className="relative z-10 flex h-full min-h-dvh w-full">
       <Sidebar user={user ? { name: user.name, role: user.role } : null} logout={logout} />
       <MobileSidebar open={mobileOpen} onClose={() => setMobileOpen(false)} user={user} logout={logout} />
 
@@ -31,6 +34,7 @@ export default function DashboardLayout() {
             <Outlet />
           </div>
         </main>
+      </div>
       </div>
     </div>
   )
