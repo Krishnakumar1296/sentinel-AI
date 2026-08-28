@@ -33,10 +33,6 @@ function LoginRoute() {
 }
 
 function LandingRoute() {
-  const { user, isAuthenticated } = useAuth()
-  if (isAuthenticated) {
-    return <Navigate to={mainPath(user?.role)} replace />
-  }
   return <Landing />
 }
 
