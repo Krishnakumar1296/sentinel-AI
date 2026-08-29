@@ -20,7 +20,7 @@ const portalConfig: Record<Portal, {
   icon: typeof UserRound
   accent: string
   desc: string
-  email: string
+  username: string
   password: string
 }> = {
   employee: {
@@ -29,7 +29,7 @@ const portalConfig: Record<Portal, {
     icon: UserRound,
     accent: 'from-blue-500 to-indigo-600',
     desc: 'Access confidential policy documents and AI-powered knowledge search.',
-    email: 'emily@company.com',
+    username: 'emily',
     password: 'password123',
   },
   admin: {
@@ -38,7 +38,7 @@ const portalConfig: Record<Portal, {
     icon: Shield,
     accent: 'from-rose-500 to-red-600',
     desc: 'Manage users, roles, security, analytics and the knowledge base.',
-    email: 'krishna@company.com',
+    username: 'krishna',
     password: 'password123',
   },
 }
@@ -49,7 +49,7 @@ export default function Login() {
   const { theme, toggleTheme } = useTheme()
   const [portal, setPortal] = useState<Portal>('employee')
   const cfg = portalConfig[portal]
-  const [email, setEmail] = useState(cfg.email)
+  const [username, setUsername] = useState(cfg.username)
   const [password, setPassword] = useState(cfg.password)
   const [showPw, setShowPw] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -57,7 +57,7 @@ export default function Login() {
 
   const selectPortal = (p: Portal) => {
     setPortal(p)
-    setEmail(portalConfig[p].email)
+    setUsername(portalConfig[p].username)
     setPassword(portalConfig[p].password)
     setError('')
   }
@@ -67,9 +67,9 @@ export default function Login() {
     setError('')
     setLoading(true)
     try {
-      const user = await loginUser(email, password)
+      const user = await loginUser(username, password)
       if (!user) {
-        setError('Invalid email or password')
+        setError('Invalid username or password')
         return
       }
       if (portal === 'admin' && user.role !== 'admin') {
@@ -186,16 +186,16 @@ export default function Login() {
 
             <form onSubmit={handleSubmit} className="mt-5 space-y-4">
               <div>
-                <label className="label">Username or Email</label>
-                <input
-                  type="text"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="username or you@company.com"
-                  className="input"
-                  autoComplete="username"
-                  required
-                />
+                <label className="label">Username</label>
+                    <input
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="Enter your username"
+                      className="input"
+                      autoComplete="username"
+                      required
+                    />
               </div>
               <div>
                 <label className="label">Password</label>
