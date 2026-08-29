@@ -1,26 +1,26 @@
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import {
   LayoutDashboard,
   MessagesSquare,
   Files,
   FilePlus2,
   History,
-  Lightbulb,
   BarChart3,
-  ShieldCheck,
-  Settings,
   Users,
-  KeyRound,
-  ScrollText,
   FolderOpen,
   FileText,
   ChevronDown,
   LogOut,
   Shield,
   Sparkles,
+  MessageSquarePlus,
+  MessageCircleMore,
+  MessageSquareDashed,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { UserRole } from '../../types'
+import { getChats } from '../../services/api'
+import type { ChatSession } from '../../services/api'
 
 interface SidebarProps {
   user: { name: string; role: UserRole } | null
@@ -29,11 +29,19 @@ interface SidebarProps {
 
 export default function Sidebar({ user, logout }: SidebarProps) {
   const navigate = useNavigate()
+  const location = useLocation()
+  const [searchParams] = useSearchParams()
   const role = user?.role ?? 'employee'
   const [docsOpen, setDocsOpen] = useState(true)
+  const [chats, setChats] = useState<ChatSession[]>([])
 
   const isManager = role === 'manager' || role === 'admin'
   const isAdmin = role === 'admin'
+  const activeChatId = location.pathname === '/search' ? searchParams.get('chat') : null
+
+  useEffect(() => {
+    getChats().then(setChats)
+  }, [location])
 
   const linkBase =
     'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-muted hover:bg-surface-soft hover:text-ink transition-colors duration-150'
@@ -64,22 +72,56 @@ export default function Sidebar({ user, logout }: SidebarProps) {
           Workspace
         </p>
 
-        {isManager && (
+        {!isAdmin && (
+          <button
+            onClick={() => navigate(`/search?new=${Date.now()}`)}
+            className={linkBase}
+          >
+            <MessageSquarePlus className="h-[18px] w-[18px]" />
+            New Chat
+          </button>
+        )}
+
+        {role === 'manager' && (
           <NavLink to="/dashboard" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
             <LayoutDashboard className="h-[18px] w-[18px]" />
             Dashboard
           </NavLink>
         )}
 
-        <NavLink to="/search" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-          <MessagesSquare className="h-[18px] w-[18px]" />
-          AI Knowledge Search
-        </NavLink>
+        {!isAdmin && (
+          <NavLink to="/search" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
+            <MessagesSquare className="h-[18px] w-[18px]" />
+            AI Knowledge Search
+          </NavLink>
+        )}
 
-        <NavLink to="/about" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-          <Sparkles className="h-[18px] w-[18px]" />
-          Why Sentinel AI
-        </NavLink>
+        {!isAdmin && chats.filter((c) => c.messages.length > 0).length > 0 && (
+          <div className="mt-1">
+            <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-wider text-faint">
+              Recent Chats
+            </p>
+            {chats.filter((c) => c.messages.length > 0).slice(0, 6).map((c) => (
+              <NavLink
+                key={c.id}
+                to={`/search?chat=${c.id}`}
+                className={({ isActive }) =>
+                  isActive || activeChatId === c.id ? activeClass : `${linkBase} truncate`
+                }
+              >
+                <MessageCircleMore className="h-[18px] w-[18px] shrink-0" />
+                <span className="truncate">{c.title}</span>
+              </NavLink>
+            ))}
+          </div>
+        )}
+
+        {role === 'manager' && (
+          <NavLink to="/about" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
+            <Sparkles className="h-[18px] w-[18px]" />
+            Why Sentinel AI
+          </NavLink>
+        )}
 
         {isManager && (
           <>
@@ -97,10 +139,6 @@ export default function Sidebar({ user, logout }: SidebarProps) {
                   <FileText className="h-[18px] w-[18px]" />
                   All Documents
                 </NavLink>
-                <NavLink to="/documents?scope=mine" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-                  <FolderOpen className="h-[18px] w-[18px]" />
-                  My Documents
-                </NavLink>
                 <NavLink to="/upload" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
                   <FilePlus2 className="h-[18px] w-[18px]" />
                   Upload Document
@@ -110,36 +148,19 @@ export default function Sidebar({ user, logout }: SidebarProps) {
           </>
         )}
 
-        <NavLink to="/history" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-          <History className="h-[18px] w-[18px]" />
-          Search History
-        </NavLink>
-
-        {isManager && (
-          <NavLink to="/gaps" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-            <Lightbulb className="h-[18px] w-[18px]" />
-            Knowledge Gaps
+        {!isAdmin && (
+          <NavLink to="/history" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
+            <History className="h-[18px] w-[18px]" />
+            Search History
           </NavLink>
         )}
 
         {isManager && (
           <NavLink to="/analytics" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
             <BarChart3 className="h-[18px] w-[18px]" />
-            Analytics
+            Analytical Gap
           </NavLink>
         )}
-
-        {isAdmin && (
-          <NavLink to="/security" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-            <ShieldCheck className="h-[18px] w-[18px]" />
-            Security Center
-          </NavLink>
-        )}
-
-        <NavLink to="/settings" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-          <Settings className="h-[18px] w-[18px]" />
-          Settings
-        </NavLink>
 
         {isAdmin && (
           <>
@@ -150,13 +171,9 @@ export default function Sidebar({ user, logout }: SidebarProps) {
               <Users className="h-[18px] w-[18px]" />
               Users
             </NavLink>
-            <NavLink to="/roles" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-              <KeyRound className="h-[18px] w-[18px]" />
-              Roles &amp; Permissions
-            </NavLink>
-            <NavLink to="/security" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-              <ScrollText className="h-[18px] w-[18px]" />
-              Audit Logs
+            <NavLink to="/requests" className={({ isActive }) => (isActive ? activeClass : linkBase)}>
+              <MessageSquareDashed className="h-[18px] w-[18px]" />
+              Knowledge Requests
             </NavLink>
           </>
         )}

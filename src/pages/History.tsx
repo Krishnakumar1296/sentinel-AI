@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { History as HistoryIcon, CheckCircle2, XCircle, Search as SearchIcon, MinusCircle } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { History as HistoryIcon, CheckCircle2, XCircle, Search as SearchIcon, MinusCircle, ArrowUpRight } from 'lucide-react'
 import { getSearchHistory } from '../services/api'
 import type { SearchHistoryItem } from '../types'
 import { SkeletonLoader } from '../components/common/SkeletonLoader'
@@ -9,6 +9,7 @@ import { EmptyState } from '../components/common/EmptyState'
 export default function History() {
   const [items, setItems] = useState<SearchHistoryItem[]>([])
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
     getSearchHistory().then((h) => {
@@ -44,11 +45,16 @@ export default function History() {
                 <th className="px-4 py-3.5">Documents Used</th>
                 <th className="px-4 py-3.5">Confidence</th>
                 <th className="px-4 py-3.5">Status</th>
+                <th className="px-4 py-3.5 text-right">Action</th>
               </tr>
             </thead>
             <tbody>
               {items.map((h, i) => (
-                <tr key={h.id} className={`border-b border-line-soft transition hover:bg-surface-muted/50 ${i === items.length - 1 ? 'border-b-0' : ''}`}>
+                <tr
+                  key={h.id}
+                  onClick={() => navigate(`/search?conversation=${h.id}`)}
+                  className={`group cursor-pointer border-b border-line-soft transition hover:bg-brand-blue/5 ${i === items.length - 1 ? 'border-b-0' : ''}`}
+                >
                   <td className="px-5 py-4 font-medium text-ink">{h.query}</td>
                   <td className="whitespace-nowrap px-4 py-4 text-muted">{h.timestamp}</td>
                   <td className="px-4 py-4 text-muted">
@@ -73,8 +79,17 @@ export default function History() {
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-4">{statusBadge(h.status)}</td>
-                </tr>
+<td className="px-4 py-4">{statusBadge(h.status)}</td>
+                    <td className="px-4 py-4 text-right">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); navigate(`/search?conversation=${h.id}`) }}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-brand-blue transition hover:bg-brand-blue/10 hover:border-brand-blue/30"
+                      >
+                        Continue conversation
+                        <ArrowUpRight className="h-3.5 w-3.5" />
+                      </button>
+                    </td>
+                  </tr>
               ))}
             </tbody>
           </table>

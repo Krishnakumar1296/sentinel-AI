@@ -21,6 +21,7 @@ export default function Documents() {
 
   const scope = searchParams.get('scope')
   const isManager = user?.role === 'manager' || user?.role === 'admin'
+  const isAdmin = user?.role === 'admin'
 
   useEffect(() => {
     getDocuments().then((d) => {
@@ -96,7 +97,7 @@ export default function Documents() {
       {loading ? (
         <SkeletonLoader variant="library" />
       ) : filtered.length > 0 ? (
-        <DocumentTable documents={filtered} />
+        <DocumentTable documents={filtered} onEdit={isAdmin ? (d) => navigate(`/viewer?doc=${d.id}&edit=1`) : undefined} />
       ) : (
         <EmptyState
           icon={FileX2}

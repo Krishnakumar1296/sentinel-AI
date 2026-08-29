@@ -5,6 +5,7 @@ export interface User {
   id: string
   name: string
   email: string
+  username?: string
   department: string
   role: UserRole
   avatar?: string
@@ -34,6 +35,7 @@ export interface Document {
   uploadedBy: string
   updatedAt: string
   description?: string
+  content?: string
   indexed: boolean
 }
 
@@ -120,4 +122,15 @@ export interface Notification {
   message: string
   timestamp: string
   read: boolean
+  action?: string
+  requestId?: string
+}
+
+export interface KnowledgeRequest {
+  id: string
+  question: string
+  askedBy: string
+  timestamp: string
+  status: 'pending' | 'resolved'
+  documentId?: string
 }

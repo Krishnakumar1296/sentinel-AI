@@ -11,12 +11,11 @@ import Documents from './pages/Documents'
 import Upload from './pages/Upload'
 import Viewer from './pages/Viewer'
 import History from './pages/History'
-import KnowledgeGaps from './pages/KnowledgeGaps'
-import Analytics from './pages/Analytics'
+import AnalyticalGap from './pages/AnalyticalGap'
+import KnowledgeRequests from './pages/KnowledgeRequests'
 import Security from './pages/Security'
 import Users from './pages/Users'
 import Roles from './pages/Roles'
-import Settings from './pages/Settings'
 import About from './pages/About'
 import DashboardLayout from './layouts/DashboardLayout'
 
@@ -64,11 +63,11 @@ function App() {
             <Route path="/history" element={<DashboardLayout />}>
               <Route index element={<History />} />
             </Route>
-            <Route path="/gaps" element={<DashboardLayout />}>
-              <Route index element={<KnowledgeGaps />} />
-            </Route>
             <Route path="/analytics" element={<DashboardLayout />}>
-              <Route index element={<Analytics />} />
+              <Route index element={<AnalyticalGap />} />
+            </Route>
+            <Route path="/requests" element={<DashboardLayout />}>
+              <Route index element={<KnowledgeRequests />} />
             </Route>
             <Route path="/security" element={<DashboardLayout />}>
               <Route index element={<Security />} />
@@ -78,9 +77,6 @@ function App() {
             </Route>
             <Route path="/roles" element={<DashboardLayout />}>
               <Route index element={<Roles />} />
-            </Route>
-            <Route path="/settings" element={<DashboardLayout />}>
-              <Route index element={<Settings />} />
             </Route>
             <Route path="/about" element={<DashboardLayout />}>
               <Route index element={<About />} />

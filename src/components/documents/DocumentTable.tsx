@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { FileText, Eye } from 'lucide-react'
+import { FileText, Eye, Pencil } from 'lucide-react'
 import type { Document } from '../../types'
 
 const statusStyles: Record<Document['status'], string> = {
@@ -18,7 +18,7 @@ const accessLabels: Record<string, string> = {
   it: 'IT',
 }
 
-export function DocumentTable({ documents }: { documents: Document[] }) {
+export function DocumentTable({ documents, onEdit }: { documents: Document[]; onEdit?: (doc: Document) => void }) {
   const navigate = useNavigate()
 
   return (
@@ -32,7 +32,7 @@ export function DocumentTable({ documents }: { documents: Document[] }) {
             <th className="px-4 py-3.5">Access</th>
             <th className="px-4 py-3.5">Updated</th>
             <th className="px-4 py-3.5">Status</th>
-            <th className="px-4 py-3.5 text-right">View</th>
+            <th className="px-4 py-3.5 text-right">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -69,14 +69,25 @@ export function DocumentTable({ documents }: { documents: Document[] }) {
                 <td className="px-4 py-3.5">
                   <span className={statusStyles[d.status]}>{d.status}</span>
                 </td>
-                <td className="px-4 py-3.5 text-right">
-                  <button
-                    onClick={() => navigate(`/viewer?doc=${d.id}`)}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-line px-2.5 py-1.5 text-xs font-medium text-muted transition hover:border-line hover:text-ink"
-                  >
-                    <Eye className="h-3.5 w-3.5" />
-                    View
-                  </button>
+                <td className="px-4 py-3.5">
+                  <div className="flex items-center justify-end gap-2">
+                    {onEdit && (
+                      <button
+                        onClick={() => onEdit(d)}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-line px-2.5 py-1.5 text-xs font-medium text-muted transition hover:border-line hover:text-ink"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                        Edit
+                      </button>
+                    )}
+                    <button
+                      onClick={() => navigate(`/viewer?doc=${d.id}`)}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-line px-2.5 py-1.5 text-xs font-medium text-muted transition hover:border-line hover:text-ink"
+                    >
+                      <Eye className="h-3.5 w-3.5" />
+                      View
+                    </button>
+                  </div>
                 </td>
               </tr>
             )

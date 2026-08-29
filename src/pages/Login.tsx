@@ -186,13 +186,14 @@ export default function Login() {
 
             <form onSubmit={handleSubmit} className="mt-5 space-y-4">
               <div>
-                <label className="label">Email</label>
+                <label className="label">Username or Email</label>
                 <input
-                  type="email"
+                  type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@company.com"
+                  placeholder="username or you@company.com"
                   className="input"
+                  autoComplete="username"
                   required
                 />
               </div>

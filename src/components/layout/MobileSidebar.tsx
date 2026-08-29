@@ -1,11 +1,13 @@
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import {
   LayoutDashboard, MessagesSquare, Files, FilePlus2, History,
-  Lightbulb, BarChart3, ShieldCheck, Settings, Users, KeyRound,
-  ScrollText, FolderOpen, FileText, ChevronDown, X, LogOut, Sparkles,
+  BarChart3, Users,
+  FolderOpen, FileText, ChevronDown, X, LogOut, Sparkles, MessageSquarePlus, MessageCircleMore, MessageSquareDashed,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { User, UserRole } from '../../types'
+import { getChats } from '../../services/api'
+import type { ChatSession } from '../../services/api'
 
 interface MobileSidebarProps {
   open: boolean
@@ -21,11 +23,19 @@ interface BareUser {
 
 export default function MobileSidebar({ open, onClose, user, logout }: MobileSidebarProps) {
   const navigate = useNavigate()
+  const location = useLocation()
+  const [searchParams] = useSearchParams()
   const role = user?.role ?? 'employee'
   const [docsOpen, setDocsOpen] = useState(true)
+  const [chats, setChats] = useState<ChatSession[]>([])
 
   const isManager = role === 'manager' || role === 'admin'
   const isAdmin = role === 'admin'
+  const activeChatId = location.pathname === '/search' ? searchParams.get('chat') : null
+
+  useEffect(() => {
+    getChats().then(setChats)
+  }, [location])
 
   const linkBase =
     'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-muted hover:bg-surface-soft hover:text-ink transition-colors duration-150'
@@ -61,17 +71,45 @@ export default function MobileSidebar({ open, onClose, user, logout }: MobileSid
 
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-wider text-faint">Workspace</p>
-          {isManager && (
+          {!isAdmin && (
+            <button
+              onClick={() => { onClose(); navigate(`/search?new=${Date.now()}`) }}
+              className={linkBase}
+            >
+              <MessageSquarePlus className="h-[18px] w-[18px]" /> New Chat
+            </button>
+          )}
+          {role === 'manager' && (
             <NavLink to="/dashboard" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
               <LayoutDashboard className="h-[18px] w-[18px]" /> Dashboard
             </NavLink>
           )}
-          <NavLink to="/search" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-            <MessagesSquare className="h-[18px] w-[18px]" /> AI Knowledge Search
-          </NavLink>
-          <NavLink to="/about" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-            <Sparkles className="h-[18px] w-[18px]" /> Why Sentinel AI
-          </NavLink>
+          {!isAdmin && (
+            <NavLink to="/search" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
+              <MessagesSquare className="h-[18px] w-[18px]" /> AI Knowledge Search
+            </NavLink>
+          )}
+          {!isAdmin && chats.filter((c) => c.messages.length > 0).length > 0 && (
+            <div className="mt-1">
+              <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-wider text-faint">Recent Chats</p>
+              {chats.filter((c) => c.messages.length > 0).slice(0, 6).map((c) => (
+                <NavLink
+                  key={c.id}
+                  to={`/search?chat=${c.id}`}
+                  onClick={onClose}
+                  className={({ isActive }) => (isActive || activeChatId === c.id ? activeClass : `${linkBase} truncate`)}
+                >
+                  <MessageCircleMore className="h-[18px] w-[18px] shrink-0" />
+                  <span className="truncate">{c.title}</span>
+                </NavLink>
+              ))}
+            </div>
+          )}
+          {role === 'manager' && (
+            <NavLink to="/about" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
+              <Sparkles className="h-[18px] w-[18px]" /> Why Sentinel AI
+            </NavLink>
+          )}
           {isManager && (
             <>
               <button
@@ -86,9 +124,6 @@ export default function MobileSidebar({ open, onClose, user, logout }: MobileSid
                   <NavLink to="/documents" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
                     <FileText className="h-[18px] w-[18px]" /> All Documents
                   </NavLink>
-                  <NavLink to="/documents?scope=mine" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-                    <FolderOpen className="h-[18px] w-[18px]" /> My Documents
-                  </NavLink>
                   <NavLink to="/upload" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
                     <FilePlus2 className="h-[18px] w-[18px]" /> Upload Document
                   </NavLink>
@@ -96,41 +131,27 @@ export default function MobileSidebar({ open, onClose, user, logout }: MobileSid
               )}
             </>
           )}
-          <NavLink to="/history" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-            <History className="h-[18px] w-[18px]" /> Search History
-          </NavLink>
-          {isManager && (
-            <NavLink to="/gaps" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-              <Lightbulb className="h-[18px] w-[18px]" /> Knowledge Gaps
+          {!isAdmin && (
+            <NavLink to="/history" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
+              <History className="h-[18px] w-[18px]" /> Search History
             </NavLink>
           )}
           {isManager && (
             <NavLink to="/analytics" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-              <BarChart3 className="h-[18px] w-[18px]" /> Analytics
+              <BarChart3 className="h-[18px] w-[18px]" /> Analytical Gap
             </NavLink>
           )}
-          {isAdmin && (
-            <NavLink to="/security" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-              <ShieldCheck className="h-[18px] w-[18px]" /> Security Center
-            </NavLink>
-          )}
-          <NavLink to="/settings" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-            <Settings className="h-[18px] w-[18px]" /> Settings
-          </NavLink>
           {isAdmin && (
             <>
               <p className="mb-1 mt-5 px-3 text-[11px] font-semibold uppercase tracking-wider text-faint">Administration</p>
-              <NavLink to="/users" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-                <Users className="h-[18px] w-[18px]" /> Users
-              </NavLink>
-              <NavLink to="/roles" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-                <KeyRound className="h-[18px] w-[18px]" /> Roles &amp; Permissions
-              </NavLink>
-              <NavLink to="/security" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
-                <ScrollText className="h-[18px] w-[18px]" /> Audit Logs
-              </NavLink>
-            </>
-          )}
+<NavLink to="/users" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
+                  <Users className="h-[18px] w-[18px]" /> Users
+                </NavLink>
+                <NavLink to="/requests" onClick={onClose} className={({ isActive }) => (isActive ? activeClass : linkBase)}>
+                  <MessageSquareDashed className="h-[18px] w-[18px]" /> Knowledge Requests
+                </NavLink>
+              </>
+            )}
         </nav>
 
         <div className="border-t border-line p-3">

@@ -31,8 +31,7 @@ export const MOCK_SEARCH_RESULTS: SearchResult[] = [
     answer: `According to the Remote Work Guidelines (Section 3.2), employees are eligible for remote work arrangements under the following conditions:\n\n• Employees must have completed at least 3 months of employment\n• A formal remote work agreement must be signed with the HR department\n• Employees are entitled to work remotely up to 3 days per week (hybrid model)\n• Full remote work requires manager approval and is reviewed quarterly\n\nAll remote employees must maintain core working hours of 10:00 AM – 3:00 PM in their local timezone and ensure a secure, dedicated workspace. IT equipment for remote work is provided by the company after successful onboarding.`,
     confidence: 96,
     sources: [
-      { id: 's1', documentId: 'd5', documentName: 'Remote Work Guidelines', page: 8, totalPages: 18, relevance: 96, excerpt: 'Employees are entitled to work remotely up to 3 days per week under the hybrid work model...' },
-      { id: 's2', documentId: 'd1', documentName: 'Employee Handbook 2024', page: 24, totalPages: 48, relevance: 84, excerpt: 'Remote work arrangements must be formalized through the HR department with a signed agreement...' },
+      { id: 's1', documentId: 'd5', documentName: 'Remote Work Guidelines', page: 8, totalPages: 18, relevance: 96, excerpt: 'Employees are entitled to work remotely up to 3 days per week under the hybrid work model. A formal remote work agreement must be signed with the HR department.' },
     ],
     timestamp: 'Today, 4:32 PM',
     status: 'verified',
@@ -41,14 +40,98 @@ export const MOCK_SEARCH_RESULTS: SearchResult[] = [
 ]
 
 export const MOCK_HISTORY: SearchHistoryItem[] = [
-  { id: 'h1', query: 'What is the remote work policy?', timestamp: 'Today, 4:32 PM', status: 'verified', confidence: 96, sourcesCount: 3, responseTime: 2.4 },
-  { id: 'h2', query: 'How many days of annual leave do I get?', timestamp: 'Today, 2:15 PM', status: 'verified', confidence: 98, sourcesCount: 2, responseTime: 1.8 },
+  { id: 'h1', query: 'What is the remote work policy?', timestamp: 'Today, 4:32 PM', status: 'verified', confidence: 96, sourcesCount: 1, responseTime: 2.4 },
+  { id: 'h2', query: 'How many days of annual leave do I get?', timestamp: 'Today, 2:15 PM', status: 'verified', confidence: 98, sourcesCount: 1, responseTime: 1.8 },
   { id: 'h3', query: 'What is the AI usage policy for employees?', timestamp: 'Today, 11:03 AM', status: 'no_answer', confidence: 0, sourcesCount: 0, responseTime: 2.1 },
-  { id: 'h4', query: 'Explain our data retention policy', timestamp: 'Yesterday, 3:45 PM', status: 'verified', confidence: 91, sourcesCount: 4, responseTime: 3.2 },
-  { id: 'h5', query: 'What are the onboarding requirements for new employees?', timestamp: 'Yesterday, 10:22 AM', status: 'verified', confidence: 94, sourcesCount: 2, responseTime: 2.7 },
+  { id: 'h4', query: 'Explain our data retention policy', timestamp: 'Yesterday, 3:45 PM', status: 'verified', confidence: 91, sourcesCount: 1, responseTime: 3.2 },
+  { id: 'h5', query: 'What are the onboarding requirements for new employees?', timestamp: 'Yesterday, 10:22 AM', status: 'verified', confidence: 94, sourcesCount: 1, responseTime: 2.7 },
   { id: 'h6', query: 'New vendor approval process?', timestamp: 'Aug 26, 2:11 PM', status: 'no_answer', confidence: 0, sourcesCount: 0, responseTime: 1.9 },
   { id: 'h7', query: 'What is the expense reimbursement procedure?', timestamp: 'Aug 26, 9:34 AM', status: 'partial', confidence: 67, sourcesCount: 1, responseTime: 2.2 },
 ]
+
+// Stored past conversations (Q&A) for the mock history entries so they can be reopened without re-running the search.
+export const MOCK_CONVERSATIONS: Record<string, SearchResult> = {
+  h1: {
+    id: 'h1',
+    query: 'What is the remote work policy?',
+    answer: `According to the Remote Work Guidelines (Section 3.2), employees are eligible for remote work arrangements under the following conditions:\n\n• Employees must have completed at least 3 months of employment\n• A formal remote work agreement must be signed with the HR department\n• Employees are entitled to work remotely up to 3 days per week (hybrid model)\n• Full remote work requires manager approval and is reviewed quarterly\n\nAll remote employees must maintain core working hours of 10:00 AM – 3:00 PM in their local timezone and ensure a secure, dedicated workspace. IT equipment for remote work is provided by the company after successful onboarding.`,
+    confidence: 96,
+    sources: [
+      { id: 's1', documentId: 'd5', documentName: 'Remote Work Guidelines', page: 8, totalPages: 18, relevance: 96, excerpt: 'Employees are entitled to work remotely up to 3 days per week under the hybrid work model. A formal remote work agreement must be signed with the HR department.' },
+    ],
+    timestamp: 'Today, 4:32 PM',
+    status: 'verified',
+    responseTime: 2.4,
+  },
+  h2: {
+    id: 'h2',
+    query: 'How many days of annual leave do I get?',
+    answer: `According to the Employee Handbook 2024 (Section 6.1), full-time employees are entitled to:\n\n• 24 days of paid annual leave per calendar year\n• 10 public holidays as per the annual company calendar\n• Up to 5 additional days for sick leave with a medical certificate\n\nLeave must be requested through the HR portal at least two weeks in advance (except emergencies). Unused leave can be carried over to the next year up to a maximum of 5 days.`,
+    confidence: 98,
+    sources: [
+      { id: 's2', documentId: 'd1', documentName: 'Employee Handbook 2024', page: 17, totalPages: 48, relevance: 98, excerpt: 'Full-time employees receive 24 days of paid annual leave each calendar year, plus 10 public holidays as per the annual company calendar.' },
+    ],
+    timestamp: 'Today, 2:15 PM',
+    status: 'verified',
+    responseTime: 1.8,
+  },
+  h3: {
+    id: 'h3',
+    query: 'What is the AI usage policy for employees?',
+    answer: '',
+    confidence: 0,
+    sources: [],
+    timestamp: 'Today, 11:03 AM',
+    status: 'no_answer',
+    responseTime: 2.1,
+  },
+  h4: {
+    id: 'h4',
+    query: 'Explain our data retention policy',
+    answer: `The Data Security Policy (Section 5.4) requires that:\n\n• Customer records must be retained in accordance with applicable regulatory and operational requirements\n• All retained data must be stored within the organization's secure vector vault and access is governed by role-based authorization\n• Records older than the defined retention period will be securely purged in line with the disposal schedule\n\nRetention periods are defined per data category and are reviewed annually by the IT Security team.`,
+    confidence: 91,
+    sources: [
+      { id: 's3', documentId: 'd2', documentName: 'Data Security Policy', page: 9, totalPages: 22, relevance: 91, excerpt: 'All retained data must be stored within the organization\'s secure vector vault and access is governed by role-based authorization.' },
+    ],
+    timestamp: 'Yesterday, 3:45 PM',
+    status: 'verified',
+    responseTime: 3.2,
+  },
+  h5: {
+    id: 'h5',
+    query: 'What are the onboarding requirements for new employees?',
+    answer: `Based on the IT Onboarding Checklist, new employees must complete the following before day one:\n\n• Accept the employment agreement and sign the IT acceptable-use policy\n• Complete the HR onboarding form in the HR portal\n• Attend the 90-minute orientation session within the first week\n\nOn day one, a company laptop and access credentials are issued. A manager must approve all access requests (email, drives, collaboration tools) within 48 hours.`,
+    confidence: 94,
+    sources: [
+      { id: 's4', documentId: 'd7', documentName: 'IT Onboarding Checklist', page: 3, totalPages: 12, relevance: 94, excerpt: 'New employees must sign the IT acceptable-use policy and complete the HR onboarding form before access credentials are issued.' },
+    ],
+    timestamp: 'Yesterday, 10:22 AM',
+    status: 'verified',
+    responseTime: 2.7,
+  },
+  h6: {
+    id: 'h6',
+    query: 'New vendor approval process?',
+    answer: '',
+    confidence: 0,
+    sources: [],
+    timestamp: 'Aug 26, 2:11 PM',
+    status: 'no_answer',
+    responseTime: 1.9,
+  },
+  h7: {
+    id: 'h7',
+    query: 'What is the expense reimbursement procedure?',
+    answer: `Per the Employee Handbook 2024 (Section 9.3), expense reimbursements are processed as follows:\n\n• Submit itemized claims with receipts within 14 days of the expense\n• Claims above $500 require manager pre-approval\n• Approved claims are paid in the next payroll cycle\n\nInternational travel reimbursements are handled separately under the Finance department's international travel policy, which is not yet documented.`,
+    confidence: 67,
+    sources: [
+      { id: 's5', documentId: 'd1', documentName: 'Employee Handbook 2024', page: 31, totalPages: 48, relevance: 67, excerpt: 'Expense claims must be submitted with receipts within 14 days. Claims above $500 require manager pre-approval before purchase.' },
+    ],
+    timestamp: 'Aug 26, 9:34 AM',
+    status: 'partial',
+    responseTime: 2.2,
+  },
+}
 
 export const MOCK_KNOWLEDGE_GAPS: KnowledgeGap[] = [
   { id: 'g1', question: 'What is our AI usage policy for employees?', frequency: 48, priority: 'high', department: 'Engineering', firstSeen: 'Aug 20', lastSeen: 'Aug 28', status: 'open' },

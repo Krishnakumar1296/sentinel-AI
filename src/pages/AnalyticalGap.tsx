@@ -1,14 +1,21 @@
 import { useEffect, useState } from 'react'
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import {
-  Lightbulb, TrendingUp, FileQuestion, PlusCircle, CheckCircle2, AlertTriangle,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
+  AreaChart, Area,
+} from 'recharts'
+import {
+  MessagesSquare, CheckCircle2, XCircle, Timer, Sparkles, Lightbulb,
+  FileQuestion, PlusCircle, AlertTriangle, TrendingUp,
 } from 'lucide-react'
-import { getKnowledgeGaps, getAnalytics } from '../services/api'
-import type { KnowledgeGap, AnalyticsData } from '../types'
+import { getAnalytics, getKnowledgeGaps } from '../services/api'
+import type { AnalyticsData, KnowledgeGap } from '../types'
 import { KnowledgeGapCard } from '../components/analytics/KnowledgeGapCard'
 import { ChartCard } from '../components/analytics/ChartCard'
+import { StatCard } from '../components/dashboard/StatCard'
 import { SkeletonLoader } from '../components/common/SkeletonLoader'
 import { EmptyState } from '../components/common/EmptyState'
+import { ErrorState } from '../components/common/ErrorState'
+import { useAuth } from '../context/AuthContext'
 import { useToast } from '../components/common/Toast'
 
 const priorityColors: Record<KnowledgeGap['priority'], string> = {
@@ -23,8 +30,32 @@ const statusBadge: Record<KnowledgeGap['status'], string> = {
   resolved: 'badge-green',
 }
 
-export default function KnowledgeGaps() {
+function QualityGauge({ value, label }: { value: number; label: string }) {
+  const color = value >= 90 ? '#16A34A' : value >= 80 ? '#2563EB' : '#F59E0B'
+  return (
+    <div className="flex flex-col items-center rounded-xl border border-line bg-surface-muted/50 p-4">
+      <div className="relative h-24 w-24">
+        <svg width={96} height={96} className="-rotate-90">
+          <circle cx={48} cy={48} r={38} fill="none" stroke="var(--line)" strokeWidth={9} />
+          <circle
+            cx={48} cy={48} r={38} fill="none" stroke={color} strokeWidth={9} strokeLinecap="round"
+            strokeDasharray={2 * Math.PI * 38} strokeDashoffset={2 * Math.PI * 38 * (1 - value / 100)}
+            style={{ transition: 'stroke-dashoffset 0.8s ease' }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-lg font-bold text-ink">{value}%</span>
+        </div>
+      </div>
+      <p className="mt-2 text-center text-xs font-medium text-muted">{label}</p>
+    </div>
+  )
+}
+
+export default function AnalyticalGap() {
+  const { user } = useAuth()
   const { toast } = useToast()
+  const isManager = user?.role === 'manager' || user?.role === 'admin'
   const [gaps, setGaps] = useState<KnowledgeGap[]>([])
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null)
   const [loading, setLoading] = useState(true)
@@ -37,11 +68,24 @@ export default function KnowledgeGaps() {
     })
   }, [])
 
-  if (loading) {
+  if (!isManager) {
+    return (
+      <div className="space-y-6">
+        <h1 className="page-title text-2xl font-bold">Analytical Gap</h1>
+        <ErrorState
+          variant="unauthorized"
+          title="Access Restricted"
+          message="Analytics are available to managers and administrators only."
+        />
+      </div>
+    )
+  }
+
+  if (loading || !analytics) {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="page-title text-2xl font-bold">Knowledge Gap Analytics</h1>
+          <h1 className="page-title text-2xl font-bold">Analytical Gap</h1>
           <p className="page-subtitle">Loading gap intelligence...</p>
         </div>
         <SkeletonLoader variant="analytics" />
@@ -49,24 +93,52 @@ export default function KnowledgeGaps() {
     )
   }
 
-  const gapOverTime = analytics?.queryTrend.map((q) => ({ month: q.date, count: Math.max(0, q.queries - q.successful) })) ?? []
+  const gapOverTime = analytics.queryTrend.map((q) => ({ month: q.date, count: Math.max(0, q.queries - q.successful) }))
   const openGaps = gaps.filter((g) => g.status !== 'resolved').length
   const highPriority = gaps.filter((g) => g.priority === 'high' && g.status === 'open').length
-  const gapsByDept = analytics?.gapsByDepartment ?? []
+  const gapsByDept = analytics.gapsByDepartment
   const maxDept = gapsByDept.length ? Math.max(...gapsByDept.map((d) => d.count)) : 1
+  const trend = analytics.queryTrend.map((q) => ({ date: q.date, queries: q.queries, answered: q.successful }))
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="page-title text-2xl font-bold">Knowledge Gap Analytics</h1>
-        <p className="page-subtitle">Identify questions your organization cannot currently answer.</p>
+        <h1 className="page-title text-2xl font-bold">Analytical Gap</h1>
+        <p className="page-subtitle">Query performance, answer quality, and knowledge gaps your organization cannot answer.</p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KnowledgeGapCard value={String(openGaps)} label="Unanswered Queries" accent="danger" />
-        <KnowledgeGapCard icon={TrendingUp} value={String(highPriority)} label="High Priority Gaps" accent="warning" />
-        <KnowledgeGapCard icon={FileQuestion} value={String(openGaps)} label="Missing Policies" />
-        <KnowledgeGapCard icon={CheckCircle2} value="5" label="New This Week" accent="success" />
+        <StatCard icon={MessagesSquare} label="Total Queries" value={analytics.totalQueries.toLocaleString()} delta="This period" />
+        <KnowledgeGapCard icon={TrendingUp} value={String(openGaps)} label="Unanswered Queries" accent="danger" />
+        <KnowledgeGapCard icon={FileQuestion} value={String(highPriority)} label="High Priority Gaps" accent="warning" />
+        <StatCard icon={Timer} label="Avg Response Time" value={`${analytics.avgResponseTime} sec`} delta="Fast" iconClass="bg-amber-50 text-amber-500 dark:bg-amber-500/10 dark:text-amber-400" />
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <ChartCard title="Query Volume" subtitle="Total vs successful answers">
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={trend} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--line)" vertical={false} />
+                <XAxis dataKey="date" tick={{ fontSize: 12, fill: 'var(--text-muted)' }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 12, fill: 'var(--text-muted)' }} axisLine={false} tickLine={false} />
+                <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid var(--line)' }} />
+                <Legend wrapperStyle={{ fontSize: 12 }} />
+                <Bar dataKey="queries" name="Total Queries" fill="var(--line)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="answered" name="Answered" fill="var(--brand-blue)" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </ChartCard>
+
+        <ChartCard title="Answer Quality" subtitle="AI performance metrics">
+          <div className="grid grid-cols-2 gap-3">
+            <QualityGauge value={analytics.faithfulnessScore} label="Faithfulness" />
+            <QualityGauge value={analytics.contextRelevance} label="Context Relevance" />
+            <QualityGauge value={analytics.answerConfidence} label="Answer Confidence" />
+            <QualityGauge value={analytics.retrievalPrecision} label="Retrieval Precision" />
+          </div>
+        </ChartCard>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -164,6 +236,33 @@ export default function KnowledgeGaps() {
           description="Your knowledge base is currently covering the most common employee questions."
         />
       )}
+
+      <div className="card p-6">
+        <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="text-center sm:text-left">
+            <h2 className="text-xl font-bold text-ink">Overall Answer Faithfulness</h2>
+            <p className="mt-1 text-sm text-muted">Proportion of answers fully supported by retrieved evidence</p>
+          </div>
+          <div className="relative h-32 w-32">
+            <svg width={128} height={128} className="-rotate-90">
+              <circle cx={64} cy={64} r={54} fill="none" stroke="var(--line)" strokeWidth={12} />
+              <circle
+                cx={64} cy={64} r={54} fill="none" stroke="#16A34A" strokeWidth={12} strokeLinecap="round"
+                strokeDasharray={2 * Math.PI * 54} strokeDashoffset={2 * Math.PI * 54 * (1 - analytics.faithfulnessScore / 100)}
+                style={{ transition: 'stroke-dashoffset 1s ease' }}
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-2xl font-bold text-ink">{analytics.faithfulnessScore}%</span>
+              <span className="text-[10px] text-muted">faithful</span>
+            </div>
+          </div>
+        </div>
+        <div className="mt-4 flex items-center justify-center gap-2 border-t border-line-soft pt-4 text-sm text-muted">
+          <Sparkles className="h-4 w-4 text-brand-blue" />
+          Every answer includes source verification and document evidence.
+        </div>
+      </div>
     </div>
   )
 }

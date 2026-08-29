@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { UserPlus, Search } from 'lucide-react'
-import { getUsers, updateUserRole } from '../services/api'
+import { UserPlus, Search, UserRound } from 'lucide-react'
+import { getUsers, addUser, updateUserProfile, type NewUserInput } from '../services/api'
 import type { User, UserRole } from '../types'
 import { UserTable } from '../components/users/UserTable'
 import { Modal } from '../components/common/Modal'
@@ -18,7 +18,15 @@ export default function Users() {
   const [search, setSearch] = useState('')
   const [addOpen, setAddOpen] = useState(false)
   const [editUser, setEditUser] = useState<User | null>(null)
-  const [form, setForm] = useState({ name: '', email: '', department: 'HR', role: 'employee' as UserRole })
+  const [saving, setSaving] = useState(false)
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    username: '',
+    password: '',
+    department: 'HR',
+    role: 'employee' as UserRole,
+  })
 
   useEffect(() => {
     getUsers().then((u) => {
@@ -53,41 +61,71 @@ export default function Users() {
     return u.name.toLowerCase().includes(s) || u.email.toLowerCase().includes(s) || u.department.toLowerCase().includes(s)
   })
 
-  const handleEditRole = async (target: User, role: UserRole) => {
-    const updated = await updateUserRole(target.id, role)
-    if (updated) {
-      setUsers((prev) => prev.map((u) => (u.id === updated.id ? updated : u)))
-      toast('success', `${target.name}'s role updated to ${role}`)
-    }
-  }
-
   const openEdit = (u: User) => {
     setEditUser(u)
-    setForm({ name: u.name, email: u.email, department: u.department, role: u.role })
+    setForm({
+      name: u.name,
+      email: u.email,
+      username: u.username ?? u.email.split('@')[0],
+      password: '',
+      department: u.department,
+      role: u.role,
+    })
   }
 
-  const handleAddSubmit = (e?: React.FormEvent) => {
+  const handleAddSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault()
-    const newUser: User = {
-      id: `u${Date.now()}`,
+    if (!form.name.trim() || !form.email.trim() || !form.password.trim()) {
+      toast('error', 'Name, email and password are required')
+      return
+    }
+    setSaving(true)
+    const input: NewUserInput = {
       name: form.name,
       email: form.email,
+      username: form.username || undefined,
+      password: form.password,
       department: form.department,
       role: form.role,
-      status: 'active',
-      lastActive: 'Just now',
-      createdAt: new Date().toISOString().slice(0, 10),
     }
-    setUsers((prev) => [...prev, newUser])
+    const created = await addUser(input)
+    setSaving(false)
+    if (!created) {
+      toast('error', 'A user with this email or username already exists')
+      return
+    }
+    setUsers(await getUsers())
     setAddOpen(false)
-    setForm({ name: '', email: '', department: 'HR', role: 'employee' })
-    toast('success', 'User added successfully')
+    setForm({ name: '', email: '', username: '', password: '', department: 'HR', role: 'employee' })
+    toast('success', `User created with username "${created.username ?? created.email.split('@')[0]}". You can share its credentials.`)
   }
 
-  const modalFooter = (close: () => void, save: () => void) => (
+  const handleEditSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault()
+    if (!editUser) return
+    setSaving(true)
+    const updated = await updateUserProfile(editUser.id, {
+      name: form.name,
+      email: form.email,
+      username: form.username,
+      password: form.password || undefined,
+      department: form.department,
+      role: form.role,
+    })
+    setSaving(false)
+    if (updated) {
+      setUsers((prev) => prev.map((u) => (u.id === updated.id ? updated : u)))
+      setEditUser(null)
+      toast('success', form.password ? `${updated.name}'s credentials updated` : `${updated.name}'s details updated`)
+    }
+  }
+
+  const modalFooter = (close: () => void, save: () => void, editing = false) => (
     <>
       <button onClick={close} className="btn-secondary">Cancel</button>
-      <button onClick={save} className="btn-primary">Save</button>
+      <button onClick={save} className="btn-primary" disabled={saving}>
+        {saving ? (editing ? 'Saving...' : 'Creating...') : editing ? 'Save' : 'Create User'}
+      </button>
     </>
   )
 
@@ -124,7 +162,7 @@ export default function Users() {
       <Modal
         open={addOpen}
         onClose={() => setAddOpen(false)}
-        title="Add New User"
+        title="Create Employee Login"
         footer={modalFooter(() => setAddOpen(false), handleAddSubmit)}
       >
         <div className="space-y-4">
@@ -138,18 +176,35 @@ export default function Users() {
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
+              <label className="label">Username</label>
+              <input
+                value={form.username}
+                onChange={(e) => setForm({ ...form, username: e.target.value })}
+                placeholder="e.g. jane.doe"
+                className="input"
+              />
+              <p className="mt-1 text-[11px] text-faint">Used for employee login. Defaults to email prefix if blank.</p>
+            </div>
+            <div>
+              <label className="label">Password</label>
+              <input
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                placeholder="Set employee password"
+                className="input"
+                required
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
               <label className="label">Department</label>
               <select value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} className="input">
                 <option>HR</option><option>IT</option><option>Finance</option><option>Legal</option><option>Operations</option><option>Management</option>
               </select>
             </div>
-            <div>
-              <label className="label">Role</label>
-              <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value as UserRole })} className="input">
-                <option value="employee">Employee</option>
-                <option value="manager">Manager</option>
-                <option value="admin">Admin</option>
-              </select>
+            <div className="flex items-end">
+              <p className="mb-0.5 text-xs text-muted">Created as <span className="font-semibold text-ink">Employee</span> access</p>
             </div>
           </div>
         </div>
@@ -159,15 +214,7 @@ export default function Users() {
         open={!!editUser}
         onClose={() => setEditUser(null)}
         title={`Edit User — ${editUser?.name ?? ''}`}
-        footer={modalFooter(
-          () => setEditUser(null),
-          () => {
-            if (editUser) {
-              handleEditRole(editUser, form.role)
-              setEditUser(null)
-            }
-          },
-        )}
+        footer={modalFooter(() => setEditUser(null), () => handleEditSubmit(), true)}
       >
         <div className="space-y-4">
           <div className="flex items-center gap-3">
@@ -180,12 +227,18 @@ export default function Users() {
             </div>
           </div>
           <div>
-            <label className="label">Role</label>
-            <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value as UserRole })} className="input">
-              <option value="employee">Employee</option>
-              <option value="manager">Manager</option>
-              <option value="admin">Admin</option>
-            </select>
+            <label className="label">Username</label>
+            <input value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} className="input" />
+          </div>
+          <div>
+            <label className="label">Reset Password</label>
+            <input
+              type="text"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              placeholder="Leave blank to keep current password"
+              className="input"
+            />
           </div>
           <div>
             <label className="label">Department</label>

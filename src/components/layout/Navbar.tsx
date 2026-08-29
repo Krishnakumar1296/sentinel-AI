@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Bell, Menu, LogOut, Search, ShieldCheck, Sun, Moon, ChevronDown, Settings, UserRound, Mail, Building2, CheckCircle2, AlertTriangle, XCircle, Info, CheckCheck, BellOff } from 'lucide-react'
+import { Bell, Menu, LogOut, Search, ShieldCheck, Sun, Moon, ChevronDown, UserRound, Mail, Building2, CheckCircle2, AlertTriangle, XCircle, Info, CheckCheck, BellOff } from 'lucide-react'
 import { useTheme } from '../../context/ThemeContext'
 import { getNotifications } from '../../services/api'
 import type { Notification, UserRole } from '../../types'
@@ -149,7 +149,13 @@ export default function Navbar({ user, onMenuClick, onLogout }: NavbarProps) {
                       return (
                         <button
                           key={n.id}
-                          onClick={() => markRead(n.id)}
+                          onClick={() => {
+                            markRead(n.id)
+                            if (n.action) {
+                              setNotifOpen(false)
+                              navigate(n.action)
+                            }
+                          }}
                           className={`flex w-full gap-3 border-b border-line-soft px-4 py-3 text-left transition hover:bg-surface-soft ${n.read ? 'bg-surface-muted/30 opacity-75' : ''}`}
                         >
                           <span className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${meta.styles}`}>
@@ -228,12 +234,6 @@ export default function Navbar({ user, onMenuClick, onLogout }: NavbarProps) {
                   </div>
                 </div>
                 <div className="p-2">
-                  <button
-                    onClick={() => { setProfileOpen(false); navigate('/settings') }}
-                    className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-muted transition hover:bg-surface-muted hover:text-ink"
-                  >
-                    <Settings className="h-4 w-4" /> Account Settings
-                  </button>
                   <button
                     onClick={onLogout}
                     className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-muted transition hover:bg-surface-muted hover:text-red-500"
