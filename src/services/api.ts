@@ -222,7 +222,7 @@ export async function loginUser(identifier: string, password: string): Promise<U
   const key = identifier.trim().toLowerCase()
   let match = users.find((u) => u.email.toLowerCase() === key)
   if (!match) {
-    const uid = usernames.get(key)
+    const uid = [...usernames].find(([, name]) => name === key)?.[0]
     if (uid) match = users.find((u) => u.id === uid)
   }
   if (!match) return null
