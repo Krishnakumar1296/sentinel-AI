@@ -1,15 +1,49 @@
 # Dependencies
-node_modules
+node_modules/
+.pnp
+.pnp.js
 
 # Build output
-dist
-dist-ssr
+dist/
+dist-ssr/
+build/
+
+# Python Virtual Environments
+backend/venv/
+backend/.venv/
+venv/
+.venv/
+env/
+ENV/
+
+# Python cache & compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
 
 # Logs
-logs
+logs/
 *.log
-dev.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+dev.log
+dev.err.log
+
+# Environment variables & secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+backend/.env
+backend/.env.local
+firebase-service-account*.json
+*.pem
+*.key
 
 # Runtime / local
 error-log.json
@@ -19,4 +53,10 @@ error-log.json
 # Editor
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+

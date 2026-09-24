@@ -8,6 +8,7 @@ import { useToast } from '../components/common/Toast'
 import { UploadZone } from '../components/documents/UploadZone'
 import { ProgressStepper } from '../components/documents/ProgressStepper'
 import { ErrorState } from '../components/common/ErrorState'
+import { CyberCard3D } from '../components/common/CyberCard3D'
 
 export default function Upload() {
   const { user } = useAuth()
@@ -116,49 +117,51 @@ export default function Upload() {
             </div>
           </div>
 
-          <form onSubmit={handleUpload} className="card h-fit p-6">
-            <h2 className="text-base font-semibold text-ink">Document Information</h2>
-            <div className="mt-5 space-y-4">
-              <div>
-                <label className="label">Document Name</label>
-                <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. HR Handbook" className="input" />
+          <CyberCard3D className="h-fit p-6">
+            <form onSubmit={handleUpload}>
+              <h2 className="font-display text-base font-semibold text-slate-900 dark:text-slate-100 tracking-tight">Document Details & Access</h2>
+              <div className="mt-5 space-y-4">
+                <div>
+                  <label className="label">Document Name</label>
+                  <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. HR Handbook" className="input" />
+                </div>
+                <div>
+                  <label className="label">Department</label>
+                  <select value={dept} onChange={(e) => setDept(e.target.value)} className="input text-xs font-normal">
+                    <option>HR</option>
+                    <option>IT</option>
+                    <option>Finance</option>
+                    <option>Legal</option>
+                    <option>Operations</option>
+                    <option>Management</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="label">Access Role Clearance</label>
+                  <select value={access} onChange={(e) => setAccess(e.target.value)} className="input text-xs font-normal">
+                    <option value="employee">Employee (General Access)</option>
+                    <option value="manager">Manager Clearance</option>
+                    <option value="admin">Administrator Only</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="label">Description</label>
+                  <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="Briefly describe the document contents..." className="input resize-none" />
+                </div>
               </div>
-              <div>
-                <label className="label">Department</label>
-                <select value={dept} onChange={(e) => setDept(e.target.value)} className="input">
-                  <option>HR</option>
-                  <option>IT</option>
-                  <option>Finance</option>
-                  <option>Legal</option>
-                  <option>Operations</option>
-                  <option>Management</option>
-                </select>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <button type="button" onClick={() => navigate('/documents')} className="btn-secondary flex-1">Cancel</button>
+                <button type="submit" disabled={!file || processing} className="btn-primary flex-1 disabled:opacity-60">
+                  {processing ? (
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                  ) : (
+                    <UploadCloud className="h-4 w-4" />
+                  )}
+                  Upload & Ingest
+                </button>
               </div>
-              <div>
-                <label className="label">Access Role</label>
-                <select value={access} onChange={(e) => setAccess(e.target.value)} className="input">
-                  <option value="employee">Employee</option>
-                  <option value="manager">Manager</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
-              <div>
-                <label className="label">Description</label>
-                <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="Briefly describe the document contents..." className="input resize-none" />
-              </div>
-            </div>
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <button type="button" onClick={() => navigate('/documents')} className="btn-secondary flex-1">Cancel</button>
-              <button type="submit" disabled={!file || processing} className="btn-primary flex-1 disabled:opacity-60">
-                {processing ? (
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-                ) : (
-                  <UploadCloud className="h-4 w-4" />
-                )}
-                Upload &amp; Process
-              </button>
-            </div>
-          </form>
+            </form>
+          </CyberCard3D>
         </div>
       )}
     </div>

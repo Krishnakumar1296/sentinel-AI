@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { UserPlus, Search, UserRound } from 'lucide-react'
-import { getUsers, addUser, updateUserProfile, type NewUserInput } from '../services/api'
+import { UserPlus, Search } from 'lucide-react'
+import { getUsers, addUser, updateUserProfile, deleteUser, type NewUserInput } from '../services/api'
 import type { User, UserRole } from '../types'
 import { UserTable } from '../components/users/UserTable'
 import { Modal } from '../components/common/Modal'
@@ -133,8 +133,15 @@ export default function Users() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="page-title text-2xl font-bold">User Management</h1>
-          <p className="page-subtitle">Manage users and their access roles.</p>
+          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 px-3 py-1 text-xs font-medium text-slate-600 dark:text-slate-300 mb-2">
+            <span>Administration Portal</span>
+          </div>
+          <h1 className="page-title font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Users & Clearances
+          </h1>
+          <p className="page-subtitle text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+            Provision user accounts, assign RBAC clearances, and govern organizational knowledge boundaries.
+          </p>
         </div>
         <button onClick={() => setAddOpen(true)} className="btn-primary">
           <UserPlus className="h-4 w-4" /> Add User
@@ -142,8 +149,13 @@ export default function Users() {
       </div>
 
       <div className="relative max-w-md">
-        <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-faint" />
-        <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search users..." className="input pl-10" />
+        <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search users by name or department..."
+          className="input pl-10 text-sm font-normal"
+        />
       </div>
 
       {loading ? (
@@ -152,7 +164,8 @@ export default function Users() {
         <UserTable
           users={filtered}
           onEdit={openEdit}
-          onDelete={(u) => {
+          onDelete={async (u) => {
+            await deleteUser(u.id)
             setUsers((prev) => prev.filter((x) => x.id !== u.id))
             toast('info', `${u.name} removed`)
           }}

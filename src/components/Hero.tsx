@@ -1,5 +1,11 @@
 import { Link } from 'react-router-dom'
 import { ChevronRight, CheckCircle2, Shield, Brain, Database, Lock, Search } from 'lucide-react'
+import { Text3D } from './common/Text3D'
+import { BorderBeam } from './animate/BorderBeam'
+import { GravityStarsBackground } from './animate/GravityStarsBackground'
+import { LiquidButton } from './animate/LiquidButton'
+import { RippleButton } from './animate/RippleButton'
+import { SentinelDrawLogo } from './animate/SvgDrawReveal'
 
 const trustItems = [
   'Role-Based Access',
@@ -21,6 +27,8 @@ function HeroIllustration() {
 
       {/* Main dashboard card */}
       <div className="relative bg-white rounded-3xl border border-slate-200 shadow-2xl p-6 overflow-hidden">
+        {/* Animate UI Border Beam */}
+        <BorderBeam size={160} duration={7} colorFrom="#38bdf8" colorTo="#818cf8" />
         {/* Top bar */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
@@ -180,18 +188,21 @@ export default function Hero() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left — Text */}
           <div className="max-w-xl">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-cyan-300 bg-white/10 border border-white/20 mb-6 w-fit">
-              <Shield className="w-3.5 h-3.5" />
-              SECURE ENTERPRISE AI
+            {/* Badge & Logo */}
+            <div className="flex items-center gap-3 mb-6">
+              <SentinelDrawLogo size={38} strokeColor="#38bdf8" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-cyan-300 bg-white/10 border border-white/20 w-fit">
+                <Shield className="w-3.5 h-3.5" />
+                SECURE ENTERPRISE AI
+              </div>
             </div>
 
             {/* Heading */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">
               Your Enterprise Knowledge.{' '}
-              <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+              <Text3D color="ocean" className="block sm:inline">
                 Secured by Intelligence.
-              </span>
+              </Text3D>
             </h1>
 
             {/* Description */}
@@ -201,16 +212,18 @@ export default function Hero() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 mb-10">
-              <Link to="/login" className="btn-primary text-base py-3.5 px-7 justify-center">
-                Get Started
-                <ChevronRight className="w-5 h-5" />
+              <Link to="/login">
+                <LiquidButton className="w-full sm:w-auto">
+                  <span>Get Started</span>
+                  <ChevronRight className="w-4 h-4" />
+                </LiquidButton>
               </Link>
-              <button
+              <RippleButton
                 onClick={() => document.querySelector('#features')?.scrollIntoView({ behavior: 'smooth' })}
-                className="btn-secondary text-base py-3.5 px-7 justify-center"
+                className="btn-secondary text-base py-3 px-7 justify-center rounded-xl"
               >
                 Explore Platform
-              </button>
+              </RippleButton>
             </div>
 
             {/* Trust indicators */}

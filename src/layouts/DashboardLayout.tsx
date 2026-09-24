@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/layout/Navbar'
 import Sidebar from '../components/layout/Sidebar'
@@ -9,6 +9,7 @@ import AnimatedBackground from '../components/layout/AnimatedBackground'
 export default function DashboardLayout() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const handleLogout = () => {
@@ -17,7 +18,7 @@ export default function DashboardLayout() {
   }
 
   return (
-    <div className="corp-bg dark:corp-bg-dark relative flex h-dvh min-h-dvh overflow-hidden text-ink">
+    <div className="relative flex h-dvh min-h-dvh overflow-hidden bg-canvas dark:bg-[#070B14] text-ink">
       <AnimatedBackground />
       <div className="relative z-10 flex h-full min-h-dvh w-full">
       <Sidebar user={user ? { name: user.name, role: user.role } : null} logout={logout} />
@@ -30,7 +31,7 @@ export default function DashboardLayout() {
           onLogout={handleLogout}
         />
         <main className="flex-1 overflow-y-auto px-4 py-6 lg:px-8 lg:py-8">
-          <div className="mx-auto max-w-7xl">
+          <div key={location.pathname} className="mx-auto max-w-7xl animate-page-enter">
             <Outlet />
           </div>
         </main>

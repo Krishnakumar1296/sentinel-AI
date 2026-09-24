@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Search, Upload, FileX2, Plus } from 'lucide-react'
+import { Search, Upload, FileX2, Plus, ShieldCheck } from 'lucide-react'
 import { getDocuments } from '../services/api'
 import type { Document } from '../types'
 import { DocumentTable } from '../components/documents/DocumentTable'
@@ -8,6 +8,7 @@ import { EmptyState } from '../components/common/EmptyState'
 import { SkeletonLoader } from '../components/common/SkeletonLoader'
 import { useAuth } from '../context/AuthContext'
 import { ErrorState } from '../components/common/ErrorState'
+import { CyberCard3D } from '../components/common/CyberCard3D'
 
 export default function Documents() {
   const { user } = useAuth()
@@ -60,8 +61,16 @@ export default function Documents() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="page-title text-2xl font-bold">Document Library</h1>
-          <p className="page-subtitle">Manage and explore your authorized company knowledge.</p>
+          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 px-3 py-1 text-xs font-medium text-slate-600 dark:text-slate-300 mb-2">
+            <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
+            <span>Encrypted Repository</span>
+          </div>
+          <h1 className="page-title font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Document Repository
+          </h1>
+          <p className="page-subtitle text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+            Manage and explore authorized enterprise knowledge with automatic vector chunking.
+          </p>
         </div>
         {isManager && (
           <button onClick={() => navigate('/upload')} className="btn-primary">
@@ -71,28 +80,30 @@ export default function Documents() {
         )}
       </div>
 
-      <div className="card flex flex-col gap-3 p-4 lg:flex-row lg:items-center">
-        <div className="relative flex-1">
-          <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-faint" />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search documents..."
-            className="input pl-10"
-          />
+      <CyberCard3D className="p-4 sm:p-5">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+          <div className="relative flex-1">
+            <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Filter repository documents by keyword..."
+              className="input pl-10 text-sm font-normal"
+            />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <select value={dept} onChange={(e) => setDept(e.target.value)} className="input w-auto text-xs font-normal">
+              <option value="all">All Departments</option>
+              {departments.map((d) => <option key={d} value={d}>{d}</option>)}
+            </select>
+            <select value={access} onChange={(e) => setAccess(e.target.value)} className="input w-auto text-xs font-normal">
+              <option value="all">All Clearance Levels</option>
+              <option value="authorized">Authorized Only</option>
+              <option value="restricted">Restricted Clearance</option>
+            </select>
+          </div>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <select value={dept} onChange={(e) => setDept(e.target.value)} className="input w-auto">
-            <option value="all">All Departments</option>
-            {departments.map((d) => <option key={d} value={d}>{d}</option>)}
-          </select>
-          <select value={access} onChange={(e) => setAccess(e.target.value)} className="input w-auto">
-            <option value="all">All Access</option>
-            <option value="authorized">Authorized</option>
-            <option value="restricted">Restricted</option>
-          </select>
-        </div>
-      </div>
+      </CyberCard3D>
 
       {loading ? (
         <SkeletonLoader variant="library" />

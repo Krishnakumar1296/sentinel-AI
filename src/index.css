@@ -3,76 +3,76 @@
 @tailwind utilities;
 
 /* ─────────────────────────────────────────────────────────────
-   Design tokens — "Corporate calm contrast"
-   Light theme: soft, airy, reduced harshness.
-   Dark theme:  muted charcoal (never pure black), low-contrast.
+   Design tokens — "Cyber Sentinel Enterprise Vault"
+   Light theme: crisp clean white & slate with vibrant cobalt & cyber cyan accents.
+   Dark theme:  deep quantum midnight with neon cyan, purple & emerald radiance.
    Switch using the `.dark` class on <html>.
    ───────────────────────────────────────────────────────────── */
 :root {
-  --canvas: #F5F7FA;
-  --canvas-soft: #F9FAFC;
+  --canvas: #F8FAFC;
+  --canvas-soft: #FFFFFF;
   --surface: #FFFFFF;
-  --surface-muted: #F1F4F8;
-  --surface-soft: #E9EDF3;
+  --surface-muted: #F1F5F9;
+  --surface-soft: #E2E8F0;
 
-  --line: #E3E8F0;
-  --line-soft: #EDF1F6;
+  --line: #E2E8F0;
+  --line-soft: #F1F5F9;
 
-  --ink: #222B38;
-  --ink-soft: #667085;
+  --ink: #0F172A;
+  --ink-soft: #475569;
 
-  --text-muted: #6B7280;
-  --text-faint: #9AA3AF;
+  --text-muted: #64748B;
+  --text-faint: #94A3B8;
 
-  --brand-navy: 18 59 93;
-  --brand-blue: 43 108 176;
-  --brand-bg: #EEF3F9;
+  --brand-navy: 15 23 42;
+  --brand-blue: 14 165 233;
+  --brand-bg: #F0F9FF;
 
-  --primary-50: 236 243 250;
-  --primary-100: 214 229 242;
-  --primary-200: 173 203 229;
-  --primary-300: 131 176 215;
-  --primary-400: 79 141 196;
-  --primary-500: 43 108 176;
-  --primary-600: 31 87 143;
-  --primary-700: 26 72 120;
-  --primary-800: 18 59 93;
-  --primary-900: 10 37 64;
+  --primary-50: 240 249 255;
+  --primary-100: 224 242 254;
+  --primary-200: 186 230 253;
+  --primary-300: 125 211 252;
+  --primary-400: 56 189 248;
+  --primary-500: 14 165 233;
+  --primary-600: 2 132 199;
+  --primary-700: 3 105 161;
+  --primary-800: 7 89 133;
+  --primary-900: 12 74 110;
 
   color-scheme: light;
 }
 
-/* Calm, muted dark palette — lower contrast than the light theme */
+/* Refined Enterprise Dark Theme */
 .dark {
-  --canvas: #0E1116;
-  --canvas-soft: #10141A;
-  --surface: #161B22;
-  --surface-muted: #1C222B;
-  --surface-soft: #232A35;
+  --canvas: #0B0F19;
+  --canvas-soft: #0F172A;
+  --surface: #111827;
+  --surface-muted: #161F30;
+  --surface-soft: #1E293B;
 
-  --line: #2A313C;
-  --line-soft: #232933;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-soft: rgba(255, 255, 255, 0.04);
 
-  --ink: #E4E9F0;
-  --ink-soft: #9AA4B2;
+  --ink: #F9FAFB;
+  --ink-soft: #9CA3AF;
 
-  --text-muted: #93A0AF;
-  --text-faint: #6B7682;
+  --text-muted: #9CA3AF;
+  --text-faint: #6B7280;
 
-  --brand-navy: 124 163 200;
-  --brand-blue: 91 155 215;
-  --brand-bg: #1A2633;
+  --brand-navy: 15 23 42;
+  --brand-blue: 37 99 235;
+  --brand-bg: #0F172A;
 
-  --primary-50: 26 39 53;
-  --primary-100: 36 55 74;
-  --primary-200: 51 80 113;
-  --primary-300: 74 108 149;
-  --primary-400: 91 155 215;
-  --primary-500: 111 169 224;
-  --primary-600: 143 185 230;
-  --primary-700: 169 201 236;
-  --primary-800: 194 217 242;
-  --primary-900: 220 237 250;
+  --primary-50: 15 23 42;
+  --primary-100: 30 41 59;
+  --primary-200: 51 65 85;
+  --primary-300: 71 85 105;
+  --primary-400: 100 116 139;
+  --primary-500: 37 99 235;
+  --primary-600: 59 130 246;
+  --primary-700: 96 165 250;
+  --primary-800: 147 197 253;
+  --primary-900: 219 234 254;
 
   color-scheme: dark;
 }
@@ -104,36 +104,65 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.625rem 1rem;
-    border-radius: 8px;
+    padding: 0.55rem 1.15rem;
+    border-radius: 9px;
     font-weight: 500;
     font-size: 0.875rem;
     color: #ffffff;
-    background-color: rgb(var(--brand-blue));
+    background: #1d4ed8;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     cursor: pointer;
     user-select: none;
-    transition: filter 0.15s ease;
+    transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
   }
-  .btn-primary:hover { filter: brightness(1.1); }
-  .btn-primary:active { filter: brightness(0.95); }
+  .btn-primary:hover {
+    background-color: #2563eb;
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+  }
+  .btn-primary:active {
+    transform: scale(0.98);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  }
+  .dark .btn-primary {
+    background: #2563eb;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  .dark .btn-primary:hover {
+    background-color: #3b82f6;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
 
   .btn-secondary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.625rem 1rem;
-    border-radius: 8px;
+    padding: 0.55rem 1rem;
+    border-radius: 9px;
     font-weight: 500;
     font-size: 0.875rem;
     color: var(--ink);
     background-color: var(--surface);
     border: 1px solid var(--line);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     cursor: pointer;
     user-select: none;
-    transition: background-color 0.15s ease, border-color 0.15s ease;
+    transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .btn-secondary:hover { background-color: var(--surface-muted); }
+  .btn-secondary:hover {
+    background-color: var(--surface-muted);
+    border-color: rgba(100, 116, 139, 0.35);
+    transform: translateY(-1px);
+  }
+  .btn-secondary:active {
+    transform: scale(0.98);
+  }
 
   .btn-ghost {
     display: inline-flex;
@@ -147,45 +176,80 @@
     color: var(--text-muted);
     cursor: pointer;
     user-select: none;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .btn-ghost:hover { background-color: var(--surface-soft); color: var(--ink); }
+  .btn-ghost:hover {
+    background-color: var(--surface-soft);
+    color: var(--ink);
+  }
+  .btn-ghost:active {
+    transform: scale(0.98);
+  }
 
   .btn-danger {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.625rem 1rem;
-    border-radius: 8px;
+    padding: 0.55rem 1rem;
+    border-radius: 9px;
     font-weight: 500;
     font-size: 0.875rem;
     color: #ffffff;
-    background-color: #dc2626;
+    background: #dc2626;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     user-select: none;
-    transition: background-color 0.15s ease;
+    transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .btn-danger:hover { background-color: #ef4444; }
+  .btn-danger:hover {
+    transform: translateY(-1px);
+    background-color: #ef4444;
+    box-shadow: 0 3px 10px rgba(220, 38, 38, 0.3);
+  }
+  .btn-danger:active {
+    transform: scale(0.98);
+  }
 
   /* Cards */
   .card {
     background-color: var(--surface);
-    border-radius: 14px;
+    border-radius: 12px;
     border: 1px solid var(--line);
-    box-shadow: 0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .dark .card {
+    background: #111827;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
 
   .card-hover {
     background-color: var(--surface);
-    border-radius: 14px;
+    border-radius: 12px;
     border: 1px solid var(--line);
-    box-shadow: 0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06);
-    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .card-hover:hover {
-    box-shadow: 0 4px 16px rgba(16,24,40,0.06);
-    border-color: var(--line);
+
+  .dark .card-hover {
+    background: #111827;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .card:hover, .card-hover:hover {
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.07);
+    transform: translateY(-1px);
+  }
+
+  .dark .card:hover, .dark .card-hover:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.07);
   }
 
   /* Form inputs */
@@ -305,6 +369,37 @@
     font-weight: 700;
     color: var(--ink);
     margin-bottom: 0.25rem;
+    display: inline-block;
+    transform-style: preserve-3d;
+    perspective: 900px;
+    will-change: transform, filter;
+    animation: text3dFloat 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.9),
+      0 2px 3px rgba(15, 23, 42, 0.07),
+      0 5px 12px rgba(15, 23, 42, 0.05);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.3s ease;
+  }
+  .page-title:hover {
+    transform: perspective(900px) rotateX(4deg) rotateY(-2deg) translateZ(12px) translateY(-2px);
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 1),
+      0 3px 6px rgba(15, 23, 42, 0.12),
+      0 8px 18px rgba(14, 165, 233, 0.15);
+  }
+
+  .dark .page-title {
+    text-shadow:
+      0 1px 0 #1e293b,
+      0 2px 4px rgba(0, 0, 0, 0.6),
+      0 6px 16px rgba(0, 0, 0, 0.45);
+  }
+  .dark .page-title:hover {
+    transform: perspective(900px) rotateX(4deg) rotateY(-2deg) translateZ(12px) translateY(-2px);
+    text-shadow:
+      0 1px 0 #334155,
+      0 2px 6px rgba(0, 0, 0, 0.8),
+      0 8px 24px rgba(14, 165, 233, 0.25);
   }
 
   .page-subtitle { font-size: 0.875rem; color: var(--text-muted); }
@@ -456,6 +551,59 @@
 .step-active { color: rgb(var(--brand-blue)); }
 .step-pending { color: var(--text-faint); }
 
+/* ── 3D Transforms & Perspective ───────────────────────────── */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.perspective-500 {
+  perspective: 500px;
+}
+
+.perspective-800 {
+  perspective: 800px;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.perspective-1200 {
+  perspective: 1200px;
+}
+
+.translate-z-10 {
+  transform: translateZ(10px);
+}
+
+.translate-z-20 {
+  transform: translateZ(20px);
+}
+
+.translate-z-30 {
+  transform: translateZ(30px);
+}
+
+.translate-z-50 {
+  transform: translateZ(50px);
+}
+
+/* ── Human-Crafted Smooth Ambient Transitions ───────────────── */
+.animate-fade-in-up {
+  animation: fadeInUp 0.36s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ── Background float animation ─────────────────────────────── */
 .bg-anim-float-ltr,
 .bg-anim-float-rtl {
@@ -481,3 +629,370 @@
   75%  { translate: -60px 25px; }
   100% { translate: 0 0; }
 }
+
+/* ── Floating & Particle Utilities ──────────────────────────── */
+.animate-float {
+  animation: floatSimple 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: floatSimple 7s ease-in-out infinite 1.5s;
+}
+
+.animate-float-slow {
+  animation: floatSimple 9s ease-in-out infinite 0.75s;
+}
+
+.particle {
+  animation: particleDrift 4s ease-in-out infinite alternate;
+}
+
+@keyframes floatSimple {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes particleDrift {
+  0% {
+    transform: translateY(0) scale(0.9);
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-16px) scale(1.1);
+    opacity: 0.2;
+  }
+}
+
+/* ── Natural Human-Curated Text Colors & Gradients ───────────── */
+/* Warm, organic, balanced tones crafted for human comfort and aesthetic elegance */
+
+/* Warm Amber & Honey Terracotta */
+.text-gradient-amber {
+  background: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #ea580c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.dark .text-gradient-amber {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fb923c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Deep Ocean & Coastal Cerulean */
+.text-gradient-ocean {
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.dark .text-gradient-ocean {
+  background: linear-gradient(135deg, #38bdf8 0%, #60a5fa 50%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Sage Botanical & Forest Emerald */
+.text-gradient-forest {
+  background: linear-gradient(135deg, #065f46 0%, #059669 50%, #0d9488 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.dark .text-gradient-forest {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 50%, #2dd4bf 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Dusk Lavender & Twilight Indigo */
+.text-gradient-dusk {
+  background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.dark .text-gradient-dusk {
+  background: linear-gradient(135deg, #a78bfa 0%, #818cf8 50%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Artisan Bronze & Warm Earth */
+.text-gradient-bronze {
+  background: linear-gradient(135deg, #78350f 0%, #b45309 50%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.dark .text-gradient-bronze {
+  background: linear-gradient(135deg, #fde68a 0%, #f59e0b 50%, #fbbf24 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Natural Rose & Berry */
+.text-gradient-rose {
+  background: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #f43f5e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.dark .text-gradient-rose {
+  background: linear-gradient(135deg, #fb7185 0%, #f43f5e 50%, #fda4af 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Refined Modern Slate */
+.text-gradient-slate {
+  background: linear-gradient(135deg, #0f172a 0%, #334155 50%, #64748b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.dark .text-gradient-slate {
+  background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 50%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Simple, Elegant Text Animations ────────────────────────── */
+
+/* 1. Animated Gradient Flow (Smooth, natural ambient wave across text) */
+.animate-text-gradient {
+  background-size: 200% 200%;
+  animation: textGradientFlow 6s ease-in-out infinite;
+}
+
+@keyframes textGradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 2. Soft Specular Shimmer (Gentle light gleam across text) */
+.animate-text-shimmer {
+  background-size: 250% 100%;
+  animation: textShimmer 4.5s ease-in-out infinite;
+}
+
+@keyframes textShimmer {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+/* 3. Gentle Breathing Pulse (Organic human pacing, never harsh) */
+.animate-text-pulse-gentle {
+  animation: textPulseGentle 3.5s ease-in-out infinite;
+}
+
+@keyframes textPulseGentle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(0.99);
+  }
+}
+
+/* 4. Subtle Micro-Float (Gentle vertical hover for headlines/badges) */
+.animate-text-float-subtle {
+  animation: textFloatSubtle 4.5s ease-in-out infinite;
+}
+
+@keyframes textFloatSubtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* 5. Smooth Text Reveal (Fade in with a soft upward settle) */
+.animate-text-reveal {
+  animation: textReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes textReveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 6. Human Typewriter Caret Cursor */
+.typewriter-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.15em;
+  vertical-align: -0.15em;
+  margin-left: 3px;
+  background-color: currentColor;
+  animation: typewriterBlink 0.9s steps(2, start) infinite;
+  border-radius: 1px;
+}
+
+@keyframes typewriterBlink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* 7. Subtle Text Glow (Natural, warm ambient glow - not harsh neon) */
+.text-glow-warm {
+  text-shadow: 0 0 16px rgba(245, 158, 11, 0.25), 0 0 32px rgba(217, 119, 6, 0.15);
+}
+
+.text-glow-ocean {
+  text-shadow: 0 0 16px rgba(14, 165, 233, 0.25), 0 0 32px rgba(37, 99, 235, 0.15);
+}
+
+.text-glow-sage {
+  text-shadow: 0 0 16px rgba(16, 185, 129, 0.25), 0 0 32px rgba(5, 150, 105, 0.15);
+}
+
+/* 8. Interactive Text Underline Expand */
+.hover-underline-expand {
+  position: relative;
+  display: inline-block;
+}
+.hover-underline-expand::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0%;
+  height: 2px;
+  background: currentColor;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 2px;
+}
+.hover-underline-expand:hover::after {
+  width: 100%;
+}
+
+/* ═════════════════════════════════════════════════════════════
+   Human-Crafted Professional Motion System
+   (Linear / Stripe / Apple Enterprise Precision)
+   ═════════════════════════════════════════════════════════════ */
+
+/* ── 1. Page Fluid Entrance Transition ──────────────────────── */
+.animate-page-enter {
+  animation: pageEnter 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── 2. Staggered Cascade Utilities ─────────────────────────── */
+.stagger-1 { animation-delay: 35ms; }
+.stagger-2 { animation-delay: 70ms; }
+.stagger-3 { animation-delay: 105ms; }
+.stagger-4 { animation-delay: 140ms; }
+.stagger-5 { animation-delay: 175ms; }
+.stagger-6 { animation-delay: 210ms; }
+
+/* ── 3. Subtle Luxury Text Shimmer ──────────────────────────── */
+.animate-luxury-shimmer {
+  background-size: 200% 100%;
+  animation: luxuryShimmer 6s ease-in-out infinite;
+}
+
+@keyframes luxuryShimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ── 4. Tactile Micro-Interactions ──────────────────────────── */
+.btn-tactile {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.btn-tactile:hover {
+  transform: translateY(-1px);
+}
+.btn-tactile:active {
+  transform: scale(0.98);
+}
+
+/* ── 5. Fluid Card Micro-Elevation ──────────────────────────── */
+.card-fluid-hover {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.2s ease;
+}
+.card-fluid-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.08), 0 6px 10px -4px rgba(0, 0, 0, 0.04);
+}
+
+/* ── 6. Border Beam Animation ─────────────────────────────────── */
+@keyframes borderBeam {
+  to {
+    stroke-dashoffset: -280;
+  }
+}
+
+.animate-border-beam {
+  animation: borderBeam 6s linear infinite;
+}
+
+/* ── 7. Ripple Expand Animation ───────────────────────────────── */
+@keyframes ripple-expand {
+  0% {
+    transform: scale(0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* ── 8. Liquid Shine Animation ────────────────────────────────── */
+@keyframes liquidShine {
+  0% {
+    transform: translateX(-100%) skewX(-12deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-12deg);
+  }
+}
+
+.animate-liquid-shine {
+  animation: liquidShine 1.5s ease-in-out infinite;
+}
+
+
+
+

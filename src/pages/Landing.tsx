@@ -7,6 +7,16 @@ import {
 import { useAuth } from '../context/AuthContext'
 import LandingNavbar from '../components/landing/LandingNavbar'
 import LandingFooter from '../components/landing/LandingFooter'
+import { Sentinel3DCore } from '../components/common/Sentinel3DCore'
+import { CyberCard3D } from '../components/common/CyberCard3D'
+import { Text3D } from '../components/common/Text3D'
+import {
+  GravityStarsBackground,
+  BorderBeam,
+  LiquidButton,
+  RippleButton,
+  SentinelDrawLogo,
+} from '../components/animate'
 
 const heroFeatures = [
   'Role-Based Access',
@@ -108,7 +118,9 @@ function HeroVisual() {
   return (
     <div className="relative mx-auto w-full max-w-[540px]">
       <div className="absolute inset-0 -z-10 scale-110 rounded-3xl bg-gradient-to-br from-brand-blue/20 via-transparent to-transparent blur-3xl" />
-      <div className="card overflow-hidden p-5 sm:p-6">
+      <div className="card relative overflow-hidden p-5 sm:p-6 shadow-2xl">
+        {/* Animate UI Border Beam */}
+        <BorderBeam size={160} duration={8} colorFrom="#38bdf8" colorTo="#818cf8" />
         {/* Top bar */}
         <div className="mb-5 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -196,40 +208,52 @@ export default function Landing() {
     <div className="min-h-screen bg-canvas text-ink">
       <LandingNavbar />
 
-      {/* Hero */}
+      {/* Hero with Animate UI Gravity Stars */}
       <section className="relative overflow-hidden pt-28 pb-16 sm:pt-36 lg:pt-40">
+        <GravityStarsBackground
+          starCount={80}
+          starColor="#0ea5e9"
+          speed={0.4}
+          connectionRadius={120}
+          className="absolute inset-0 -z-10"
+        />
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-brand-blue/10 blur-3xl" />
-          <div className="absolute -bottom-16 -left-24 h-80 w-80 rounded-full bg-brand-blue/10 blur-3xl" />
+          <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-blue-600/[0.06] blur-3xl" />
+          <div className="absolute -bottom-16 -left-24 h-80 w-80 rounded-full bg-indigo-600/[0.05] blur-3xl" />
         </div>
 
         <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
           {/* Text */}
           <div>
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-brand-blue/30 bg-brand-blue/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand-blue">
-              <Shield className="h-3.5 w-3.5" /> Secure Enterprise AI
+            <div className="mb-4 flex items-center gap-3">
+              <SentinelDrawLogo size={42} strokeColor="#0ea5e9" />
+              <div className="inline-flex items-center gap-2 rounded-full border border-brand-blue/30 bg-brand-blue/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand-blue">
+                <Shield className="h-3.5 w-3.5" /> Secure Enterprise AI
+              </div>
             </div>
             <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-ink sm:text-5xl lg:text-6xl">
               Your Enterprise Knowledge.{' '}
-              <span className="text-brand-blue">Secured by Intelligence.</span>
+              <Text3D color="ocean" className="block sm:inline">
+                Secured by Intelligence.
+              </Text3D>
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
               Search internal company knowledge with confidence. Sentinel AI combines role-based security, intelligent
               document retrieval, and visual source verification in one secure platform.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                to={isAuthenticated ? '/search' : '/login'}
-                className="btn-primary justify-center px-8 py-3.5 text-base"
-              >
-                {isAuthenticated ? 'Open the workspace' : 'Get Started'} <ChevronRight className="h-5 w-5" />
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Link to={isAuthenticated ? '/search' : '/login'}>
+                <LiquidButton className="w-full sm:w-auto">
+                  <span>{isAuthenticated ? 'Open the workspace' : 'Get Started'}</span>
+                  <ChevronRight className="h-4 w-4" />
+                </LiquidButton>
               </Link>
-              <button
+              <RippleButton
                 onClick={() => document.querySelector('#features')?.scrollIntoView({ behavior: 'smooth' })}
-                className="btn-secondary justify-center px-8 py-3.5 text-base"
+                className="btn-secondary justify-center px-8 py-3.5 text-base rounded-xl"
               >
                 Explore Platform
-              </button>
+              </RippleButton>
             </div>
             <div className="mt-8 flex flex-wrap gap-5">
               {heroFeatures.map((f) => (
@@ -241,8 +265,9 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Visual */}
-          <div className="hidden lg:block">
+          {/* 3D Visual Showcase */}
+          <div className="hidden lg:flex flex-col items-center justify-center gap-6">
+            <Sentinel3DCore size="hero" interactive={true} showTelemetry={true} />
             <HeroVisual />
           </div>
         </div>
@@ -264,17 +289,17 @@ export default function Landing() {
 
           <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
             {features.map((f) => (
-              <div key={f.title} className="card-hover group flex flex-col p-6">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-faint">{f.category}</span>
+              <CyberCard3D key={f.title} className="p-6">
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">{f.category}</span>
                 <div className={`mt-3 flex h-12 w-12 items-center justify-center rounded-2xl ${f.accent}`}>
                   <f.Icon className="h-6 w-6" />
                 </div>
-                <h3 className="mt-4 text-base font-bold text-ink">{f.title}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{f.description}</p>
-                <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-brand-blue opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <h3 className="mt-4 text-base font-semibold text-slate-900 dark:text-slate-100">{f.title}</h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{f.description}</p>
+                <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400">
                   Learn more <ArrowRight className="h-3.5 w-3.5" />
                 </div>
-              </div>
+              </CyberCard3D>
             ))}
           </div>
         </div>
