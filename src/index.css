@@ -42,37 +42,37 @@
   color-scheme: light;
 }
 
-/* Refined Enterprise Dark Theme — Matte Obsidian (Animate UI aesthetic) */
+/* ChatGPT Dark Theme — Matte Charcoal Black (#212121, #171717, #2f2f2f) */
 .dark {
-  --canvas: #09090B;
-  --canvas-soft: #0E0E11;
-  --surface: #121215;
-  --surface-muted: #18181B;
-  --surface-soft: #27272A;
+  --canvas: #212121;
+  --canvas-soft: #262626;
+  --surface: #262626;
+  --surface-muted: #2F2F2F;
+  --surface-soft: #383838;
 
-  --line: rgba(255, 255, 255, 0.08);
-  --line-soft: rgba(255, 255, 255, 0.04);
+  --line: rgba(255, 255, 255, 0.09);
+  --line-soft: rgba(255, 255, 255, 0.05);
 
-  --ink: #FAFAFA;
-  --ink-soft: #A1A1AA;
+  --ink: #ECECEC;
+  --ink-soft: #B4B4B4;
 
-  --text-muted: #A1A1AA;
-  --text-faint: #71717A;
+  --text-muted: #8E8E8E;
+  --text-faint: #666666;
 
-  --brand-navy: 18 18 21;
-  --brand-blue: 56 189 248;
-  --brand-bg: #121215;
+  --brand-navy: 23 23 23;
+  --brand-blue: 16 163 127;
+  --brand-bg: #212121;
 
-  --primary-50: 18 18 21;
-  --primary-100: 24 24 27;
-  --primary-200: 39 39 42;
-  --primary-300: 63 63 70;
-  --primary-400: 113 113 122;
-  --primary-500: 56 189 248;
-  --primary-600: 14 165 233;
-  --primary-700: 2 132 199;
-  --primary-800: 3 105 161;
-  --primary-900: 224 242 254;
+  --primary-50: 33 33 33;
+  --primary-100: 38 38 38;
+  --primary-200: 47 47 47;
+  --primary-300: 64 64 64;
+  --primary-400: 115 115 115;
+  --primary-500: 16 163 127;
+  --primary-600: 13 148 115;
+  --primary-700: 15 118 94;
+  --primary-800: 17 94 77;
+  --primary-900: 236 236 236;
 
   color-scheme: dark;
 }
@@ -128,14 +128,18 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
   }
   .dark .btn-primary {
-    background: #2563eb;
-    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    background: #ffffff;
+    color: #0d0d0d;
+    font-weight: 600;
+    background-image: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   }
   .dark .btn-primary:hover {
-    background-color: #3b82f6;
-    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    background-color: #e5e5e5;
+    color: #000000;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    transform: translateY(-1px);
   }
 
   .btn-secondary {
@@ -163,6 +167,17 @@
   .btn-secondary:active {
     transform: scale(0.98);
   }
+  .dark .btn-secondary {
+    background-color: #2F2F2F;
+    color: #ECECEC;
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  .dark .btn-secondary:hover {
+    background-color: #383838;
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
 
   .btn-ghost {
     display: inline-flex;
@@ -184,6 +199,10 @@
   }
   .btn-ghost:active {
     transform: scale(0.98);
+  }
+  .dark .btn-ghost:hover {
+    background-color: #2F2F2F;
+    color: #ECECEC;
   }
 
   .btn-danger {
@@ -223,9 +242,9 @@
   }
 
   .dark .card {
-    background: #111827;
+    background: #262626;
     border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    box-shadow: 0 4px 18px -3px rgba(0, 0, 0, 0.5);
   }
 
   .card-hover {
@@ -237,9 +256,9 @@
   }
 
   .dark .card-hover {
-    background: #111827;
+    background: #262626;
     border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.4);
   }
 
   .card:hover, .card-hover:hover {
@@ -248,8 +267,9 @@
   }
 
   .dark .card:hover, .dark .card-hover:hover {
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    background: #2a2a2a;
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.65);
   }
 
   /* Form inputs */
@@ -267,7 +287,19 @@
   .input:focus {
     outline: none;
     border-color: rgb(var(--brand-blue));
-    box-shadow: 0 0 0 2px rgba(43, 108, 176, 0.18);
+    box-shadow: 0 0 0 2px rgba(16, 163, 127, 0.18);
+  }
+  .dark .input {
+    background-color: #2F2F2F;
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #ECECEC;
+  }
+  .dark .input::placeholder {
+    color: #8E8E8E;
+  }
+  .dark .input:focus {
+    border-color: rgba(255, 255, 255, 0.28);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
   }
 
   .label {

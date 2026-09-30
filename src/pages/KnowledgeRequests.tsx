@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { FilePlus2, CheckCircle2, Clock, MessageSquareDashed } from 'lucide-react'
 import { getKnowledgeRequests, getDocuments, publishDocumentForRequest, type DocumentEdits } from '../services/api'
 import type { Document, KnowledgeRequest } from '../types'
@@ -9,6 +10,9 @@ import { SkeletonLoader } from '../components/common/SkeletonLoader'
 import { ErrorState } from '../components/common/ErrorState'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../components/common/Toast'
+import { FadeUp, HoverCard } from '../components/animations'
+import { DURATION, EASING } from '../components/animations/motion-tokens'
+import { RippleButton } from '../components/animate/RippleButton'
 
 export default function KnowledgeRequests() {
   const { user } = useAuth()
@@ -34,16 +38,21 @@ export default function KnowledgeRequests() {
 
   if (!isManager) {
     return (
-      <div className="space-y-6">
+      <FadeUp className="space-y-6">
         <h1 className="page-title text-2xl font-bold">Knowledge Requests</h1>
         <ErrorState
           variant="unauthorized"
           title="Access Restricted"
           message="Only administrators and managers can review knowledge requests."
         >
-          <button onClick={() => navigate('/search')} className="btn-primary">Go to AI Search</button>
+          <RippleButton
+            onClick={() => navigate('/search')}
+            className="btn-primary"
+          >
+            Go to AI Search
+          </RippleButton>
         </ErrorState>
-      </div>
+      </FadeUp>
     )
   }
 
@@ -65,11 +74,16 @@ export default function KnowledgeRequests() {
   }
 
   return (
-    <div className="space-y-6">
+    <FadeUp className="space-y-6">
       <div>
-        <h1 className="page-title text-2xl font-bold">Knowledge Requests</h1>
-        <p className="page-subtitle">
-          Questions the AI could not answer from the documents. Publish or update a PDF to close the gap.
+        <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#212121] px-3 py-1 text-xs font-medium text-slate-600 dark:text-[#8e8e8e] mb-2">
+          <span>Feedback Loop</span>
+        </div>
+        <h1 className="page-title font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-[#ececec]">
+          Knowledge Requests
+        </h1>
+        <p className="page-subtitle text-xs sm:text-sm text-slate-500 dark:text-[#8e8e8e]">
+          Questions the AI could not answer from the documents. Publish or update a PDF to close the organizational knowledge gap.
         </p>
       </div>
 
@@ -83,45 +97,65 @@ export default function KnowledgeRequests() {
         />
       ) : (
         <div className="space-y-3">
-          {pending.map((r) => (
-            <div key={r.id} className="card flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400">
+          {pending.map((r, i) => (
+            <motion.div
+              key={r.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: DURATION.FAST,
+                delay: Math.min(i * 0.04, 0.3),
+                ease: EASING.SMOOTH,
+              }}
+              className="card flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between transition-shadow hover:shadow-card-md"
+            >
+              <div className="flex items-start gap-3.5">
+                <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
                   <Clock className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
-                  <p className="font-medium text-ink">"{r.question}"</p>
-                  <p className="mt-0.5 text-xs text-muted">
-                    Not found in documents · Asked by {r.askedBy} · {r.timestamp}
+                  <p className="font-semibold text-ink">"{r.question}"</p>
+                  <p className="mt-1 text-xs text-muted">
+                    Not found in documents · Asked by <span className="font-medium text-ink">{r.askedBy}</span> · {r.timestamp}
                   </p>
                 </div>
               </div>
-              <button
+              <RippleButton
                 onClick={() => setEditing(r)}
-                className="btn-primary shrink-0"
+                className="btn-primary shrink-0 self-start sm:self-auto shadow-sm"
               >
                 <FilePlus2 className="h-4 w-4" />
                 Add / Update PDF
-              </button>
-            </div>
+              </RippleButton>
+            </motion.div>
           ))}
         </div>
       )}
 
       {resolved.length > 0 && (
         <div>
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">Resolved</h2>
+          <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">Resolved History</h2>
           <div className="space-y-2">
-            {resolved.map((r) => (
-              <div key={r.id} className="card flex items-center gap-3 p-4">
-                <CheckCircle2 className="h-5 w-5 shrink-0 text-green-600 dark:text-green-400" />
+            {resolved.map((r, i) => (
+              <motion.div
+                key={r.id}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: DURATION.FAST,
+                  delay: Math.min(i * 0.03, 0.2),
+                  ease: EASING.SMOOTH,
+                }}
+                className="card flex items-center gap-3 p-4 transition-colors hover:bg-slate-50/50 dark:hover:bg-slate-800/30"
+              >
+                <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-500" />
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-ink">"{r.question}"</p>
                   <p className="text-xs text-muted">
                     Resolved by {r.askedBy} on {r.timestamp}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -152,6 +186,6 @@ export default function KnowledgeRequests() {
           onClose={() => setEditing(null)}
         />
       )}
-    </div>
+    </FadeUp>
   )
 }

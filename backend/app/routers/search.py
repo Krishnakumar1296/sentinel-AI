@@ -15,7 +15,7 @@ router = APIRouter(prefix="/api/search", tags=["Search"])
 @router.post("", response_model=SearchResult)
 async def search(body: SearchQuery, user: User = Depends(get_current_user)):
     """Execute a RAG search query."""
-    result = await search_service.execute_search(body.query, user)
+    result = await search_service.execute_search(body.query, user, history=body.history)
     
     # If no answer, report as unanswered
     if result.status == "no_answer":

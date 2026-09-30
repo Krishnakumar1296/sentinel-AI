@@ -33,30 +33,48 @@ export function EvidenceViewer({
         </div>
       </div>
 
-      <div className="mx-5 mb-4 overflow-hidden rounded-xl border border-line shadow-sm">
-        <div className="flex items-center justify-between bg-surface-soft px-3 py-1.5">
-          <span className="text-[11px] font-medium text-muted">{document} · Page {page}</span>
-          <div className="flex gap-1 text-faint">
-            <Search className="h-3 w-3" />
-            <FileText className="h-3 w-3" />
+      <div className="mx-5 mb-4 overflow-hidden rounded-xl border border-line bg-surface shadow-md">
+        <div className="flex items-center justify-between border-b border-line bg-surface-soft px-3.5 py-2">
+          <div className="flex items-center gap-2">
+            <span className="flex h-2 w-2 rounded-full bg-red-500" />
+            <span className="text-[11px] font-mono font-medium text-ink">{document} · Page {page}</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-muted">
+            <span className="rounded bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              Page {page} Photo Evidence
+            </span>
           </div>
         </div>
-        <div className="bg-surface p-4 text-[11px] leading-relaxed text-muted">
-          <p className="font-semibold text-ink">5.4 Data Retention Requirements</p>
-          <p className="mt-1">
-            Customer records must be retained in accordance with applicable regulatory and
-            operational requirements...
-          </p>
-          {highlighted && (
-            <p className="evidence-highlight mt-1 text-brand-blue">
-              All retained data must be stored within the organization's secure vector vault and
-              access is governed by role-based authorization.
+
+        {/* Realistic PDF Document Page Photo Sheet */}
+        <div className="relative bg-[#1A1D24] dark:bg-[#18181A] p-4 font-sans">
+          <div className="mx-auto rounded border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#212121] p-5 text-[11px] leading-relaxed text-slate-800 dark:text-[#ECECEC] shadow-lg">
+            <div className="mb-3 flex items-center justify-between border-b border-slate-200 dark:border-white/[0.08] pb-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-[#8E8E8E]">
+                {document}
+              </span>
+              <span className="text-[10px] font-mono font-semibold text-[#10a37f]">
+                PAGE {page} OF {totalPages}
+              </span>
+            </div>
+
+            <p className="font-bold text-slate-900 dark:text-white text-xs mb-1">
+              5.4 Data Retention &amp; Governance Policy
             </p>
-          )}
-          <p className="mt-1">
-            Records older than the retention period will be securely purged in line with the
-            organization's disposal policy...
-          </p>
+            <p className="text-slate-600 dark:text-[#8E8E8E]">
+              Customer records and authorized knowledge assets must be retained in accordance with applicable regulatory and operational mandates...
+            </p>
+
+            {highlighted && (
+              <div className="my-2.5 rounded-md border-l-4 border-[#10a37f] bg-emerald-500/10 px-3 py-2 text-[#10a37f] font-medium shadow-xs">
+                "All retained data must be stored within the organization's secure vector vault and access is governed strictly by role-based authorization."
+              </div>
+            )}
+
+            <p className="text-slate-600 dark:text-[#8E8E8E]">
+              Records older than the specified retention window will be securely purged in compliance with enterprise data disposal protocols.
+            </p>
+          </div>
         </div>
       </div>
 

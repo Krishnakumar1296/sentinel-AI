@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Loader2 } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Loader2, Check } from 'lucide-react'
+import { DURATION, EASING } from '../animations/motion-tokens'
 
 export function ProgressStepper({ running, onComplete }: { running: boolean; onComplete: () => void }) {
   const stages = [
@@ -29,24 +31,65 @@ export function ProgressStepper({ running, onComplete }: { running: boolean; onC
   if (!running) return null
 
   return (
-    <div className="card p-5">
-      <p className="text-sm font-semibold text-ink">Processing Document</p>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: DURATION.NORMAL, ease: EASING.SMOOTH }}
+      className="card p-5 border border-brand-blue/30 shadow-card"
+    >
+      <div className="flex items-center justify-between">
+        <p className="text-sm font-semibold text-ink">Processing Document</p>
+        <span className="text-xs font-mono font-medium text-brand-blue">
+          {Math.min(step + 1, stages.length)} / {stages.length}
+        </span>
+      </div>
       <div className="mt-4 space-y-3">
         {stages.map((s, i) => (
           <div key={s} className="flex items-center gap-3 text-sm">
             <span className="flex h-5 w-5 items-center justify-center">
-              {i < step && (
-                <svg className="h-4 w-4 text-green-500 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                </svg>
-              )}
-              {i === step && <Loader2 className="h-4 w-4 animate-spin text-brand-blue" />}
-              {i > step && <span className="h-3 w-3 rounded-full border border-line" />}
+              <AnimatePresence mode="wait">
+                {i < step && (
+                  <motion.span
+                    key="check"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                    className="flex h-5 w-5 items-center justify-center rounded-full bg-green-500/10 text-green-600 dark:text-green-400"
+                  >
+                    <Check className="h-3.5 w-3.5" />
+                  </motion.span>
+                )}
+                {i === step && (
+                  <motion.span
+                    key="spinner"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="flex h-5 w-5 items-center justify-center"
+                  >
+                    <Loader2 className="h-4 w-4 animate-spin text-brand-blue" />
+                  </motion.span>
+                )}
+                {i > step && (
+                  <span className="h-2.5 w-2.5 rounded-full border border-line bg-surface-soft" />
+                )}
+              </AnimatePresence>
             </span>
-            <span className={i <= step ? 'font-medium text-ink' : 'text-faint'}>{s}</span>
+            <span
+              className={`transition-colors duration-200 ${
+                i < step
+                  ? 'text-ink/80'
+                  : i === step
+                  ? 'font-semibold text-brand-blue'
+                  : 'text-faint'
+              }`}
+            >
+              {s}
+            </span>
           </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   )
 }
+

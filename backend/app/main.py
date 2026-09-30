@@ -25,10 +25,10 @@ async def lifespan(app: FastAPI):
     else:
         print("[INFO] Supabase not configured (set SUPABASE_URL & SUPABASE_KEY)")
 
-    if settings.is_gemini_configured:
-        print("[OK] Google Gemini AI configured")
+    if settings.is_ollama_configured:
+        print(f"[OK] Ollama configured at {settings.OLLAMA_BASE_URL} (model: {settings.OLLAMA_MODEL})")
     else:
-        print("[INFO] Gemini API key not set (set GEMINI_API_KEY)")
+        print("[INFO] Ollama not configured (set OLLAMA_BASE_URL)")
 
     print("[STARTUP] Sentinel AI backend is running")
     yield

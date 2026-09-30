@@ -4,3 +4,5 @@ export * from './RippleButton'
 export * from './LiquidButton'
 export * from './AnimatedTabs'
 export * from './SvgDrawReveal'
+export * from '../animations'
+

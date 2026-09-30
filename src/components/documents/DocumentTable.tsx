@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { FileText, Eye, Pencil } from 'lucide-react'
 import type { Document } from '../../types'
+import { DURATION, EASING } from '../animations/motion-tokens'
 
 const statusStyles: Record<Document['status'], string> = {
   active: 'badge-green',
@@ -39,9 +41,18 @@ export function DocumentTable({ documents, onEdit }: { documents: Document[]; on
           {documents.map((d, i) => {
             const accessRestricted = d.access !== 'employee'
             return (
-              <tr
+              <motion.tr
                 key={d.id}
-                className={`border-b border-line-soft transition hover:bg-surface-muted/50 ${i === documents.length - 1 ? 'border-b-0' : ''}`}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: DURATION.FAST,
+                  delay: Math.min(i * 0.03, 0.3),
+                  ease: EASING.SMOOTH,
+                }}
+                className={`border-b border-line-soft transition-colors hover:bg-slate-50/70 dark:hover:bg-[#2f2f2f] ${
+                  i === documents.length - 1 ? 'border-b-0' : ''
+                }`}
               >
                 <td className="px-5 py-3.5">
                   <div className="flex items-center gap-3">
@@ -72,24 +83,28 @@ export function DocumentTable({ documents, onEdit }: { documents: Document[]; on
                 <td className="px-4 py-3.5">
                   <div className="flex items-center justify-end gap-2">
                     {onEdit && (
-                      <button
+                      <motion.button
+                        whileHover={{ scale: 1.04 }}
+                        whileTap={{ scale: 0.96 }}
                         onClick={() => onEdit(d)}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-line px-2.5 py-1.5 text-xs font-medium text-muted transition hover:border-line hover:text-ink"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-line px-2.5 py-1.5 text-xs font-medium text-muted transition-colors hover:border-line hover:text-ink hover:bg-slate-100/50 dark:hover:bg-[#2f2f2f]"
                       >
                         <Pencil className="h-3.5 w-3.5" />
                         Edit
-                      </button>
+                      </motion.button>
                     )}
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.04 }}
+                      whileTap={{ scale: 0.96 }}
                       onClick={() => navigate(`/viewer?doc=${d.id}`)}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-line px-2.5 py-1.5 text-xs font-medium text-muted transition hover:border-line hover:text-ink"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-line px-2.5 py-1.5 text-xs font-medium text-muted transition-colors hover:border-line hover:text-ink hover:bg-slate-100/50 dark:hover:bg-[#2f2f2f]"
                     >
                       <Eye className="h-3.5 w-3.5" />
                       View
-                    </button>
+                    </motion.button>
                   </div>
                 </td>
-              </tr>
+              </motion.tr>
             )
           })}
         </tbody>
@@ -97,3 +112,4 @@ export function DocumentTable({ documents, onEdit }: { documents: Document[]; on
     </div>
   )
 }
+

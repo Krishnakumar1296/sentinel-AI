@@ -1,5 +1,7 @@
+import { motion } from 'framer-motion'
 import { Pencil, Trash2 } from 'lucide-react'
 import type { User } from '../../types'
+import { DURATION, EASING } from '../animations/motion-tokens'
 
 export function UserTable({
   users,
@@ -26,13 +28,20 @@ export function UserTable({
         </thead>
         <tbody>
           {users.map((u, i) => (
-            <tr
+            <motion.tr
               key={u.id}
-              className={`border-b border-line-soft transition hover:bg-surface-muted/50 ${i === users.length - 1 ? 'border-b-0' : ''}`}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: DURATION.FAST,
+                delay: Math.min(i * 0.03, 0.3),
+                ease: EASING.SMOOTH,
+              }}
+              className={`border-b border-line-soft transition-colors hover:bg-slate-50/70 dark:hover:bg-[#2f2f2f] ${i === users.length - 1 ? 'border-b-0' : ''}`}
             >
               <td className="px-5 py-3.5">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white shadow-sm">
                     {u.name.charAt(0)}
                   </div>
                   <span className="font-medium text-ink">{u.name}</span>
@@ -41,7 +50,7 @@ export function UserTable({
               <td className="px-4 py-3.5 text-muted">{u.email}</td>
               <td className="px-4 py-3.5 text-muted">{u.department}</td>
               <td className="px-4 py-3.5">
-                <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium uppercase ${
+                <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold uppercase ${
                   u.role === 'admin' ? 'border-blue-200 bg-blue-50 text-brand-blue dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-400'
                   : u.role === 'manager' ? 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-400'
                   : 'border-line bg-surface-soft text-muted'
@@ -51,25 +60,38 @@ export function UserTable({
               </td>
               <td className="px-4 py-3.5">
                 <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${u.status === 'active' ? 'text-green-600 dark:text-green-400' : 'text-faint'}`}>
-                  <span className={`h-2 w-2 rounded-full ${u.status === 'active' ? 'bg-green-500' : 'bg-faint'}`} />
+                  <span className={`h-2 w-2 rounded-full ${u.status === 'active' ? 'bg-green-500 animate-pulse' : 'bg-faint'}`} />
                   {u.status}
                 </span>
               </td>
               <td className="px-4 py-3.5 text-muted">{u.lastActive}</td>
               <td className="px-4 py-3.5">
-                <div className="flex justify-end gap-1">
-                  <button onClick={() => onEdit(u)} className="rounded-md p-1.5 text-muted hover:bg-surface-soft hover:text-ink" title="Edit user">
+                <div className="flex justify-end gap-1.5">
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.92 }}
+                    onClick={() => onEdit(u)}
+                    className="rounded-lg p-1.5 text-muted transition-colors hover:bg-surface-soft hover:text-ink"
+                    title="Edit user"
+                  >
                     <Pencil className="h-4 w-4" />
-                  </button>
-                  <button onClick={() => onDelete(u)} className="rounded-md p-1.5 text-muted hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/10 dark:hover:text-red-400" title="Delete user">
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.92 }}
+                    onClick={() => onDelete(u)}
+                    className="rounded-lg p-1.5 text-muted transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/10 dark:hover:text-red-400"
+                    title="Delete user"
+                  >
                     <Trash2 className="h-4 w-4" />
-                  </button>
+                  </motion.button>
                 </div>
               </td>
-            </tr>
+            </motion.tr>
           ))}
         </tbody>
       </table>
     </div>
   )
 }
+

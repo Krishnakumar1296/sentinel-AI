@@ -1,55 +1,50 @@
-"""Embedding generation using Google Gemini."""
+"""Embedding generation using Ollama (nomic-embed-text)."""
 
 from typing import List
-from google import genai
+import httpx
 
 from ..config import settings
 
-_client: genai.Client | None = None
-
-EMBEDDING_MODEL = "gemini-embedding-001"
+EMBEDDING_MODEL = "nomic-embed-text"
 EMBEDDING_DIMENSION = 768
 
 
-def _get_client() -> genai.Client:
-    global _client
-    if _client is None:
-        _client = genai.Client(api_key=settings.GEMINI_API_KEY)
-    return _client
-
-
 def embed_texts(texts: List[str]) -> List[List[float]]:
-    """Generate embeddings for a batch of texts.
-    
+    """Generate embeddings for a batch of texts using Ollama.
+
     Returns a list of embedding vectors (each is a list of floats).
     """
     if not texts:
         return []
 
-    if not settings.is_gemini_configured:
-        return [[0.0] * EMBEDDING_DIMENSION for _ in texts]
-    
-    try:
-        client = _get_client()
-        all_embeddings: List[List[float]] = []
-        batch_size = 100
+    all_embeddings: List[List[float]] = []
 
-        for i in range(0, len(texts), batch_size):
-            batch = texts[i : i + batch_size]
-            result = client.models.embed_content(
-                model=EMBEDDING_MODEL,
-                contents=batch,
-                config={
-                    "output_dimensionality": EMBEDDING_DIMENSION,
+    for text in texts:
+        try:
+            response = httpx.post(
+                f"{settings.OLLAMA_BASE_URL}/api/embeddings",
+                json={
+                    "model": EMBEDDING_MODEL,
+                    "prompt": text,
+                    # Release VRAM immediately after embedding so llama3.2
+                    # can load without waiting for the keep-alive window.
+                    "keep_alive": 0,
                 },
+                timeout=60.0,
             )
-            for embedding in result.embeddings:
-                all_embeddings.append(list(embedding.values))
+            response.raise_for_status()
+            data = response.json()
+            embedding = data.get("embedding", [])
+            if not embedding:
+                print(f"[WARN] Ollama returned empty embedding for text snippet.")
+                all_embeddings.append([0.0] * EMBEDDING_DIMENSION)
+            else:
+                all_embeddings.append(embedding)
+        except Exception as exc:
+            print(f"[WARN] Ollama embedding failed ({exc}). Returning zero vector.")
+            all_embeddings.append([0.0] * EMBEDDING_DIMENSION)
 
-        return all_embeddings
-    except Exception as exc:
-        print(f"[WARN] Gemini embedding failed ({exc}). Returning zero vectors.")
-        return [[0.0] * EMBEDDING_DIMENSION for _ in texts]
+    return all_embeddings
 
 
 def embed_query(query: str) -> List[float]:

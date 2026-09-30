@@ -2,7 +2,7 @@
 
 import time
 from datetime import datetime, timezone
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 from ..dependencies import get_supabase, is_supabase_ready
 from ..models.search import SearchResult, SearchHistoryItem, SearchSource
@@ -206,12 +206,17 @@ _DEV_SEARCH_HISTORY: List[dict] = [
 ]
 
 
-async def execute_search(query: str, user: User) -> SearchResult:
+async def execute_search(
+    query: str,
+    user: User,
+    history: Optional[List[Dict[str, str]]] = None,
+) -> SearchResult:
     """Run a RAG search and persist the result in history."""
     result = await rag_search(
         query=query,
         user_access_level=user.role,
         user_department=user.department,
+        history=history,
     )
 
     now = datetime.now(timezone.utc).isoformat()

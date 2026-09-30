@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import { UploadCloud, CheckCircle2 } from 'lucide-react'
 import { uploadDocument } from '../services/api'
 import type { Document } from '../types'
@@ -9,6 +10,8 @@ import { UploadZone } from '../components/documents/UploadZone'
 import { ProgressStepper } from '../components/documents/ProgressStepper'
 import { ErrorState } from '../components/common/ErrorState'
 import { CyberCard3D } from '../components/common/CyberCard3D'
+import { FadeUp } from '../components/animations/FadeUp'
+import { DURATION, EASING } from '../components/animations/motion-tokens'
 
 export default function Upload() {
   const { user } = useAuth()
@@ -71,99 +74,136 @@ export default function Upload() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="page-title text-2xl font-bold">Upload Enterprise Document</h1>
-        <p className="page-subtitle">Add internal documents to the secure knowledge vault.</p>
-      </div>
-
-      {done ? (
-        <div className="card flex flex-col items-center p-10 text-center">
-          <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 dark:bg-green-500/10">
-            <CheckCircle2 className="h-7 w-7 text-green-600 dark:text-green-400" />
-          </div>
-          <h2 className="text-lg font-semibold text-ink">Document Uploaded Successfully</h2>
-          <p className="mt-1 text-sm text-muted">
-            <span className="font-medium text-ink">{name || file?.name}</span> is now available in the secure knowledge vault.
-          </p>
-          <div className="mt-6 flex gap-3">
-            <button
-              onClick={() => {
-                setDone(false)
-                setProcessing(false)
-                setFile(null)
-                setName('')
-                setDescription('')
-              }}
-              className="btn-secondary"
-            >
-              Upload Another
-            </button>
-            <button onClick={() => navigate('/documents')} className="btn-primary">View Documents</button>
-          </div>
+      <FadeUp delay={0.05}>
+        <div>
+          <h1 className="page-title text-2xl font-bold">Upload Enterprise Document</h1>
+          <p className="page-subtitle">Add internal documents to the secure knowledge vault.</p>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <UploadZone onFile={setFile} />
-            <div className="mt-5">
-              <ProgressStepper
-                running={processing}
-                onComplete={() => {
-                  setProcessing(false)
-                  setDone(true)
-                  toast('success', 'Document processed and added to the vault')
-                }}
-              />
+      </FadeUp>
+
+      <AnimatePresence mode="wait">
+        {done ? (
+          <motion.div
+            key="done"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: DURATION.NORMAL, ease: EASING.SMOOTH }}
+            className="card flex flex-col items-center p-10 text-center"
+          >
+            <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 dark:bg-green-500/10">
+              <CheckCircle2 className="h-7 w-7 text-green-600 dark:text-green-400" />
             </div>
-          </div>
+            <h2 className="text-lg font-semibold text-ink">Document Uploaded Successfully</h2>
+            <p className="mt-1 text-sm text-muted">
+              <span className="font-medium text-ink">{name || file?.name}</span> is now available in the secure knowledge vault.
+            </p>
+            <div className="mt-6 flex gap-3">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  setDone(false)
+                  setProcessing(false)
+                  setFile(null)
+                  setName('')
+                  setDescription('')
+                }}
+                className="btn-secondary"
+              >
+                Upload Another
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => navigate('/documents')}
+                className="btn-primary"
+              >
+                View Documents
+              </motion.button>
+            </div>
+          </motion.div>
+        ) : (
+          <FadeUp delay={0.1}>
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+              <div className="lg:col-span-2">
+                <UploadZone onFile={setFile} />
+                <div className="mt-5">
+                  <ProgressStepper
+                    running={processing}
+                    onComplete={() => {
+                      setProcessing(false)
+                      setDone(true)
+                      toast('success', 'Document processed and added to the vault')
+                    }}
+                  />
+                </div>
+              </div>
 
-          <CyberCard3D className="h-fit p-6">
-            <form onSubmit={handleUpload}>
-              <h2 className="font-display text-base font-semibold text-slate-900 dark:text-slate-100 tracking-tight">Document Details & Access</h2>
-              <div className="mt-5 space-y-4">
-                <div>
-                  <label className="label">Document Name</label>
-                  <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. HR Handbook" className="input" />
-                </div>
-                <div>
-                  <label className="label">Department</label>
-                  <select value={dept} onChange={(e) => setDept(e.target.value)} className="input text-xs font-normal">
-                    <option>HR</option>
-                    <option>IT</option>
-                    <option>Finance</option>
-                    <option>Legal</option>
-                    <option>Operations</option>
-                    <option>Management</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="label">Access Role Clearance</label>
-                  <select value={access} onChange={(e) => setAccess(e.target.value)} className="input text-xs font-normal">
-                    <option value="employee">Employee (General Access)</option>
-                    <option value="manager">Manager Clearance</option>
-                    <option value="admin">Administrator Only</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="label">Description</label>
-                  <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="Briefly describe the document contents..." className="input resize-none" />
-                </div>
-              </div>
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <button type="button" onClick={() => navigate('/documents')} className="btn-secondary flex-1">Cancel</button>
-                <button type="submit" disabled={!file || processing} className="btn-primary flex-1 disabled:opacity-60">
-                  {processing ? (
-                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-                  ) : (
-                    <UploadCloud className="h-4 w-4" />
-                  )}
-                  Upload & Ingest
-                </button>
-              </div>
-            </form>
-          </CyberCard3D>
-        </div>
-      )}
+              <CyberCard3D className="h-fit p-6">
+                <form onSubmit={handleUpload}>
+                  <h2 className="font-display text-base font-semibold text-slate-900 dark:text-[#ececec] tracking-tight">Document Details & Access</h2>
+                  <div className="mt-5 space-y-4">
+                    <div>
+                      <label className="label">Document Name</label>
+                      <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. HR Handbook" className="input" />
+                    </div>
+                    <div>
+                      <label className="label">Department</label>
+                      <select value={dept} onChange={(e) => setDept(e.target.value)} className="input text-xs font-normal">
+                        <option>HR</option>
+                        <option>IT</option>
+                        <option>Finance</option>
+                        <option>Legal</option>
+                        <option>Operations</option>
+                        <option>Management</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="label">Access Role Clearance</label>
+                      <select value={access} onChange={(e) => setAccess(e.target.value)} className="input text-xs font-normal">
+                        <option value="employee">Employee (General Access)</option>
+                        <option value="manager">Manager Clearance</option>
+                        <option value="admin">Administrator Only</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="label">Description</label>
+                      <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="Briefly describe the document contents..." className="input resize-none" />
+                    </div>
+                  </div>
+                  <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      type="button"
+                      onClick={() => navigate('/documents')}
+                      className="btn-secondary flex-1"
+                    >
+                      Cancel
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      type="submit"
+                      disabled={!file || processing}
+                      className="btn-primary flex-1 disabled:opacity-60"
+                    >
+                      {processing ? (
+                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                      ) : (
+                        <UploadCloud className="h-4 w-4" />
+                      )}
+                      Upload & Ingest
+                    </motion.button>
+                  </div>
+                </form>
+              </CyberCard3D>
+            </div>
+          </FadeUp>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
+

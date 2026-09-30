@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from ..dependencies import get_supabase, is_supabase_ready
 from ..models.search import SearchResult, SearchSource
 from .embedder import embed_query
-from .generator import generate_answer
+from .generator import generate_answer, generate_chat_response, is_conversational, _extractive_fallback
 
 
 async def search(
@@ -17,6 +17,7 @@ async def search(
     user_department: str = "",
     top_k: int = 10,
     similarity_threshold: float = 0.3,
+    history: Optional[List[Dict[str, str]]] = None,
 ) -> SearchResult:
     """Execute the full RAG pipeline: embed → retrieve → generate.
     
@@ -33,10 +34,37 @@ async def search(
     start_time = time.time()
     result_id = f"sr-{int(time.time() * 1000)}"
 
+    # Step 0: Handle conversational queries (hi, thanks, how are you, etc.)
+    if is_conversational(query):
+        chat_result = await generate_chat_response(query, history=history)
+        return SearchResult(
+            id=result_id,
+            query=query,
+            answer=chat_result["answer"],
+            confidence=chat_result["confidence"],
+            sources=[],
+            citations=[],
+            timestamp=datetime.now(timezone.utc).isoformat(),
+            status="verified",
+            responseTime=round(time.time() - start_time, 1),
+        )
+
     # Step 1: Embed the query
     query_embedding = embed_query(query)
     if not query_embedding:
-        return _no_answer_result(result_id, query, time.time() - start_time)
+        # Embedding failed (Ollama down?) — still answer conversationally
+        chat_result = await generate_chat_response(query, history=history)
+        return SearchResult(
+            id=result_id,
+            query=query,
+            answer=chat_result["answer"],
+            confidence=chat_result["confidence"],
+            sources=[],
+            citations=[],
+            timestamp=datetime.now(timezone.utc).isoformat(),
+            status="verified",
+            responseTime=round(time.time() - start_time, 1),
+        )
 
     # Step 2: Retrieve similar chunks from Supabase (with RBAC filtering)
     chunks = await _retrieve_chunks(
@@ -44,15 +72,31 @@ async def search(
     )
 
     if not chunks:
-        return _no_answer_result(result_id, query, time.time() - start_time)
+        # No documents found — fall back to conversational AI
+        chat_result = await generate_chat_response(query, history=history)
+        return SearchResult(
+            id=result_id,
+            query=query,
+            answer=chat_result["answer"],
+            confidence=chat_result["confidence"],
+            sources=[],
+            citations=[],
+            timestamp=datetime.now(timezone.utc).isoformat(),
+            status="verified",
+            responseTime=round(time.time() - start_time, 1),
+        )
 
     # Step 3: Generate answer using LLM
     llm_result = await generate_answer(query, chunks)
 
-    # Step 4: Build SearchResult
+    # Step 4: If RAG returned empty answer, use exact document text (extractive fallback).
+    # Do NOT route to generate_chat_response — documents were found so the user
+    # should get the real document content, not a generic AI reply.
+    if not llm_result.get("answer", "").strip():
+        llm_result = _extractive_fallback(chunks)
+
+    # Step 5: Build SearchResult with sources
     response_time = round(time.time() - start_time, 1)
-    
-    # Build source list from cited sources + retrieved chunks
     sources = _build_sources(chunks, llm_result.get("cited_sources", []))
 
     return SearchResult(

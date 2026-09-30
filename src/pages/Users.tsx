@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import { UserPlus, Search } from 'lucide-react'
 import { getUsers, addUser, updateUserProfile, deleteUser, type NewUserInput } from '../services/api'
 import type { User, UserRole } from '../types'
@@ -8,6 +9,8 @@ import { SkeletonLoader } from '../components/common/SkeletonLoader'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../components/common/Toast'
 import { ErrorState } from '../components/common/ErrorState'
+import { FadeUp } from '../components/animations'
+import { RippleButton } from '../components/animate/RippleButton'
 
 export default function Users() {
   const { user } = useAuth()
@@ -37,7 +40,7 @@ export default function Users() {
 
   if (!isAdmin) {
     return (
-      <div className="space-y-6">
+      <FadeUp className="space-y-6">
         <h1 className="page-title text-2xl font-bold">User Management</h1>
         <ErrorState variant="unauthorized" title="Access Restricted" message="User management is restricted to administrators.">
           <div className="mx-auto max-w-xs space-y-3 text-sm">
@@ -51,7 +54,7 @@ export default function Users() {
             </div>
           </div>
         </ErrorState>
-      </div>
+      </FadeUp>
     )
   }
 
@@ -122,30 +125,35 @@ export default function Users() {
 
   const modalFooter = (close: () => void, save: () => void, editing = false) => (
     <>
-      <button onClick={close} className="btn-secondary">Cancel</button>
-      <button onClick={save} className="btn-primary" disabled={saving}>
+      <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={close} className="btn-secondary">
+        Cancel
+      </motion.button>
+      <RippleButton onClick={save} className="btn-primary" disabled={saving}>
         {saving ? (editing ? 'Saving...' : 'Creating...') : editing ? 'Save' : 'Create User'}
-      </button>
+      </RippleButton>
     </>
   )
 
   return (
-    <div className="space-y-6">
+    <FadeUp className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 px-3 py-1 text-xs font-medium text-slate-600 dark:text-slate-300 mb-2">
+          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#212121] px-3 py-1 text-xs font-medium text-slate-600 dark:text-[#8e8e8e] mb-2">
             <span>Administration Portal</span>
           </div>
-          <h1 className="page-title font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h1 className="page-title font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-[#ececec]">
             Users & Clearances
           </h1>
-          <p className="page-subtitle text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+          <p className="page-subtitle text-xs sm:text-sm text-slate-500 dark:text-[#8e8e8e]">
             Provision user accounts, assign RBAC clearances, and govern organizational knowledge boundaries.
           </p>
         </div>
-        <button onClick={() => setAddOpen(true)} className="btn-primary">
+        <RippleButton
+          onClick={() => setAddOpen(true)}
+          className="btn-primary shadow-sm"
+        >
           <UserPlus className="h-4 w-4" /> Add User
-        </button>
+        </RippleButton>
       </div>
 
       <div className="relative max-w-md">
@@ -259,6 +267,7 @@ export default function Users() {
           </div>
         </div>
       </Modal>
-    </div>
+    </FadeUp>
   )
 }
+

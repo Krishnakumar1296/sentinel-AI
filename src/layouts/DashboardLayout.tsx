@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/layout/Navbar'
 import Sidebar from '../components/layout/Sidebar'
 import MobileSidebar from '../components/layout/MobileSidebar'
 import AnimatedBackground from '../components/layout/AnimatedBackground'
+import { PageTransition } from '../components/animations/PageTransition'
 
 export default function DashboardLayout() {
   const { user, logout } = useAuth()
@@ -18,25 +20,28 @@ export default function DashboardLayout() {
   }
 
   return (
-    <div className="relative flex h-dvh min-h-dvh overflow-hidden bg-canvas dark:bg-[#070B14] text-ink">
+    <div className="relative flex h-dvh min-h-dvh overflow-hidden bg-canvas dark:bg-[#212121] text-ink">
       <AnimatedBackground />
       <div className="relative z-10 flex h-full min-h-dvh w-full">
-      <Sidebar user={user ? { name: user.name, role: user.role } : null} logout={logout} />
-      <MobileSidebar open={mobileOpen} onClose={() => setMobileOpen(false)} user={user} logout={logout} />
+        <Sidebar user={user ? { name: user.name, role: user.role } : null} logout={logout} />
+        <MobileSidebar open={mobileOpen} onClose={() => setMobileOpen(false)} user={user} logout={logout} />
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <Navbar
-          user={user ? { name: user.name, role: user.role, department: user.department, email: user.email } : null}
-          onMenuClick={() => setMobileOpen(true)}
-          onLogout={handleLogout}
-        />
-        <main className="flex-1 overflow-y-auto px-4 py-6 lg:px-8 lg:py-8">
-          <div key={location.pathname} className="mx-auto max-w-7xl animate-page-enter">
-            <Outlet />
-          </div>
-        </main>
-      </div>
+        <div className="flex min-w-0 flex-1 flex-col">
+          <Navbar
+            user={user ? { name: user.name, role: user.role, department: user.department, email: user.email } : null}
+            onMenuClick={() => setMobileOpen(true)}
+            onLogout={handleLogout}
+          />
+          <main className="flex-1 overflow-y-auto px-4 py-6 lg:px-8 lg:py-8">
+            <AnimatePresence mode="wait">
+              <PageTransition key={location.pathname} className="mx-auto max-w-7xl">
+                <Outlet />
+              </PageTransition>
+            </AnimatePresence>
+          </main>
+        </div>
       </div>
     </div>
   )
 }
+

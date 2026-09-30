@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Literal
+from typing import List, Literal, Optional, Dict
 
 
 class SearchSource(BaseModel):
@@ -36,3 +36,6 @@ class SearchHistoryItem(BaseModel):
 
 class SearchQuery(BaseModel):
     query: str
+    # Optional conversation history for multi-turn chat context.
+    # Each entry: {"role": "user" | "assistant", "content": "..."}
+    history: Optional[List[Dict[str, str]]] = None

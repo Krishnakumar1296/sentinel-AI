@@ -14,8 +14,10 @@ class Settings(BaseSettings):
     SUPABASE_URL: str = ""
     SUPABASE_KEY: str = ""
 
-    # Google Gemini
-    GEMINI_API_KEY: str = ""
+    # Ollama (local LLM)
+    OLLAMA_BASE_URL: str = "http://localhost:11434"
+    OLLAMA_MODEL: str = "llama3.2"
+    OLLAMA_EMBED_MODEL: str = "nomic-embed-text"
 
     # Development mode (falls back gracefully if credentials are not yet configured)
     DEV_MODE: bool = True
@@ -43,8 +45,9 @@ class Settings(BaseSettings):
         return url
 
     @property
-    def is_gemini_configured(self) -> bool:
-        return bool(self.GEMINI_API_KEY)
+    def is_ollama_configured(self) -> bool:
+        """Check if Ollama appears reachable (config-level check only)."""
+        return bool(self.OLLAMA_BASE_URL)
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8", "extra": "ignore"}
 

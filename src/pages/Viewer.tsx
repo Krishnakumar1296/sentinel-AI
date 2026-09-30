@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { ArrowLeft, FileText, ShieldCheck, BookOpen, Pencil, Save, X as XIcon, RefreshCw } from 'lucide-react'
 import { getDocument, updateDocument } from '../services/api'
 import type { Document } from '../types'
@@ -9,6 +10,8 @@ import { SkeletonLoader } from '../components/common/SkeletonLoader'
 import { ErrorState } from '../components/common/ErrorState'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../components/common/Toast'
+import { FadeUp } from '../components/animations'
+import { RippleButton } from '../components/animate/RippleButton'
 
 export default function Viewer() {
   const { user } = useAuth()
@@ -41,16 +44,21 @@ export default function Viewer() {
 
   if (!isManager) {
     return (
-      <div className="space-y-6">
+      <FadeUp className="space-y-6">
         <h1 className="page-title text-2xl font-bold">Document Viewer</h1>
         <ErrorState
           variant="unauthorized"
           title="Viewing Not Authorized"
           message="Your role is restricted to viewing AI answers and source references only. Direct document content is not available to employee accounts."
         >
-          <button onClick={() => navigate('/search')} className="btn-primary">Back to AI Search</button>
+          <RippleButton
+            onClick={() => navigate('/search')}
+            className="btn-primary"
+          >
+            Back to AI Search
+          </RippleButton>
         </ErrorState>
-      </div>
+      </FadeUp>
     )
   }
 
@@ -65,10 +73,10 @@ export default function Viewer() {
 
   if (!doc) {
     return (
-      <div className="space-y-6">
+      <FadeUp className="space-y-6">
         <h1 className="page-title text-2xl font-bold">Document Viewer</h1>
         <ErrorState title="Document not found" message="The requested document could not be located." />
-      </div>
+      </FadeUp>
     )
   }
 
@@ -103,12 +111,17 @@ export default function Viewer() {
   }
 
   return (
-    <div className="space-y-6">
+    <FadeUp className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="btn-secondary p-2">
+          <motion.button
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.94 }}
+            onClick={() => navigate(-1)}
+            className="btn-secondary p-2 shadow-sm"
+          >
             <ArrowLeft className="h-4 w-4" />
-          </button>
+          </motion.button>
           <div>
             <h1 className="page-title text-2xl font-bold">{editMode ? 'Edit PDF' : 'Document Viewer'}</h1>
             <p className="flex items-center gap-1.5 text-sm text-muted">
@@ -120,28 +133,36 @@ export default function Viewer() {
         <div className="flex flex-wrap items-center gap-2">
           {editMode ? (
             <>
-              <button onClick={exitEdit} className="btn-secondary">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={exitEdit}
+                className="btn-secondary"
+              >
                 <XIcon className="h-4 w-4" /> Discard
-              </button>
-              <button
+              </motion.button>
+              <RippleButton
                 onClick={handleSave}
                 disabled={saving}
                 className="btn-primary disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Save className="h-4 w-4" />
                 {saving ? 'Uploading...' : 'Save & Upload'}
-              </button>
+              </RippleButton>
             </>
           ) : (
             <>
-              <div className="flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-3 py-2 dark:border-green-500/20 dark:bg-green-500/10">
+              <div className="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-3 py-2 dark:border-green-500/20 dark:bg-green-500/10">
                 <ShieldCheck className="h-4 w-4 text-green-600 dark:text-green-400" />
-                <span className="text-xs font-medium text-green-700 dark:text-green-400">Authorized for your role</span>
+                <span className="text-xs font-semibold text-green-700 dark:text-green-400">Authorized for your role</span>
               </div>
               {isAdmin && !editMode && (
-                <button onClick={enterEdit} className="btn-primary">
+                <RippleButton
+                  onClick={enterEdit}
+                  className="btn-primary"
+                >
                   <Pencil className="h-4 w-4" /> Edit PDF
-                </button>
+                </RippleButton>
               )}
             </>
           )}
@@ -149,17 +170,25 @@ export default function Viewer() {
       </div>
 
       {editMode && (
-        <div className="flex items-start gap-3 rounded-xl border border-brand-blue/30 bg-brand-blue/5 px-4 py-3 text-sm text-brand-blue">
-          <RefreshCw className="mt-0.5 h-4 w-4 shrink-0" />
+        <motion.div
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-start gap-3 rounded-xl border border-brand-blue/30 bg-brand-blue/5 px-4 py-3 text-sm text-brand-blue"
+        >
+          <RefreshCw className="mt-0.5 h-4 w-4 shrink-0 animate-spin" />
           You're editing the actual PDF document. Click any text directly on the page to update it, then hit Save & Upload to publish to the team.
-        </div>
+        </motion.div>
       )}
 
       {!editMode && searchParams.get('page') && docId !== 'd5' && (
-        <div className="flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-400">
+        <motion.div
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-400"
+        >
           <BookOpen className="h-4 w-4" />
           Navigated to cited page {citedPage} — highlighted evidence from the AI answer.
-        </div>
+        </motion.div>
       )}
 
       {editMode ? (
@@ -179,6 +208,6 @@ export default function Viewer() {
           onPageChange={setPage}
         />
       )}
-    </div>
+    </FadeUp>
   )
 }

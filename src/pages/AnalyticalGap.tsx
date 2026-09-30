@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
   AreaChart, Area,
@@ -17,6 +18,9 @@ import { EmptyState } from '../components/common/EmptyState'
 import { ErrorState } from '../components/common/ErrorState'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../components/common/Toast'
+import { FadeUp } from '../components/animations/FadeUp'
+import { StaggerContainer, StaggerItem } from '../components/animations/StaggerContainer'
+import { DURATION, EASING } from '../components/animations/motion-tokens'
 
 const priorityColors: Record<KnowledgeGap['priority'], string> = {
   high: 'border-red-200 bg-red-50 text-red-600 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400',
@@ -102,19 +106,29 @@ export default function AnalyticalGap() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="page-title text-2xl font-bold">Analytical Gap</h1>
-        <p className="page-subtitle">Query performance, answer quality, and knowledge gaps your organization cannot answer.</p>
-      </div>
+      <FadeUp delay={0.05}>
+        <div>
+          <h1 className="page-title text-2xl font-bold">Analytical Gap</h1>
+          <p className="page-subtitle">Query performance, answer quality, and knowledge gaps your organization cannot answer.</p>
+        </div>
+      </FadeUp>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard icon={MessagesSquare} label="Total Queries" value={analytics.totalQueries.toLocaleString()} delta="This period" />
-        <KnowledgeGapCard icon={TrendingUp} value={String(openGaps)} label="Unanswered Queries" accent="danger" />
-        <KnowledgeGapCard icon={FileQuestion} value={String(highPriority)} label="High Priority Gaps" accent="warning" />
-        <StatCard icon={Timer} label="Avg Response Time" value={`${analytics.avgResponseTime} sec`} delta="Fast" iconClass="bg-amber-50 text-amber-500 dark:bg-amber-500/10 dark:text-amber-400" />
-      </div>
+      <StaggerContainer staggerDelay={0.08} className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StaggerItem>
+          <StatCard icon={MessagesSquare} label="Total Queries" value={analytics.totalQueries.toLocaleString()} delta="This period" />
+        </StaggerItem>
+        <StaggerItem>
+          <KnowledgeGapCard icon={TrendingUp} value={String(openGaps)} label="Unanswered Queries" accent="danger" />
+        </StaggerItem>
+        <StaggerItem>
+          <KnowledgeGapCard icon={FileQuestion} value={String(highPriority)} label="High Priority Gaps" accent="warning" />
+        </StaggerItem>
+        <StaggerItem>
+          <StatCard icon={Timer} label="Avg Response Time" value={`${analytics.avgResponseTime} sec`} delta="Fast" iconClass="bg-amber-50 text-amber-500 dark:bg-amber-500/10 dark:text-amber-400" />
+        </StaggerItem>
+      </StaggerContainer>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <FadeUp delay={0.1} className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <ChartCard title="Query Volume" subtitle="Total vs successful answers">
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -139,7 +153,7 @@ export default function AnalyticalGap() {
             <QualityGauge value={analytics.retrievalPrecision} label="Retrieval Precision" />
           </div>
         </ChartCard>
-      </div>
+      </FadeUp>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <ChartCard title="Knowledge Gaps Over Time" subtitle="Unanswered queries by day">

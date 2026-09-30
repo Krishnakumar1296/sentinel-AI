@@ -1,17 +1,19 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import {
   FileText, MessagesSquare, CheckCircle2, Lightbulb,
   Search, ShieldCheck, ArrowRight, History, Clock,
-  Sparkles, Cpu, Zap, ShieldAlert, Terminal, Lock
+  Cpu, Zap, Terminal
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { StatCard } from '../components/dashboard/StatCard'
 import { CyberCard3D } from '../components/common/CyberCard3D'
-import { Sentinel3DCore } from '../components/common/Sentinel3DCore'
-import { Text3D } from '../components/common/Text3D'
 import { BorderBeam } from '../components/animate/BorderBeam'
 import { RippleButton } from '../components/animate/RippleButton'
+import { StaggerContainer, StaggerItem } from '../components/animations/StaggerContainer'
+import { FadeUp } from '../components/animations/FadeUp'
+import { EASING, DURATION } from '../components/animations/motion-tokens'
 
 const suggestions = [
   'What is the company\'s remote work policy?',
@@ -50,105 +52,105 @@ export default function Dashboard() {
   return (
     <div className="space-y-8">
       {/* Sentinel Command Center Hero Banner */}
-      <section className="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 sm:p-10 shadow-sm">
-        {/* Animate UI Border Beam */}
-        <BorderBeam size={220} duration={12} colorFrom="#38bdf8" colorTo="#818cf8" />
-        {/* Soft Ambient Horizon Accent */}
-        <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-blue-500/[0.06] blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-indigo-500/[0.05] blur-3xl" />
+      <FadeUp delay={0.05}>
+        <section className="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#262626] p-8 sm:p-10 shadow-sm">
+          {/* Animate UI Border Beam */}
+          <BorderBeam size={220} duration={12} colorFrom="#10a37f" colorTo="#ececec" />
+          {/* Soft Ambient Horizon Accent */}
+          <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-emerald-500/[0.03] dark:bg-emerald-500/[0.02] blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-neutral-500/[0.03] blur-3xl" />
 
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-          <div className="max-w-2xl">
-            {/* Status Pill */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 px-3 py-1 text-xs font-medium text-slate-600 dark:text-slate-400">
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              <span>Knowledge System Operational</span>
-            </div>
-
-            <h1 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl text-slate-900 dark:text-white">
-              {getGreeting()},{' '}
-              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 dark:from-white dark:via-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
-                {firstName}
-              </span>
-            </h1>
-
-            <p className="mt-2.5 text-sm sm:text-base text-slate-500 dark:text-slate-400 leading-relaxed max-w-xl">
-              Query internal policies, technical documentation, and enterprise guidelines with verified citation grounding.
-            </p>
-
-            {/* Neural Search Input */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                navigate('/search')
-              }}
-              className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center"
-            >
-              <div className="relative flex-1">
-                <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                <input
-                  placeholder="Ask a question about internal company knowledge..."
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && e.currentTarget.value.trim()) {
-                      e.preventDefault()
-                      navigate(`/search?q=${encodeURIComponent(e.currentTarget.value)}`)
-                    }
-                  }}
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 py-2.5 pl-10 pr-4 text-sm text-slate-900 dark:text-white placeholder-slate-400 transition-colors focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+            <div className="max-w-2xl">
+              {/* Status Pill */}
+              <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#212121] px-3 py-1 text-xs font-medium text-slate-600 dark:text-[#b4b4b4]">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Knowledge System Operational</span>
               </div>
-              <RippleButton
-                type="submit"
-                className="btn-primary justify-center px-5 py-2.5 text-sm font-medium rounded-xl"
-              >
-                <Search className="h-4 w-4" />
-                <span>Search Vault</span>
-              </RippleButton>
-            </form>
 
-            {/* Quick Suggestion Chips */}
-            <div className="mt-4 flex flex-wrap items-center gap-1.5">
-              <span className="text-xs text-slate-400 mr-1">Suggested:</span>
-              {suggestions.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => navigate(`/search?q=${encodeURIComponent(s)}`)}
-                  className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 px-2.5 py-1 text-xs text-slate-600 dark:text-slate-400 transition-colors hover:border-slate-300 dark:hover:border-slate-700 hover:text-slate-900 dark:hover:text-white"
+              <h1 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl text-slate-900 dark:text-[#ececec]">
+                {getGreeting()},{' '}
+                <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 dark:from-white dark:via-neutral-200 dark:to-neutral-400 bg-clip-text text-transparent">
+                  {firstName}
+                </span>
+              </h1>
+
+              <p className="mt-2.5 text-sm sm:text-base text-slate-500 dark:text-[#8e8e8e] leading-relaxed max-w-xl">
+                Query internal policies, technical documentation, and enterprise guidelines with verified citation grounding.
+              </p>
+
+              {/* Neural Search Input */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  navigate('/search')
+                }}
+                className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center"
+              >
+                <div className="relative flex-1">
+                  <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <input
+                    placeholder="Ask a question about internal company knowledge..."
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                        e.preventDefault()
+                        navigate(`/search?q=${encodeURIComponent(e.currentTarget.value)}`)
+                      }
+                    }}
+                    className="w-full rounded-xl border border-slate-200 dark:border-white/[0.1] bg-slate-50 dark:bg-[#2f2f2f] py-2.5 pl-10 pr-4 text-sm text-slate-900 dark:text-[#ececec] placeholder-slate-400 dark:placeholder-text-[#737373] transition-all duration-200 focus:border-blue-500 dark:focus:border-white/[0.25] focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  />
+                </div>
+                <RippleButton
+                  type="submit"
+                  className="btn-primary justify-center px-5 py-2.5 text-sm font-medium rounded-xl"
                 >
-                  {s}
-                </button>
-              ))}
+                  <Search className="h-4 w-4" />
+                  <span>Search Vault</span>
+                </RippleButton>
+              </form>
+
+              {/* Quick Suggestion Chips */}
+              <div className="mt-4 flex flex-wrap items-center gap-1.5">
+                <span className="text-xs text-slate-400 dark:text-[#737373] mr-1">Suggested:</span>
+                {suggestions.map((s) => (
+                  <motion.button
+                    key={s}
+                    whileHover={{ scale: 1.03, y: -1 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ duration: DURATION.FAST, ease: EASING.SMOOTH }}
+                    onClick={() => navigate(`/search?q=${encodeURIComponent(s)}`)}
+                    className="rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#212121] px-2.5 py-1 text-xs text-slate-600 dark:text-[#b4b4b4] transition-colors hover:border-slate-300 dark:hover:border-white/[0.18] hover:text-slate-900 dark:hover:text-white"
+                  >
+                    {s}
+                  </motion.button>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Right Side — Precision Security Token */}
-          <div className="hidden lg:flex shrink-0 items-center justify-center">
-            <Sentinel3DCore size="sm" interactive={true} showTelemetry={false} />
+          {/* System Meta Bar */}
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 dark:border-white/[0.08] pt-4 text-xs text-slate-500 dark:text-[#8e8e8e]">
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-1.5 text-slate-700 dark:text-[#b4b4b4]">
+                <Cpu className="h-3.5 w-3.5 text-blue-500 dark:text-emerald-400" /> Model: Gemini 2.0 Flash
+              </span>
+              <span>•</span>
+              <span className="flex items-center gap-1.5">
+                <Zap className="h-3.5 w-3.5 text-indigo-500 dark:text-emerald-400" /> Vector Space: pgvector
+              </span>
+              <span>•</span>
+              <span className="flex items-center gap-1.5">
+                <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Zero-Trust RBAC
+              </span>
+            </div>
+            <span className="text-slate-500 dark:text-[#737373]">Access Level: <strong className="uppercase text-slate-700 dark:text-[#ececec]">{user?.role}</strong></span>
           </div>
-        </div>
-
-        {/* System Meta Bar */}
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 dark:border-slate-800 pt-4 text-xs text-slate-500 dark:text-slate-400">
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
-              <Cpu className="h-3.5 w-3.5 text-blue-500" /> Model: Gemini 2.0 Flash
-            </span>
-            <span>•</span>
-            <span className="flex items-center gap-1.5">
-              <Zap className="h-3.5 w-3.5 text-indigo-500" /> Vector Space: pgvector
-            </span>
-            <span>•</span>
-            <span className="flex items-center gap-1.5">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Zero-Trust RBAC
-            </span>
-          </div>
-          <span className="text-slate-500">Access Level: <strong className="uppercase text-slate-700 dark:text-slate-300">{user?.role}</strong></span>
-        </div>
-      </section>
+        </section>
+      </FadeUp>
 
       {/* 4 Fluid Staggered Stat Cards */}
-      <section className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="animate-fade-in-up stagger-1">
+      <StaggerContainer staggerDelay={0.08} className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <StaggerItem>
           <StatCard
             icon={FileText}
             label="Available Documents"
@@ -157,8 +159,8 @@ export default function Dashboard() {
             glowColor="blue"
             iconClass="bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20"
           />
-        </div>
-        <div className="animate-fade-in-up stagger-2">
+        </StaggerItem>
+        <StaggerItem>
           <StatCard
             icon={MessagesSquare}
             label="Knowledge Queries"
@@ -167,8 +169,8 @@ export default function Dashboard() {
             glowColor="blue"
             iconClass="bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20"
           />
-        </div>
-        <div className="animate-fade-in-up stagger-3">
+        </StaggerItem>
+        <StaggerItem>
           <StatCard
             icon={CheckCircle2}
             label="Verified Answers"
@@ -177,8 +179,8 @@ export default function Dashboard() {
             glowColor="emerald"
             iconClass="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
           />
-        </div>
-        <div className="animate-fade-in-up stagger-4">
+        </StaggerItem>
+        <StaggerItem>
           <StatCard
             icon={Lightbulb}
             label="Knowledge Gaps"
@@ -188,13 +190,13 @@ export default function Dashboard() {
             glowColor="amber"
             iconClass="bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
           />
-        </div>
-      </section>
+        </StaggerItem>
+      </StaggerContainer>
 
       {/* 3D Interactive Widgets */}
       <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Recent AI Searches */}
-        <div className="animate-fade-in-up stagger-5 lg:col-span-2">
+        <FadeUp delay={0.15} className="lg:col-span-2">
           <CyberCard3D glowColor="cyan" className="p-6 h-full">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -206,50 +208,56 @@ export default function Dashboard() {
                   <p className="text-xs text-muted">Real-time queries routed through neural RAG</p>
                 </div>
               </div>
-              <button
+              <motion.button
+                whileHover={{ x: 2 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => navigate('/history')}
                 className="flex items-center gap-1.5 text-xs font-mono font-bold text-cyan-500 hover:text-cyan-400 transition-colors"
               >
                 VIEW ALL <ArrowRight className="h-3.5 w-3.5" />
-              </button>
+              </motion.button>
             </div>
 
-            <div className="mt-5 space-y-2.5">
+            <StaggerContainer staggerDelay={0.06} className="mt-5 space-y-2.5">
               {recent.map((r, i) => (
-                <button
-                  key={i}
-                  onClick={() => navigate('/history')}
-                  className="group flex w-full items-center justify-between rounded-xl border border-line bg-surface-muted/60 dark:bg-slate-950/40 p-3.5 text-left transition-all hover:border-cyan-400/40 hover:bg-surface-soft hover:shadow-[0_4px_15px_rgba(0,240,255,0.1)]"
-                >
-                  <div className="flex min-w-0 flex-1 items-center gap-3">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400 group-hover:bg-cyan-500/20">
-                      <Terminal className="h-4 w-4" />
-                    </div>
-                    <div className="truncate">
-                      <span className="text-sm font-semibold text-ink group-hover:text-cyan-400 transition-colors">
-                        {r.q}
-                      </span>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <span className="text-[10px] font-mono font-semibold uppercase px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                          {r.dept}
+                <StaggerItem key={i}>
+                  <motion.button
+                    whileHover={{ scale: 1.01, y: -1 }}
+                    whileTap={{ scale: 0.99 }}
+                    transition={{ duration: DURATION.FAST, ease: EASING.SMOOTH }}
+                    onClick={() => navigate('/history')}
+                    className="group flex w-full items-center justify-between rounded-xl border border-line bg-surface-muted/60 dark:bg-slate-950/40 p-3.5 text-left transition-all hover:border-cyan-400/40 hover:bg-surface-soft hover:shadow-[0_4px_15px_rgba(0,240,255,0.1)]"
+                  >
+                    <div className="flex min-w-0 flex-1 items-center gap-3">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400 group-hover:bg-cyan-500/20 transition-colors">
+                        <Terminal className="h-4 w-4" />
+                      </div>
+                      <div className="truncate">
+                        <span className="text-sm font-semibold text-ink group-hover:text-cyan-400 transition-colors">
+                          {r.q}
                         </span>
-                        <span className="text-[10px] text-emerald-400 font-mono">
-                          VERIFIED EVIDENCE
-                        </span>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[10px] font-mono font-semibold uppercase px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                            {r.dept}
+                          </span>
+                          <span className="text-[10px] text-emerald-400 font-mono">
+                            VERIFIED EVIDENCE
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <span className="flex shrink-0 items-center gap-1.5 pl-3 text-xs font-mono text-muted">
-                    <Clock className="h-3.5 w-3.5" /> {r.t}
-                  </span>
-                </button>
+                    <span className="flex shrink-0 items-center gap-1.5 pl-3 text-xs font-mono text-muted">
+                      <Clock className="h-3.5 w-3.5" /> {r.t}
+                    </span>
+                  </motion.button>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerContainer>
           </CyberCard3D>
-        </div>
+        </FadeUp>
 
         {/* Security & Access Governance */}
-        <div className="animate-fade-in-up stagger-6">
+        <FadeUp delay={0.2} className="h-full">
           <CyberCard3D className="p-6 h-full">
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
@@ -291,8 +299,9 @@ export default function Dashboard() {
               </div>
             </div>
           </CyberCard3D>
-        </div>
+        </FadeUp>
       </section>
     </div>
   )
 }
+

@@ -53,19 +53,19 @@ export function CyberCard3D({
   }
 
   const borderHoverMap = {
-    cyan: 'hover:border-blue-500/40 hover:shadow-lg dark:hover:border-blue-400/40',
-    purple: 'hover:border-indigo-500/40 hover:shadow-lg dark:hover:border-indigo-400/40',
-    emerald: 'hover:border-emerald-500/40 hover:shadow-lg dark:hover:border-emerald-400/40',
+    cyan: 'hover:border-blue-500/40 hover:shadow-lg dark:hover:border-white/[0.16]',
+    purple: 'hover:border-indigo-500/40 hover:shadow-lg dark:hover:border-white/[0.16]',
+    emerald: 'hover:border-emerald-500/40 hover:shadow-lg dark:hover:border-[#10a37f]/40',
     amber: 'hover:border-amber-500/40 hover:shadow-lg dark:hover:border-amber-400/40',
-    blue: 'hover:border-blue-500/40 hover:shadow-lg dark:hover:border-blue-400/40',
+    blue: 'hover:border-blue-500/40 hover:shadow-lg dark:hover:border-white/[0.16]',
   }
 
   const beamColors = {
-    cyan: { from: '#06b6d4', to: '#3b82f6' },
+    cyan: { from: '#10a37f', to: '#ececec' },
     purple: { from: '#8b5cf6', to: '#ec4899' },
-    emerald: { from: '#10b981', to: '#06b6d4' },
+    emerald: { from: '#10a37f', to: '#ececec' },
     amber: { from: '#f59e0b', to: '#ef4444' },
-    blue: { from: '#38bdf8', to: '#6366f1' },
+    blue: { from: '#10a37f', to: '#ececec' },
   }
 
   return (
@@ -80,7 +80,7 @@ export function CyberCard3D({
         transformStyle: 'preserve-3d',
         transition: isHovered ? 'transform 0.1s ease-out' : 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease',
       }}
-      className={`relative overflow-hidden rounded-xl border border-slate-200/90 dark:border-slate-800 bg-surface dark:bg-slate-900/90 shadow-sm transition-all duration-200 ${borderHoverMap[glowColor]} ${className}`}
+      className={`relative overflow-hidden rounded-xl border border-slate-200/90 dark:border-white/[0.08] bg-surface dark:bg-[#262626] shadow-sm transition-all duration-200 ${borderHoverMap[glowColor]} ${className}`}
     >
       {/* BorderBeam on hover or when enabled */}
       {(showBorderBeam || isHovered) && (
