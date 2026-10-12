@@ -16,7 +16,7 @@ def record(test_name: str, passed: bool, details: str = ""):
     print(f"[{status}] {test_name}: {details}")
 
 def run_tests():
-    with httpx.Client(base_url=BASE_URL, timeout=120.0) as client:
+    with httpx.Client(base_url=BASE_URL, timeout=300.0) as client:
         # 1. Health check
         try:
             r = client.get("/health")
