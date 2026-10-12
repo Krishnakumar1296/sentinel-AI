@@ -265,7 +265,22 @@ except Exception as e:
 sec("11. FastAPI — Route Registration")
 try:
     from app.main import app
-    routes = [r.path for r in app.routes]
+    from starlette.routing import Route, Mount
+
+    def collect_routes(route_list, prefix=""):
+        paths = []
+        for r in route_list:
+            path = prefix + getattr(r, "path", "")
+            # Newer Starlette: _IncludedRouter stores sub-routes in original_router
+            if hasattr(r, "original_router") and hasattr(r.original_router, "routes"):
+                paths.extend(collect_routes(r.original_router.routes, ""))
+            elif hasattr(r, "routes"):          # Mount / standard nested router
+                paths.extend(collect_routes(r.routes, path))
+            else:
+                paths.append(path)
+        return paths
+
+    routes = collect_routes(app.routes)
     ok("FastAPI app created", str(len(routes)) + " total routes")
 
     checks = [
